@@ -1,0 +1,62 @@
+@import '../../colors';
+
+#SideNavigation {
+    background-color: $sideNavigation_primaryColor;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+
+    a,
+    a:visited,
+    a:hover,
+    a:active {
+        text-decoration: none;
+    }
+
+    a {
+        transition-duration: 0.5s;
+        padding: 0 7px;
+        display: flex;
+        
+        &:hover {
+            background-color: $sideNavigation_secondaryColor;
+            cursor: pointer;
+        }
+    }
+}
+
+#SideNavigation_Header {
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#SideNavigation_Items {
+    flex-grow: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    a.active {
+        background-color: $sideNavigation_secondaryColor;
+    }
+}
+
+#SideNavigation_Footer {
+    display: flex;
+    flex-direction: row;
+    background-color: $sideNavigation_tertiaryColor;
+    overflow: hidden;
+
+    a {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 0;
+
+        &:hover {
+            background-color: $sideNavigation_iconColor;
+        }
+    }
+}
