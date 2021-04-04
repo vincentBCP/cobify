@@ -23,8 +23,7 @@ const StyledBadge = withStyles((theme: Theme) =>
             width: 22,
             height: 22,
             borderRadius: 11,
-            fontSize: 12,
-            backgroundColor: '#407ad6'
+            fontSize: 12
         },
     }),
 )(Badge);
