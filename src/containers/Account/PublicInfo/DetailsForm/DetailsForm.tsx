@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+import UserDetails from '../../../../models/types/UserDetails';
+
 interface IDetailsFormProps {
-    firstName: string,
-    lastName: string
+    userDetails: UserDetails,
+    handleUserDetailsChange: (arg1: UserDetails) => void
 };
 
 const DetailsForm: React.FC<IDetailsFormProps> = props => {
-    const [firstName, setFirstName] = useState<string>();
-    const [lastName, setLastName] = useState<string>();
-
-    useEffect(() => {
-        setFirstName(props.firstName);
-        setLastName(props.lastName);
-    }, [ props.firstName, props.lastName ]);
-
     return (
         <Grid item xs={8}>
             <TextField
@@ -25,8 +19,13 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={firstName || ''}
-                onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setFirstName(ev.target.value)}
+                value={props.userDetails.firstName || ''}
+                onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                    props.handleUserDetailsChange({
+                        ...props.userDetails,
+                        firstName: ev.target.value
+                    });
+                }}
             />
         
             <TextField
@@ -35,8 +34,13 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={lastName || ''}
-                onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setLastName(ev.target.value)}
+                value={props.userDetails.lastName || ''}
+                onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                    props.handleUserDetailsChange({
+                        ...props.userDetails,
+                        lastName: ev.target.value
+                    });
+                }}
             />
         </Grid>
     );

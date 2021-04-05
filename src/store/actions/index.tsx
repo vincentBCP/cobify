@@ -1,0 +1,3 @@
+export {
+    updateUserDetails
+} from './publicInfo';
