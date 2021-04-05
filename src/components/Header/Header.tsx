@@ -58,7 +58,7 @@ const Header: React.FC<IHeaderProps> = props => {
     if (!user) return null;
 
     return (
-        <AppBar id="Header" position="static" className={classes.appBar}>
+        <AppBar id="Header" position="fixed" className={classes.appBar}>
             <Toolbar>
                 <Typography className={classes.title} variant="h6">{props.title}</Typography>
 

@@ -13,4 +13,6 @@
     background-color: $app_backgroundColor;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    padding-top: 68px;
 }
