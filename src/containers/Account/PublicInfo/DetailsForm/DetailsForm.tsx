@@ -13,8 +13,8 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
     const [lastName, setLastName] = useState<string>();
 
     useEffect(() => {
-        setFirstName(props.firstName || '');
-        setLastName(props.lastName || '');
+        setFirstName(props.firstName);
+        setLastName(props.lastName);
     }, [ props.firstName, props.lastName ]);
 
     return (
@@ -25,7 +25,7 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={firstName}
+                value={firstName || ''}
                 onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setFirstName(ev.target.value)}
             />
         
@@ -35,7 +35,7 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={lastName}
+                value={lastName || ''}
                 onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setLastName(ev.target.value)}
             />
         </Grid>

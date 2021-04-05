@@ -29,11 +29,11 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
     const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
-        setEmail(props.email || '');
+        setEmail(props.email);
     }, [ props.email ]);
 
     return (
-        <Card>
+        <Card style={{marginBottom: 30}}>
             <CardContent>
                 <Typography style={{marginBottom: 15}}>Contact details</Typography>
                 <TextField
@@ -43,7 +43,7 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                     variant="outlined"
                     className={classes.input}
                     disabled={!editMode}
-                    value={email}
+                    value={email || ''}
                     onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setEmail(ev.target.value)}
                 />
                 <Grid
