@@ -2,9 +2,10 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+
+import Avatar from '../../../../widgets/Avatar';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -17,24 +18,28 @@ const useStyles = makeStyles((theme: Theme) =>
         inputFile: {
             display: 'none'
         },
-        avatar: {
-            width: theme.spacing(14),
-            height: theme.spacing(14),
-            marginBottom: 10
-        },
         upload: {
-            paddingLeft: 25,
-            paddingRight: 25
+            paddingLeft: 15,
+            paddingRight: 15,
+            marginTop: 10
         }
     })
 );
 
-const ProfilePicture: React.FC = props => {
+interface IProfilePictureProps {
+    user: any
+}
+
+const ProfilePicture: React.FC<IProfilePictureProps> = props => {
     const classes = useStyles();
 
     return (
         <Grid item xs={4} className={classes.root}>
-            <Avatar className={classes.avatar}>VP</Avatar>
+            <Avatar
+                firstName={props.user.firstName}
+                lastName={props.user.lastName}
+                color={props.user.color}
+            />
             <input
                 accept="image/*"
                 className={classes.inputFile}

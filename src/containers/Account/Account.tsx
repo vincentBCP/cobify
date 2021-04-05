@@ -1,14 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
 import './Account.scss';
 
-import PublicInfo from './PublicInfo';
-
 import Auxi from '../../hoc/Auxi';
 import Header from '../../components/Header';
+
+import PublicInfo from './PublicInfo';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -24,12 +25,14 @@ const useStyles = makeStyles((theme: Theme) =>
 const Account: React.FC = props => {
     const classes = useStyles();
 
+    const user: any = useSelector((state: any) => state.app.user);
+
     return (
         <Auxi>
             <Header title="Account" />
 
             <Paper id="AccountPage" className={classes.root} elevation={0}>
-                <PublicInfo />
+                <PublicInfo user={user} />
             </Paper>
         </Auxi>
     );

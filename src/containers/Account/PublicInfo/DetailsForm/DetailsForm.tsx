@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-const DetailsForm: React.FC = props => {
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
+interface IDetailsFormProps {
+    firstName: string,
+    lastName: string
+};
 
-    const user: any = useSelector((state: any) => state.app.user);
+const DetailsForm: React.FC<IDetailsFormProps> = props => {
+    const [firstName, setFirstName] = useState<string>();
+    const [lastName, setLastName] = useState<string>();
 
     useEffect(() => {
-        if (!user) return;
-
-        setFirstName(user.firstName || '');
-        setLastName(user.lastName || '');
-    }, [ user ]);
-
-    if (!user) return null;
+        setFirstName(props.firstName || '');
+        setLastName(props.lastName || '');
+    }, [ props.firstName, props.lastName ]);
 
     return (
         <Grid item xs={8}>

@@ -11,14 +11,21 @@ import './PublicInfo.scss';
 import DetailsForm from './DetailsForm';
 import ProfilePicture from './ProfilePicture';
 
-const PublicInfo: React.FC = props => {
+interface IPublicInfoProps {
+    user: any
+};
+
+const PublicInfo: React.FC<IPublicInfoProps> = props => {
     return (
-        <Card>
+        <Card style={{marginBottom: 30}}>
             <CardContent>
                 <Typography>Public info</Typography>
-                <Grid container spacing={2} style={{marginBottom: 5}}>
-                    <DetailsForm />
-                    <ProfilePicture />
+                <Grid container spacing={2}>
+                    <DetailsForm
+                        firstName={props.user.firstName}
+                        lastName={props.user.lastName}
+                    />
+                    <ProfilePicture user={props.user} />
                 </Grid>
                 <Button variant="contained" color="primary">
                     Save changes
