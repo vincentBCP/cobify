@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 
 import Avatar from '../../widgets/Avatar';
 
+const drawerWidth = 240;
+
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
         badge: {
@@ -32,7 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
         appBar: {
             backgroundColor: 'white',
             padding: 2,
-            boxShadow: 'none'
+            boxShadow: 'none',
+            paddingLeft: drawerWidth
         },
         title: {
             color: 'rgb(158 158 158)',
