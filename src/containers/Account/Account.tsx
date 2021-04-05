@@ -10,6 +10,7 @@ import Auxi from '../../hoc/Auxi';
 import Header from '../../components/Header';
 
 import PublicInfo from './PublicInfo';
+import ContactDetails from './ContactDetails';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -33,6 +34,7 @@ const Account: React.FC = props => {
 
             <Paper id="AccountPage" className={classes.root} elevation={0}>
                 <PublicInfo user={user} />
+                <ContactDetails email={user.email} />
             </Paper>
         </Auxi>
     );
