@@ -29,7 +29,7 @@ const store = createStore(rootRecuder, compose(applyMiddleware(thunk)))
 const theme = createMuiTheme({
     palette: {
         primary: {
-            main: "#407ad6"
+            main: "#376fd0"
         }
     },
     overrides: {
