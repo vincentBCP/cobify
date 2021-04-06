@@ -17,14 +17,16 @@ const drawerWidth = 240;
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
         badge: {
-            right: 8,
-            top: 6,
+            right: 6,
+            top: 2,
             border: 'none',
             padding: 0,
             width: 22,
             height: 22,
             borderRadius: 11,
-            fontSize: 12
+            fontSize: 12,
+            backgroundColor: "#407ad6",
+            color: "white"
         },
     }),
 )(Badge);
@@ -67,7 +69,7 @@ const Header: React.FC<IHeaderProps> = props => {
 
                 <Tooltip title="Notifications">
                     <IconButton>
-                        <StyledBadge badgeContent={4} color="primary">
+                        <StyledBadge badgeContent={4}>
                             <NotificationIcon className={classes.icon} />
                         </StyledBadge>
                     </IconButton>
