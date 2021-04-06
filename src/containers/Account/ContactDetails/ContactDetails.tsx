@@ -34,6 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+const emailRegExp = /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\.[a-zA-Z]+)*\.[a-z]{2,4}$/;
+
 const ContactDetails: React.FC<IContactDetailsProps> = props => {
     const classes = useStyles();
     const [email, setEmail] = useState<string>();
@@ -46,7 +48,8 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
     }, [ props.email ]);
 
     const handleSaveChanges = () => {
-        if (!email || !hasChange) return;
+        if (!hasChange || !email) return;
+        if (!emailRegExp.test(email)) return;
 
         AppAPI
         .requestCode(email)
