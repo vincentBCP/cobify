@@ -3,12 +3,15 @@ import React from 'react';
 import './Guests.scss';
 
 import Auxi from '../../hoc/Auxi';
-import Header from '../../components/Header';
+import ApplicationBar from '../../components/ApplicationBar';
+import Page from '../../components/Page';
 
 const Guests: React.FC = props => {
     return (
         <Auxi>
-            <Header title="Guests" />
+            <ApplicationBar title="Guests" />
+
+            <Page title="Guests"></Page>
         </Auxi>
     );
 };

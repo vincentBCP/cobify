@@ -95,7 +95,7 @@ const SideNavigation: React.FC = props => {
             </div>
             
             <footer id="SideNavigation_Footer">
-                <Tooltip title="Contact Support">
+                <Tooltip title="Contact support">
                     <NavLink to="contactSupport">
                         <ContactSupportIcon className={classes.drawerItemText} />
                     </NavLink>

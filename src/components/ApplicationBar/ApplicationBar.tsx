@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import NotificationIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 
 import Avatar from '../../widgets/Avatar';
 
@@ -39,11 +38,6 @@ const useStyles = makeStyles((theme: Theme) =>
             boxShadow: 'none',
             paddingLeft: drawerWidth
         },
-        title: {
-            color: 'rgb(158 158 158)',
-            flexGrow: 1,
-            fontWeight: 'bold'
-        },
         icon: {
             color: '#9e9e9e',
             fontSize: 30
@@ -55,7 +49,7 @@ interface IHeaderProps {
     title: string
 };
 
-const Header: React.FC<IHeaderProps> = props => {
+const ApplicationBar: React.FC<IHeaderProps> = props => {
     const classes = useStyles();
 
     const user = useSelector((state: any) => state.app.user);
@@ -65,8 +59,7 @@ const Header: React.FC<IHeaderProps> = props => {
     return (
         <AppBar id="Header" position="fixed" className={classes.appBar}>
             <Toolbar>
-                <Typography className={classes.title} variant="h6">{props.title}</Typography>
-
+                <span style={{flexGrow: 1}}></span>
                 <Tooltip title="Notifications">
                     <IconButton>
                         <StyledBadge badgeContent={4}>
@@ -89,4 +82,4 @@ const Header: React.FC<IHeaderProps> = props => {
     );
 };
 
-export default Header;
+export default ApplicationBar;

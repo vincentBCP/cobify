@@ -3,12 +3,12 @@ import React from 'react';
 import './Workplace.scss';
 
 import Auxi from '../../hoc/Auxi';
-import Header from '../../components/Header';
+import ApplicationBar from '../../components/ApplicationBar';
 
 const Workplace: React.FC = props => {
     return (
         <Auxi>
-            <Header title="Workplace" />
+            <ApplicationBar title="Workplace" />
         </Auxi>
     );
 };

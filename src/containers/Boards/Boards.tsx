@@ -3,12 +3,15 @@ import React from 'react';
 import './Boards.scss';
 
 import Auxi from '../../hoc/Auxi';
-import Header from '../../components/Header';
+import ApplicationBar from '../../components/ApplicationBar';
+import Page from '../../components/Page';
 
 const Boards: React.FC = props => {
     return (
         <Auxi>
-            <Header title="Boards" />
+            <ApplicationBar title="Boards" />
+
+            <Page title="Boards"></Page>
         </Auxi>
     );
 };
