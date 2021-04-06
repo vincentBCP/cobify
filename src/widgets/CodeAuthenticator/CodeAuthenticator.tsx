@@ -9,6 +9,8 @@ import CodeForm from './CodeForm';
 
 interface ICodeAuthenticatorProps {
     open?: boolean,
+    title?: string,
+    message?: string,
     handleCancel: () => void,
     handleSuccess: () => void,
     handleFail: () => void
@@ -41,6 +43,8 @@ const CodeAuthenticator: React.FC<ICodeAuthenticatorProps> = props => {
             <DialogContent>
                 <CodeForm
                     code={code || ''}
+                    title={props.title}
+                    message={props.message}
                     handleCodeChange={(value: string) => setCode(value)}
                     handleCancel={handleCancel}
                     handleSend={handleSend}
