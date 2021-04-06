@@ -101,7 +101,7 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                 }}
             />
 
-            <Card style={{marginBottom: 30}}>
+            <Card>
                 <CardContent>
                     <Typography style={{marginBottom: 15}}>Contact details</Typography>
                     <TextField

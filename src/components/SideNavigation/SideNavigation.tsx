@@ -14,6 +14,7 @@ import BoardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/PeopleAlt';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import PowerIcon from '@material-ui/icons/PowerSettingsNew';
+import { Typography } from '@material-ui/core';
 
 import './SideNavigation.scss';
 
@@ -53,7 +54,12 @@ const SideNavigation: React.FC = props => {
             }}
         >
             <div id="SideNavigation_Header">
-
+                <Typography style={{
+                    fontSize: 24,
+                    fontWeight: 'bold',
+                    color: '#c5c8cc',
+                    fontStyle: 'italic'
+                }}>Cobify</Typography>
             </div>
 
             <div id="SideNavigation_Items">

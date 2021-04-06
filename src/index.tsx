@@ -9,12 +9,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { compose, combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-
-import appReducer from './store/reducers/app';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 
+import appReducer from './store/reducers/app';
+import guestReducer from './store/reducers/guest';
+import boardReducer from './store/reducers/board';
+import invitationReducer from './store/reducers/invitation';
+
 const rootRecuder = combineReducers({
-    app: appReducer
+    app: appReducer,
+    guest: guestReducer,
+    board: boardReducer,
+    invitation: invitationReducer
 });
 
 const store = createStore(rootRecuder, compose(applyMiddleware(thunk)))

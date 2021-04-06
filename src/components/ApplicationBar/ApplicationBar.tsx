@@ -70,7 +70,8 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
                 <Tooltip title="Account">
                     <IconButton>
                         <Avatar
-                            size="sm"
+                            size={30}
+                            textSize={14}
                             firstName={user.firstName}
                             lastName={user.lastName}
                             color={user.color}

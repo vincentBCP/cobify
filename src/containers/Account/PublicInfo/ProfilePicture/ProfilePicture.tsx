@@ -36,6 +36,8 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
     return (
         <Grid item xs={4} className={classes.root}>
             <Avatar
+                size={130}
+                textSize={72}
                 firstName={props.user.firstName}
                 lastName={props.user.lastName}
                 color={props.user.color}
