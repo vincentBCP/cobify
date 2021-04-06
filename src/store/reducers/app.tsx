@@ -29,8 +29,19 @@ const updateUserDetails = (state: any, userDetails: UserDetails) => {
     };
 };
 
+const updateEmail = (state: any, email: string) => {
+    return {
+        ...state,
+        user: {
+            ...state.user,
+            email: email
+        }
+    };
+};
+
 const actions: any = [];
 actions[actionTypes.UPDATE_USER_DETAILS] = updateUserDetails;
+actions[actionTypes.UPDATE_EMAIL] = updateEmail;
 
 const appReducer = (state = initialState, action: IAction) => {
     if (!actions[action.type]) return state;

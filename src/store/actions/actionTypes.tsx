@@ -1,1 +1,2 @@
 export const UPDATE_USER_DETAILS = "UPDATE_USER_DETAILS";
+export const UPDATE_EMAIL = "UPDATE_EMAIL";

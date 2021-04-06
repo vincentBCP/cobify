@@ -1,3 +1,4 @@
 export {
-    updateUserDetails
-} from './publicInfo';
+    updateUserDetails,
+    updateEmail
+} from './app';

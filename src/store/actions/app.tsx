@@ -20,3 +20,23 @@ export const updateUserDetails = (userDetails: UserDetails) => {
         });
     };
 };
+
+export const updateEmail = (email: string) => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            AppAPI
+            .updateEmail(email)
+            .then(response => {
+                dispatch({
+                    type: actionTypes.UPDATE_EMAIL,
+                    payload: email
+                });
+
+                resolve(true);
+            })
+            .catch(error => {
+                reject(error);
+            });
+        });
+    };
+};
