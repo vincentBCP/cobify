@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
 
-export const SUCCESS_DELAY = 400;
+export const SUCCESS_DELAY = 200;
 
 interface IButtonProgressProps {
     label?: string,

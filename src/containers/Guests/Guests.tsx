@@ -62,8 +62,12 @@ const Guests: React.FC<IGuestsProps> = props => {
         setGuest(null);
     }
 
-    const handleRemoveInvitation = (id: string) => {
-        props.deleteInvitation(id);
+    const handleRemoveInvitation = (id: string): [Promise<any>, () => void, () => void] => {
+        return [
+            props.deleteInvitation(id),
+            () => {},
+            () => {}
+        ];
     };
 
     const renderInvitations = (guest: Guest): JSX.Element => {
@@ -82,9 +86,8 @@ const Guests: React.FC<IGuestsProps> = props => {
                                 key={i.id}
                                 label={board.name}
                                 color={board.color}
-                                handleDelete={() => {
-                                    handleRemoveInvitation(i.id)
-                                }}
+                                handleDelete={(): [Promise<any>, () => void, () => void] => 
+                                    handleRemoveInvitation(i.id)}
                             />;
                         }
                     )

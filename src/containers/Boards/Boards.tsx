@@ -42,8 +42,12 @@ const Boards: React.FC<IBoardsProps> = props => {
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const guests: Guest[] = useSelector((state: any) => state.guest.guests);
 
-    const handleRemoveInvitation = (id: string) => {
-        props.deleteInvitation(id);
+    const handleRemoveInvitation = (id: string): [Promise<any>, () => void, () => void] => {
+        return [
+            props.deleteInvitation(id),
+            () => {},
+            () => {}
+        ];
     };
 
     const handleShareInvitation = (board: Board) => {
@@ -82,9 +86,8 @@ const Boards: React.FC<IBoardsProps> = props => {
                                 key={i.id}
                                 label={guest.firstName + " " + guest.lastName}
                                 color={guest.color}
-                                handleDelete={() => {
-                                    handleRemoveInvitation(i.id)
-                                }}
+                                handleDelete={(): [Promise<any>, () => void, () => void] => 
+                                    handleRemoveInvitation(i.id)}
                             />;
                         }
                     )
