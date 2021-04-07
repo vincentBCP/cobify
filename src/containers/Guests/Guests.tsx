@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useSelector, connect } from 'react-redux';
 
 import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/AddCircleOutline';
+import ShareIcon from '@material-ui/icons/Share';
 
 import './Guests.scss';
 
@@ -16,16 +16,22 @@ import Table, { HeadCell } from '../../components/Table/Table';
 import Guest from '../../models/types/Guest';
 import Invitation from '../../models/types/Invitation';
 import Board from '../../models/types/Board';
+import InvitationDTO from '../../models/dto/InvitationDTO';
 
 import Chip from '../../widgets/Chip';
+
+import InvitationFormModal, { Type } from '../../components/InvitationFormModal/InvitationFormModal';
 
 import * as actions from '../../store/actions';
 
 interface IGuestsProps {
-    deleteInvitation: (arg1: string) => Promise<any>
+    deleteInvitation: (arg1: string) => Promise<any>,
+    sendInvitation: (arg1: InvitationDTO) => Promise<any>
 }
 
 const Guests: React.FC<IGuestsProps> = props => {
+    const [guest, setGuest] = useState<Guest | null>(null);
+
     const guests: Guest[] = useSelector((state: any) => 
         state.guest.guests.map((guest: Guest) => ({
             ...guest,
@@ -35,6 +41,26 @@ const Guests: React.FC<IGuestsProps> = props => {
 
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => state.board.boards);
+
+    const handleShareInvitation = (g: Guest) => {
+        setGuest(g);
+    }
+
+    const handleSend = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
+        return [
+            props.sendInvitation(dto),
+            () => { // succes callback
+                setGuest(null);
+            },
+            () => { // fail callback
+
+            }
+        ];
+    }
+
+    const handleCancel = () => {
+        setGuest(null);
+    }
 
     const handleRemoveInvitation = (id: string) => {
         props.deleteInvitation(id);
@@ -72,9 +98,12 @@ const Guests: React.FC<IGuestsProps> = props => {
             <div>
                 <IconButton
                     size="medium"
-                    onClick={(ev: React.MouseEvent) => ev.stopPropagation()}
+                    onClick={(ev: React.MouseEvent) => {
+                        ev.stopPropagation();
+                        handleShareInvitation(guest);
+                    }}
                 >
-                    <AddIcon />
+                    <ShareIcon />
                 </IconButton>
             </div>
         );
@@ -91,6 +120,14 @@ const Guests: React.FC<IGuestsProps> = props => {
         <Auxi>
             <ApplicationBar title="Guests" />
 
+            <InvitationFormModal
+                type={Type.BOARD}
+                open={guest !== null}
+                guest={guest}
+                handleSend={handleSend}
+                handleCancel={handleCancel}
+            />
+
             <Page title="Guests">
                 <Table
                     dataList={guests}
@@ -104,7 +141,8 @@ const Guests: React.FC<IGuestsProps> = props => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id))
+        deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
+        sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto))
     }
 };
 

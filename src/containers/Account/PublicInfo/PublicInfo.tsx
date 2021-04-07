@@ -6,7 +6,6 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 
 import './PublicInfo.scss';
 
@@ -17,6 +16,8 @@ import * as actions from '../../../store/actions';
 
 import UserDetails from '../../../models/types/UserDetails';
 
+import SendButton from '../../../widgets/FormActions/SendButton';
+
 interface IPublicInfoProps {
     user: any,
     updateUserDetails: (arg1: UserDetails) => Promise<any>
@@ -25,6 +26,7 @@ interface IPublicInfoProps {
 const PublicInfo: React.FC<IPublicInfoProps> = props => {
     const [hasChange, setHasChange] = useState<boolean>(false);
     const [userDetails, setUserDetails] = useState<UserDetails>();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!props.user) return;
@@ -49,8 +51,11 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
     const handleSaveChanges = () => {
         if (!hasChange || !userDetails || !isUserDetailsValid()) return;
         
+        setLoading(true);
+
         props.updateUserDetails({...userDetails})
         .then(response => {
+            setLoading(false);
             setHasChange(false);
         })
         .catch(erorr => { });
@@ -69,13 +74,18 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
                     />
                     <ProfilePicture user={props.user} />
                 </Grid>
-                <Button
+                {/*<Button
                     variant="contained"
                     color="primary"
                     onClick={handleSaveChanges}
                 >
                     Save changes
-                </Button>
+                </Button>*/}
+                <SendButton
+                    label="Save changes"
+                    loading={loading}
+                    handleClick={handleSaveChanges}
+                />
             </CardContent>
         </Card>
     );

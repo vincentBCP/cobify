@@ -6,19 +6,55 @@ import axios from '../axios';
 
 class AppAPI {
     public static updateUserDetails(userDetails: UserDetails): Promise<AxiosResponse> {
-        return axios.post('publicInfo', userDetails);
+        // return axios.post('publicInfo', userDetails);
+        return new Promise((resolve, reject) => {
+            axios.post('publicInfo', userDetails)
+            .then(response => {
+                setTimeout(() => {
+                    resolve(response);
+                }, 1000);
+            })
+            .catch(error => reject(error));
+        });
     };
 
     public static requestCode(email: string): Promise<AxiosResponse> {
-        return axios.get('requestCode?e=' + email);
+        // return axios.get('requestCode?e=' + email);
+        return new Promise((resolve, reject) => {
+            axios.get('requestCode?e=' + email)
+            .then(response => {
+                setTimeout(() => {
+                    resolve(response);
+                }, 1000);
+            })
+            .catch(error => reject(error));
+        });
     };
 
     public static checkCode(code: string): Promise<AxiosResponse> {
-        return axios.get('checkCode?c=' + code);
+        // return axios.get('checkCode?c=' + code);
+        return new Promise((resolve, reject) => {
+            axios.get('checkCode?c=' + code)
+            .then(response => {
+                setTimeout(() => {
+                    resolve(response);
+                }, 1000);
+            })
+            .catch(error => reject(error));
+        });
     };
 
     public static updateEmail(email: string): Promise<AxiosResponse> {
-        return axios.post('updateEmail', { email: email });
+        // return axios.post('updateEmail', { email: email });
+        return new Promise((resolve, reject) => {
+            axios.post('updateEmail', { email: email })
+            .then(response => {
+                setTimeout(() => {
+                    resolve(response);
+                }, 1000);
+            })
+            .catch(error => reject(error));
+        });
     }
 };
 

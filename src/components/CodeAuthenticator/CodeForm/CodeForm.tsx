@@ -3,9 +3,9 @@ import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+
+import FormActions from '../../../widgets/FormActions';
 
 interface ICodeFormProps {
     code?: string,
@@ -13,7 +13,9 @@ interface ICodeFormProps {
     message?: string,
     handleCodeChange: (arg1: string) => void
     handleCancel: () => void,
-    handleSend: () => void
+    handleSend: () => void,
+    loading?: boolean,
+    success?: boolean
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -61,22 +63,12 @@ const CodeForm: React.FC<ICodeFormProps> = props => {
                 className={classes.input}
             />
 
-            <Grid container direction="row" justify="flex-end">
-                <Button
-                    color="default"
-                    onClick={props.handleCancel}
-                    style={{marginRight: 10}}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={props.handleSend}
-                >
-                    Send
-                </Button>
-            </Grid>
+            <FormActions
+                loading={props.loading}
+                success={props.success}
+                handleSend={props.handleSend}
+                handleCancel={props.handleCancel}
+            />
         </Paper>
     )
 };

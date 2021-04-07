@@ -4,5 +4,10 @@ export {
 } from './app';
 
 export {
-    deleteInvitation
+    deleteInvitation,
+    sendInvitation
 } from './invitation';
+
+export {
+    sendGuestInvitation
+} from './guest';

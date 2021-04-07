@@ -6,7 +6,6 @@ import { deepPurple } from '@material-ui/core/colors';
 
 interface IAvatarProps {
     size: number,
-    textSize: number,
     src?: string,
     color?: string,
     firstName?: string,
@@ -28,7 +27,7 @@ const ProfileAvatar: React.FC<IAvatarProps> = props => {
             style={{
                 width: props.size,
                 height: props.size,
-                fontSize: props.textSize,
+                fontSize: props.size / 2,
                 backgroundColor: props.color ? props.color : deepPurple[500],
                 color: theme.palette.getContrastText(props.color ? props.color : deepPurple[500])
             }}

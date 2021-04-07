@@ -14,9 +14,12 @@ import AppAPI from '../../../api/AppAPI';
 
 import Aux from '../../../hoc/Auxi';
 
-import CodeAuthenticator from '../../../widgets/CodeAuthenticator';
+import CodeAuthenticator from '../../../components/CodeAuthenticator';
+import FormActions from '../../../widgets/FormActions';
 
 import * as actions from '../../../store/actions';
+
+import { emailRegExp } from '../../../constants';
 
 interface IContactDetailsProps {
     email: string,
@@ -34,14 +37,14 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const emailRegExp = /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\.[a-zA-Z]+)*\.[a-z]{2,4}$/;
-
 const ContactDetails: React.FC<IContactDetailsProps> = props => {
     const classes = useStyles();
     const [email, setEmail] = useState<string>();
     const [hasChange, setHasChange] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [authenticate, setAuthenticate] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         setEmail(props.email);
@@ -51,9 +54,13 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
         if (!hasChange || !email) return;
         if (!emailRegExp.test(email)) return;
 
+        setLoading(true);
+
         AppAPI
         .requestCode(email)
         .then(response => {
+            setLoading(false);
+            setSuccess(true);
             setAuthenticate(true);
         })
         .catch(error => {
@@ -71,20 +78,35 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
         setHasChange(false);
     };
 
-    const handleSuccess = () => {
+    const handleCodeAuthSuccess = () => {
         if (!email) return;
+
+        setLoading(true);
+        setSuccess(false);
+        setAuthenticate(false);
 
         props
         .updateEmail(email)
         .then(response => {
-            setAuthenticate(false);
             setEditMode(false);
             setHasChange(false);
+            setLoading(false);
+            setSuccess(false);
         })
         .catch(error => {
 
         });
     };
+
+    const handleCodeAuthCancel = () => {
+        setAuthenticate(false);
+        setLoading(false);
+        setSuccess(false);
+    };
+
+    const handleCodeAuthFail = () => {
+
+    }
 
     return (
         <Aux>
@@ -92,13 +114,9 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                 open={authenticate}
                 title="Email verification"
                 message="Please enter the 6 digit code sent to the email you provided."
-                handleCancel={() => {
-                    setAuthenticate(false);
-                }}
-                handleSuccess={handleSuccess}
-                handleFail={() => {
-                    setAuthenticate(false);
-                }}
+                handleCancel={handleCodeAuthCancel}
+                handleSuccess={handleCodeAuthSuccess}
+                handleFail={handleCodeAuthFail}
             />
 
             <Card>
@@ -117,40 +135,29 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                             setHasChange(true);
                         }}
                     />
-                    <Grid
-                        container
-                        direction="row"
-                        justify="flex-end"
-                        alignItems="center"
-                    >
-                        {
-                            editMode
-                            ? <Button
-                                color="default"
-                                className={classes.button}
-                                onClick={handleCancel}
-                            >
-                                Cancel
-                            </Button>
-                            : null
-                        }
 
-                        {
-                            editMode 
-                            ? <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.button}
-                                onClick={handleSaveChanges}
-                            >
-                                Save changes
-                            </Button>
-                            : null
-                        }
-                        
-                        {
-                            !editMode
-                            ? <Button
+                    {
+                        editMode
+                        ? <FormActions
+                            sendLabel="Save changes"
+                            loading={loading}
+                            success={success}
+                            handleSend={handleSaveChanges}
+                            handleCancel={handleCancel}
+
+                        />
+                        : null
+                    }
+
+                    {
+                        !editMode
+                        ? <Grid
+                            container
+                            direction="row"
+                            justify="flex-end"
+                            alignItems="center"
+                        >
+                            <Button
                                 variant="contained"
                                 color="primary"
                                 className={classes.button}
@@ -158,9 +165,9 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                             >
                                 Update email
                             </Button>
-                            : null
-                        }
-                    </Grid>
+                        </Grid>
+                        : null
+                    }
                 </CardContent>
             </Card>
         </Aux>

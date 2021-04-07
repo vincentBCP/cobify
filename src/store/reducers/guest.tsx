@@ -1,5 +1,7 @@
 import Guest from '../../models/types/Guest';
 
+import * as actionTypes from '../actions/actionTypes';
+
 interface IState {
     guests: Guest[]
 }
@@ -57,7 +59,18 @@ const initialState: IState = {
     ]
 };
 
+const addGuest = (state: any, guest: Guest) => {
+    return {
+        ...state,
+        guests: [
+            ...state.guests,
+            guest
+        ]
+    };
+};
+
 const actions: any = [];
+actions[actionTypes.ADD_GUEST] = addGuest;
 
 const guestReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

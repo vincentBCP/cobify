@@ -71,8 +71,19 @@ const deleteInvitation = (state: any, id: string) => {
     };
 };
 
+const addInvitation = (state: any, invitation: Invitation) => {
+    return {
+        ...state,
+        invitations: [
+            ...state.invitations,
+            invitation
+        ]
+    };
+};
+
 const actions: any = [];
 actions[actionTypes.DELETE_INVITATION] = deleteInvitation;
+actions[actionTypes.ADD_INVITATION] = addInvitation;
 
 const invitationReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

@@ -71,7 +71,6 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
                     <IconButton>
                         <Avatar
                             size={30}
-                            textSize={14}
                             firstName={user.firstName}
                             lastName={user.lastName}
                             color={user.color}
