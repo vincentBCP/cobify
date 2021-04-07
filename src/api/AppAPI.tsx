@@ -32,29 +32,11 @@ class AppAPI {
     };
 
     public static checkCode(code: string): Promise<AxiosResponse> {
-        // return axios.get('checkCode?c=' + code);
-        return new Promise((resolve, reject) => {
-            axios.get('checkCode?c=' + code)
-            .then(response => {
-                setTimeout(() => {
-                    resolve(response);
-                }, 1000);
-            })
-            .catch(error => reject(error));
-        });
+        return axios.get('checkCode?c=' + code);
     };
 
     public static updateEmail(email: string): Promise<AxiosResponse> {
-        // return axios.post('updateEmail', { email: email });
-        return new Promise((resolve, reject) => {
-            axios.post('updateEmail', { email: email })
-            .then(response => {
-                setTimeout(() => {
-                    resolve(response);
-                }, 1000);
-            })
-            .catch(error => reject(error));
-        });
+        return axios.post('updateEmail', { email: email });
     }
 };
 
