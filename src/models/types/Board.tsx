@@ -1,6 +1,7 @@
 type Board = {
     id: string,
     name: string,
+    code: string,
     accountID: string,
     color: string,
     // computed

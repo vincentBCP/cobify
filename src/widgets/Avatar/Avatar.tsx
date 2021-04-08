@@ -8,19 +8,11 @@ interface IAvatarProps {
     size: number,
     src?: string,
     color?: string,
-    firstName?: string,
-    lastName?: string
+    initials?: string
 };
 
 const ProfileAvatar: React.FC<IAvatarProps> = props => {
     const theme = useTheme();
-
-    const getInitials = (): string => {
-        if (!props.firstName && !props.lastName) return '';
-
-        return ((props.firstName || '').charAt(0).toUpperCase() + 
-                (props.lastName || '').charAt(0)).toUpperCase();
-    };
 
     return (
         <Avatar
@@ -32,7 +24,7 @@ const ProfileAvatar: React.FC<IAvatarProps> = props => {
                 color: theme.palette.getContrastText(props.color ? props.color : deepPurple[500])
             }}
         >
-            {getInitials()}
+            {props.initials}
         </Avatar>
     );
 };

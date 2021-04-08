@@ -74,9 +74,11 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
                     <IconButton>
                         <Avatar
                             size={30}
-                            firstName={user.firstName}
-                            lastName={user.lastName}
                             color={user.color}
+                            initials={
+                                ((user.firstName || '').charAt(0).toUpperCase() + 
+                                (user.lastName || '').charAt(0)).toUpperCase()
+                            }
                         />
                     </IconButton>
                 </Tooltip>

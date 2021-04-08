@@ -64,8 +64,7 @@ const BoardSelector: React.FC = props => {
                 startIcon={
                     selectedBoard
                     ? <Avatar
-                        firstName={selectedBoard.name}
-                        lastName=""
+                        initials={selectedBoard.code}
                         color={selectedBoard.color}
                         size={30}
                     />
@@ -102,8 +101,7 @@ const BoardSelector: React.FC = props => {
                             >
                                 <ListItemIcon>
                                     <Avatar
-                                        firstName={board.name}
-                                        lastName=""
+                                        initials={board.code}
                                         color={board.color}
                                         size={30}
                                     />

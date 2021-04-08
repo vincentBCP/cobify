@@ -155,18 +155,19 @@ const InvitationFormModal: React.FC<IInvitationFormModalProps> = props => {
                     >
                         {board ?
                         <Avatar
-                            firstName={board.name}
-                            lastName=""
+                            initials={board.code}
                             color={board.color}
                             size={50}
                         /> : null}
 
                         {guest ?
                         <Avatar
-                            firstName={guest.firstName}
-                            lastName={guest.lastName}
                             color={guest.color}
                             size={50}
+                            initials={
+                                ((guest.firstName || '').charAt(0).toUpperCase() + 
+                                (guest.lastName || '').charAt(0)).toUpperCase()
+                            }
                         /> : null}
                         
                         <Grid item>

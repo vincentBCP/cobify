@@ -37,9 +37,11 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
         <Grid item xs={4} className={classes.root}>
             <Avatar
                 size={130}
-                firstName={props.user.firstName}
-                lastName={props.user.lastName}
                 color={props.user.color}
+                initials={
+                    ((props.user.firstName || '').charAt(0).toUpperCase() + 
+                    (props.user.lastName || '').charAt(0)).toUpperCase()
+                }
             />
             <input
                 accept="image/*"
