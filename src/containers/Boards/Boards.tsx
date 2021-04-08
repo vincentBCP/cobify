@@ -16,6 +16,8 @@ import Table, { HeadCell } from '../../components/Table/Table';
 import Board from '../../models/types/Board';
 import Invitation from '../../models/types/Invitation';
 import Guest from '../../models/types/Guest';
+import Column from '../../models/types/Column';
+import Task from '../../models/types/Task';
 import GuestDTO from '../../models/dto/GuestDTO';
 
 import Chip from '../../widgets/Chip';
@@ -32,11 +34,13 @@ interface IBoardsProps {
 const Boards: React.FC<IBoardsProps> = props => {
     const [board, setBoard] = useState<Board | null>(null);
 
+    const columns: Column[] = useSelector((state: any) => state.column.columns);
+    const tasks: Task[] = useSelector((state: any) => state.task.tasks);
     const boards: Board[] = useSelector((state: any) =>
         state.board.boards.map((board: Board) => ({
             ...board,
-            columnCount: 0,
-            taskCount: 0
+            columnCount: columns.filter(c => c.boardID === board.id).length,
+            taskCount: tasks.filter(t => t.boardID === board.id).length
         }))
     );
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);

@@ -15,12 +15,16 @@ import appReducer from './store/reducers/app';
 import guestReducer from './store/reducers/guest';
 import boardReducer from './store/reducers/board';
 import invitationReducer from './store/reducers/invitation';
+import columnReducer from './store/reducers/column';
+import taskReducer from './store/reducers/task';
 
 const rootRecuder = combineReducers({
     app: appReducer,
     guest: guestReducer,
     board: boardReducer,
-    invitation: invitationReducer
+    invitation: invitationReducer,
+    column: columnReducer,
+    task: taskReducer
 });
 
 const store = createStore(rootRecuder, compose(applyMiddleware(thunk)))
