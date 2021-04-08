@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const BoardSelector: React.FC = props => {
+    const theme = useTheme();
     const classes = useStyles();
 
     const [selectedBoard, setSelectedBoard] = useState<Board | null>();
@@ -68,11 +69,15 @@ const BoardSelector: React.FC = props => {
                         color={selectedBoard.color}
                         size={30}
                     />
-                    : null
+                    : <Avatar
+                        initials="W"
+                        color={theme.palette.primary.main}
+                        size={30}
+                    />
                 }
             >
                 <Typography>
-                    { selectedBoard ? selectedBoard.name : 'Select Board' }
+                    { selectedBoard ? selectedBoard.name : 'Workplace' }
                 </Typography>
             </Button>
 
