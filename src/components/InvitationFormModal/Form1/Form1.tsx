@@ -2,27 +2,16 @@ import React from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { makeStyles, createStyles,Theme } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-
-import { emailRegExp, nameRegExp } from '../../../constants';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import Guest from '../../../models/types/Guest';
 
 interface IFormInputs {
-    firstName: string;
-    lastName: string;
-    email: string;
-    boardID: string
+    guestID: string
 };
-
-const useStyles = makeStyles((theme: Theme) => 
-    createStyles({
-        input: {
-            marginBottom: 20
-        }
-    })
-);
 
 interface IForm1Props {
     guests: Guest[],
@@ -31,70 +20,35 @@ interface IForm1Props {
 }
 
 const Form1: React.FC<IForm1Props> = props => {
-    const classes = useStyles();
-
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>();
 
     return (
         <form onSubmit={handleSubmit(props.handleSubmit)}>
-            <TextField
-                label="First name"
-                fullWidth
-                required
-                error={errors.firstName !== undefined}
-                helperText={errors.firstName ? errors.firstName.message : ''}
-                className={classes.input}
-                inputProps={{
-                    ...register('firstName', { 
-                        required: 'Required', 
-                        pattern: {
-                            value: nameRegExp,
-                            message: 'Invalid name format'
-                        }
-                    })
-                }}
-            />
-
-            <TextField
-                label="Last name"
-                fullWidth
-                required
-                error={errors.lastName !== undefined}
-                helperText={errors.lastName ? errors.lastName.message : ''}
-                className={classes.input}
-                inputProps={{
-                    ...register('lastName', { 
-                        required: 'Required', 
-                        pattern: {
-                            value: nameRegExp,
-                            message: 'Invalid name format'
-                        }
-                    })
-                }}
-            />
-
-            <TextField
-                label="Email"
-                fullWidth
-                required
-                error={errors.email !== undefined}
-                helperText={errors.email ? errors.email.message : ''}
-                className={classes.input}
-                inputProps={{
-                    ...register('email', { 
-                        required: 'Required', 
-                        pattern: {
-                            value: emailRegExp,
-                            message: 'Invalid email format'
-                        },
-                        validate: value => {
-                            const guest = props.guests.find(g => g.email === value);
-                            
-                            return !guest ? true : 'Guest already exists';
-                        }
-                    })
-                }}
-            />
+            <FormControl fullWidth style={{marginBottom: 20}}>
+                <InputLabel
+                    required
+                    error={errors.guestID !== undefined}
+                >
+                    Guest
+                </InputLabel>
+                <Select
+                    label="Guest"
+                    defaultValue=""
+                    fullWidth
+                    error={errors.guestID !== undefined}
+                    inputProps={{
+                        required: true,
+                        ...register('guestID', { required: true })
+                    }}
+                >
+                    {
+                        props.guests
+                        .map(guest =>
+                            <MenuItem key={guest.id} value={guest.id}>{guest.firstName + " " + guest.lastName}</MenuItem>
+                        )
+                    }
+                </Select>
+            </FormControl>
 
             { props.actions }
         </form>

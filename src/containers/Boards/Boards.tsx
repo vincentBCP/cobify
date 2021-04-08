@@ -18,7 +18,7 @@ import Invitation from '../../models/types/Invitation';
 import Guest from '../../models/types/Guest';
 import Column from '../../models/types/Column';
 import Task from '../../models/types/Task';
-import GuestDTO from '../../models/dto/GuestDTO';
+import InvitationDTO from '../../models/dto/InvitationDTO';
 
 import Chip from '../../widgets/Chip';
 
@@ -28,7 +28,7 @@ import * as actions from '../../store/actions';
 
 interface IBoardsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
-    sendGuestInvitation: (arg1: GuestDTO) => Promise<any>
+    sendInvitation: (arg1: InvitationDTO) => Promise<any>
 }
 
 const Boards: React.FC<IBoardsProps> = props => {
@@ -58,9 +58,9 @@ const Boards: React.FC<IBoardsProps> = props => {
         setBoard(board);
     }
 
-    const handleSend = (dto: GuestDTO): [Promise<any>, () => void, () => void] =>  {
+    const handleSend = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
         return [
-            props.sendGuestInvitation(dto),
+            props.sendInvitation(dto),
             () => { // succes callback
                 setBoard(null);
             },
@@ -150,7 +150,7 @@ const Boards: React.FC<IBoardsProps> = props => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
-        sendGuestInvitation: (dto: GuestDTO) => dispatch(actions.sendGuestInvitation(dto))
+        sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto))
     }
 };
 

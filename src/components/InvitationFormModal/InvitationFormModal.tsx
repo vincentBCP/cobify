@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from'react';
-import randomcolor from 'randomcolor';
+import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
 
@@ -14,7 +14,6 @@ import Guest from '../../models/types/Guest';
 import Board from '../../models/types/Board';
 import Invitation from '../../models/types/Invitation';
 import InvitationDTO from '../../models/dto/InvitationDTO';
-import GuestDTO from '../../models/dto/GuestDTO';
 
 import Avatar from '../../widgets/Avatar';
 import FormActions from '../../widgets/FormActions';
@@ -33,8 +32,7 @@ interface IInvitationFormModalProps {
     type: Type,
     guest?: Guest | null,
     board?: Board | null,
-    handleSend: ((arg1: InvitationDTO) => [Promise<any>, () => void, () => void]) | 
-                ((arg1: GuestDTO) => [Promise<any>, () => void, () => void]),
+    handleSend: (arg1: InvitationDTO) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
 }
 
@@ -92,28 +90,32 @@ const InvitationFormModal: React.FC<IInvitationFormModalProps> = props => {
     }
 
     const filterBoards = () => {
-        if (!guests) return [];
-
         const guestID = guest?.id;
 
-        return boards.filter(b => {
+        const filteredBoards = boards.filter(b => {
             const inv = invitations.find(i => i.boardID === b.id && i.guestID === guestID);
             return inv ? false : true;
         });
+
+        return _.orderBy(filteredBoards, ["name"]);
+    }
+
+    const filterGuests = () => {
+        const boardID = board?.id;
+
+        const filteredGuests = guests.filter(g => {
+            const inv = invitations.find(i => i.guestID === g.id && i.boardID === boardID);
+            return inv ? false : true;
+        });
+
+        return _.orderBy(filteredGuests, ["firstName"]);
     }
 
     const handleSubmit = (data: any) => {
-        let [request, successCallback, failCallback] = board
-            ? (props.handleSend as ((arg1: GuestDTO) => [Promise<any>, () => void, () => void]))({
-                firstName: data.firstName,
-                lastName: data.lastName,
-                email: data.email,
-                color: randomcolor(),
-                boardID: board.id
-            }) : (props.handleSend as ((arg1: InvitationDTO) => [Promise<any>, () => void, () => void]))({
-                guestID: guest ? guest.id : '',
-                boardID: data.boardID
-            });
+        let [request, successCallback, failCallback] = props.handleSend({
+            boardID: board ? board.id : data.boardID,
+            guestID: guest ? guest.id : data.guestID
+        });
 
         setLoading(true);
         setSuccess(false);
@@ -189,7 +191,7 @@ const InvitationFormModal: React.FC<IInvitationFormModalProps> = props => {
                     {
                         props.type === Type.GUEST
                         ? <Form1
-                            guests={guests}
+                            guests={filterGuests()}
                             actions={actions}
                             handleSubmit={handleSubmit}
                         />
