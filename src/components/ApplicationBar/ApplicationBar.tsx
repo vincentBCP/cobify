@@ -46,7 +46,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IHeaderProps {
-    title: string
+    title: string,
+    component?: JSX.Element
 };
 
 const ApplicationBar: React.FC<IHeaderProps> = props => {
@@ -59,7 +60,9 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
     return (
         <AppBar id="Header" position="fixed" className={classes.appBar}>
             <Toolbar>
-                <span style={{flexGrow: 1}}></span>
+                <div style={{flexGrow: 1}}>
+                    {props.component}
+                </div>
                 <Tooltip title="Notifications">
                     <IconButton>
                         <StyledBadge badgeContent={4}>
