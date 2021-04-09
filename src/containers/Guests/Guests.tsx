@@ -20,7 +20,7 @@ import InvitationDTO from '../../models/dto/InvitationDTO';
 
 import Chip from '../../widgets/Chip';
 
-import InvitationFormModal, { Type } from '../../components/InvitationFormModal/InvitationFormModal';
+import GuestInvitationFormModal from './GuestInvitationFormModal';
 
 import * as actions from '../../store/actions';
 
@@ -46,7 +46,7 @@ const Guests: React.FC<IGuestsProps> = props => {
         setGuest(g);
     }
 
-    const handleSend = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
+    const handleSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
         return [
             props.sendInvitation(dto),
             () => { // succes callback
@@ -123,11 +123,9 @@ const Guests: React.FC<IGuestsProps> = props => {
         <Auxi>
             <ApplicationBar title="Guests" />
 
-            <InvitationFormModal
-                type={Type.BOARD}
-                open={guest !== null}
+            <GuestInvitationFormModal
                 guest={guest}
-                handleSend={handleSend}
+                handleSubmit={handleSubmit}
                 handleCancel={handleCancel}
             />
 

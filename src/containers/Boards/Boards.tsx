@@ -20,9 +20,9 @@ import Column from '../../models/types/Column';
 import Task from '../../models/types/Task';
 import InvitationDTO from '../../models/dto/InvitationDTO';
 
-import Chip from '../../widgets/Chip';
+import BoardInvitationFormModal from './BoardInvitationFormModal';
 
-import InvitationFormModal, { Type } from '../../components/InvitationFormModal/InvitationFormModal';
+import Chip from '../../widgets/Chip';
 
 import * as actions from '../../store/actions';
 
@@ -58,7 +58,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         setBoard(board);
     }
 
-    const handleSend = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
+    const handleSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
         return [
             props.sendInvitation(dto),
             () => { // succes callback
@@ -128,11 +128,9 @@ const Boards: React.FC<IBoardsProps> = props => {
         <Auxi>
             <ApplicationBar title="Boards" />
 
-            <InvitationFormModal
-                type={Type.GUEST}
-                open={board !== null}
+            <BoardInvitationFormModal
                 board={board}
-                handleSend={handleSend}
+                handleSubmit={handleSubmit}
                 handleCancel={handleCancel}
             />
 

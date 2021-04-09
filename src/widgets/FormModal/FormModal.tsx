@@ -1,19 +1,22 @@
-import React from 'react';
+import React,  { useState,  useEffect } from 'react';
+
+import { UseFormHandleSubmit } from 'react-hook-form';
 
 import { makeStyles, createStyles,Theme } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 
 import FormActions from './FormActions';
+
+import { SUCCESS_DELAY } from './FormActions/SendButton/SendButton';
 
 interface IFormModalProps {
     open?: boolean,
     title: string,
-    loading?: boolean,
-    success?: boolean,
+    useFormHandleSubmit: UseFormHandleSubmit<any>,
+    handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void]
     handleCancel: () => void
 }
 
@@ -37,17 +40,52 @@ const useStyles = makeStyles((theme: Theme) =>
 const FormModal: React.FC<IFormModalProps> = props => {
     const classes = useStyles();
 
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+
+    useEffect(() => {
+        if (!props.open) return;
+
+        setLoading(false);
+        setSuccess(false);
+    }, [ props.open ]);
+
+    const handleSubmit = (data: any) => {
+        const [request, successCallback, failCallback] = props.handleSubmit(data);
+
+        setLoading(true);
+
+        request
+        .then(response => {
+            setSuccess(true);
+            setLoading(false);
+
+            setTimeout(() => {
+                successCallback();
+            }, SUCCESS_DELAY);
+        })
+        .catch(error => {
+            failCallback();
+            setLoading(false);
+        });
+    };
+
     return (
         <Dialog open={props.open || false}>
             <DialogContent>
                 <Paper elevation={0} className={classes.root}>
                     <Typography className={classes.title}>{props.title || "Form"}</Typography>
-                    {props.children}
-                    <FormActions
-                        loading={props.loading}
-                        success={props.success}
-                        handleCancel={props.handleCancel}
-                    />
+                    
+                    <form onSubmit={props.useFormHandleSubmit(handleSubmit)}>
+                        {props.children}
+                        <div style={{marginTop: 20}}>
+                            <FormActions
+                                loading={loading}
+                                success={success}
+                                handleCancel={props.handleCancel}
+                            />
+                        </div>
+                    </form>
                 </Paper>
             </DialogContent>
         </Dialog>
