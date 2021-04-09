@@ -73,10 +73,7 @@ const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props
                 {guest ? <Avatar
                     color={guest.color}
                     size={50}
-                    initials={
-                        ((guest.firstName || '').charAt(0).toUpperCase() + 
-                        (guest.lastName || '').charAt(0)).toUpperCase()
-                    }
+                    initials={guest.initials}
                 /> : null}
                 
                 <Grid item>

@@ -14,7 +14,9 @@ const initialState: IState = {
             lastName: "Doe",
             email: "john.doe@email.com",
             hostID: "1",
-            color: "#20DCCA"
+            color: "#20DCCA",
+            displayName: "John Doe",
+            initials: "JD",
         },
         {
             id: "2",
@@ -22,7 +24,9 @@ const initialState: IState = {
             lastName: "Itadori",
             hostID: "1",
             email: "yuji.itadori@email.com",
-            color: "#7505B9"
+            color: "#7505B9",
+            displayName: "Yuji Itadori",
+            initials: "YI"
         },
         {
             id: "3",
@@ -30,7 +34,9 @@ const initialState: IState = {
             lastName: "Tanaka",
             hostID: "1",
             email: "ren.tanaka@email.com",
-            color: "#0CC152"
+            color: "#0CC152",
+            displayName: "Ren Tanaka",
+            initials: "RT"
         },
         {
             id: "4",
@@ -38,7 +44,9 @@ const initialState: IState = {
             lastName: "Jakka",
             hostID: "1",
             email: "ruujin.jakka@email.com",
-            color: "#547C3A"
+            color: "#547C3A",
+            displayName: "Ruujin Jakka",
+            initials: "RJ"
         },
         {
             id: "5",
@@ -46,7 +54,9 @@ const initialState: IState = {
             lastName: "Kurosaki",
             hostID: "1",
             email: "ichigo.kurosaki@email.com",
-            color: "#FF13CE"
+            color: "#FF13CE",
+            displayName: "Ichigo Kurosaki",
+            initials: "IK"
         },
         {
             id: "6",
@@ -54,7 +64,9 @@ const initialState: IState = {
             lastName: "Katsuki",
             hostID: "1",
             email: "bakugo.katsuki@email.com",
-            color: "#9FB075"
+            color: "#9FB075",
+            displayName: "Bakugo Katsuki",
+            initials: "BK"
         }
     ]
 };

@@ -11,3 +11,7 @@ export {
 export {
     sendGuestInvitation
 } from './guest';
+
+export {
+    createColumn
+} from './column'

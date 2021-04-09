@@ -3,7 +3,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import Column from '../../../models/types/Column';
@@ -15,12 +14,18 @@ interface IColumnsProps {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            marginTop: 20
+            flexGrow: 1,
+            overflow: 'auto',
+            whiteSpace: 'nowrap',
+            padding: "0 20px 20px 20px"
         },
         column: {
+            display: 'inline-flex',
             backgroundColor: 'white',
             borderRadius: 5,
             width: 350,
+            minWidth: 350,
+            maxWidth: 350,
             marginRight: 20,
             padding: 12,
             boxShadow: "rgba(50, 50, 93, 0.025) 0px 2px 5px -1px, rgba(0, 0, 0, 0.05) 0px 1px 3px -1px",
@@ -41,15 +46,15 @@ const Columns: React.FC<IColumnsProps> = props => {
         state.column.columns.filter((c: Column) => c.boardID === props.boardID));
 
     return (
-        <Grid container className={classes.root}>
+        <div className={classes.root}>
             {
                 columns.map(col =>
-                    <Grid key={"columns-" + col.id} item className={classes.column}>
+                    <div key={"columns-" + col.id} className={classes.column}>
                         <Typography className={classes.columnTitle}>{col.name}</Typography>    
-                    </Grid>    
+                    </div>    
                 )
             }
-        </Grid>
+        </div>
     );
 };
 

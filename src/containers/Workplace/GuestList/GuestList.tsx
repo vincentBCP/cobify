@@ -142,6 +142,7 @@ const GuestList: React.FC<IGuestListProps> = props => {
                 {add ? <List className={classes.guestList}>
                     {getAvailableGuests().map(guest =>
                         <ListItem
+                            key={"add-guest-" + guest.id}
                             button
                             onClick={() => handleAdd(guest.id)}
                             className={classes.guestListItem}
@@ -149,10 +150,7 @@ const GuestList: React.FC<IGuestListProps> = props => {
                             <Typography className={classes.guestName}>{guest.firstName + " " + guest.lastName}</Typography>
                             <ListItemSecondaryAction>
                                 <Avatar
-                                    initials={
-                                        ((guest.firstName || '').charAt(0).toUpperCase() + 
-                                        (guest.lastName || '').charAt(0)).toUpperCase()
-                                    }
+                                    initials={guest.initials}
                                     color={guest.color}
                                     size={32}
                                 />
@@ -175,10 +173,7 @@ const GuestList: React.FC<IGuestListProps> = props => {
                     >
                         <Avatar
                             size={32}
-                            initials={
-                                ((guest.firstName || '').charAt(0).toUpperCase() + 
-                                (guest.lastName || '').charAt(0)).toUpperCase()
-                            }
+                            initials={guest.initials}
                             
                             color={guest.color}
                         />

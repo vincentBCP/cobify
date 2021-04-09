@@ -7,6 +7,7 @@ type Guest = {
     hostID: string,
     // computed
     displayName?: string,
+    initials?: string
 };
 
 export default Guest;

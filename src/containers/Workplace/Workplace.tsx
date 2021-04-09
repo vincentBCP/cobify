@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { connect } from 'react-redux';
+
 import {makeStyles, createStyles, Theme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -14,15 +16,24 @@ import ApplicationBar from '../../components/ApplicationBar';
 import BoardSelector from './BoardSelector';
 import GuestList from './GuestList';
 import Columns from './Columns';
+import ColumnFormModal from './ColumnFormModal';
 
 import Board from '../../models/types/Board';
+import ColumnDTO from '../../models/dto/ColumnDTO';
+
+import * as actions from '../../store/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            display: 'flex',
+            flexDirection: 'column',
             borderRadius: 0,
-            padding: '30px 25px',
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            height: '100%'
+        },
+        header: {
+            padding: "30px 20px 20px 20px"
         },
         button: {
             marginRight: 10
@@ -30,13 +41,38 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const Workplace: React.FC = props => {
+interface IWorkplaceProps {
+    createColumn: (arg1: ColumnDTO) => Promise<any>
+}
+
+const Workplace: React.FC<IWorkplaceProps> = props => {
     const classes = useStyles();
 
+    const [openColumnFormModal, setOpenColumnFormModal] = useState(false);
     const [board, setBoard] = useState<Board>();
 
     const handleBoardChange = (board: Board) => {
         setBoard(board);
+    }
+
+    const handleSumbitColumn = (data: any): [Promise<any>, () => void, () => void] => {
+        return [
+            props.createColumn({
+                name: data.name,
+                boardID: board?.id,
+                hostID: "1"
+            } as ColumnDTO),
+            () => {
+                setOpenColumnFormModal(false)
+            },
+            () => {
+                console.log("failed?");
+            }
+        ];
+    }
+
+    const handleCancelCreateColumn = () => {
+        setOpenColumnFormModal(false);
     }
 
     return (
@@ -45,15 +81,23 @@ const Workplace: React.FC = props => {
                 title="Workplace"
                 component={<BoardSelector handleChange={handleBoardChange} />}
             />
+
+            <ColumnFormModal
+                open={openColumnFormModal}
+                handleSubmit={handleSumbitColumn}
+                handleCancel={handleCancelCreateColumn}
+            />
+
             {
                 board
                 ? <Paper elevation={0} className={classes.root}>
-                    <Grid container direction="row">
+                    <Grid container direction="row" className={classes.header}>
                         <Button
                             variant="contained"
                             className={classes.button}
                             startIcon={<AddIcon />}
                             color="primary"
+                            onClick={() => setOpenColumnFormModal(true)}
                         >Column</Button>
                         <Button
                             variant="contained" 
@@ -76,4 +120,10 @@ const Workplace: React.FC = props => {
     );
 };
 
-export default Workplace;
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        createColumn: (dto: ColumnDTO) => dispatch(actions.createColumn(dto))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Workplace);
