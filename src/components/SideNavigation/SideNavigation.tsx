@@ -35,6 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawerItemText: {
             color: '#c5c8cc'
+        },
+        logoText: {
+            fontSize: 24,
+            fontWeight: 'bold',
+            color: '#c5c8cc',
+            fontStyle: 'italic'
         }
     }),
 );
@@ -54,12 +60,7 @@ const SideNavigation: React.FC = props => {
             }}
         >
             <div id="SideNavigation_Header">
-                <Typography style={{
-                    fontSize: 24,
-                    fontWeight: 'bold',
-                    color: '#c5c8cc',
-                    fontStyle: 'italic'
-                }}>Cobify</Typography>
+                <Typography className={classes.logoText}>Cobify</Typography>
             </div>
 
             <div id="SideNavigation_Items">

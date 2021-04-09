@@ -28,6 +28,11 @@ interface IGuestListProps {
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center'
+        },
         button: {
             width: 30,
             height: 32,
@@ -40,6 +45,23 @@ const useStyles = makeStyles((theme: Theme) =>
             '&:hover': {
                 boxShadow: 'none'
             }
+        },
+        popover: {
+            marginTop: 7
+        },
+        guestList: {
+            minWidth: 100
+        },
+        guestListItem : {
+            paddingTop: 10,
+            paddingBottom: 10
+        },
+        guestName: {
+            marginRight: 15, 
+            flexGrow: 1, 
+            textAlign: 'right', 
+            overflow: 'nowrap', 
+            textOverflow: 'nowrap'
         }
     })
 );
@@ -94,7 +116,7 @@ const GuestList: React.FC<IGuestListProps> = props => {
     if (!props.boardID) return null;
     
     return (
-        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+        <div className={classes.root}>
             <Popover
                 id="guest-list-popup"
                 open={Boolean(anchorEl)}
@@ -108,7 +130,7 @@ const GuestList: React.FC<IGuestListProps> = props => {
                     vertical: 'top',
                     horizontal: add ? 'right' : 'center',
                 }}
-                style={{marginTop: 7}}
+                className={classes.popover}
             >
                 {!add ? <ListItem
                     button
@@ -117,20 +139,14 @@ const GuestList: React.FC<IGuestListProps> = props => {
                     Remove
                 </ListItem> : null}
 
-                {add ? <List>
+                {add ? <List className={classes.guestList}>
                     {getAvailableGuests().map(guest =>
                         <ListItem
                             button
                             onClick={() => handleAdd(guest.id)}
-                            style={{paddingTop: 10, paddingBottom: 10}}
+                            className={classes.guestListItem}
                         >
-                            <Typography style={{
-                                marginRight: 15, 
-                                flexGrow: 1, 
-                                textAlign: 'right', 
-                                overflow: 'nowrap', 
-                                textOverflow: 'nowrap'}}
-                            >{guest.firstName + " " + guest.lastName}</Typography>
+                            <Typography className={classes.guestName}>{guest.firstName + " " + guest.lastName}</Typography>
                             <ListItemSecondaryAction>
                                 <Avatar
                                     initials={
@@ -138,13 +154,14 @@ const GuestList: React.FC<IGuestListProps> = props => {
                                         (guest.lastName || '').charAt(0)).toUpperCase()
                                     }
                                     color={guest.color}
-                                    size={30}
+                                    size={32}
                                 />
                             </ListItemSecondaryAction>
                         </ListItem>
                     )}
                 </List> : null}
             </Popover>
+
             {
                 filterGuests().map(guest =>
                     <Button
@@ -168,6 +185,7 @@ const GuestList: React.FC<IGuestListProps> = props => {
                     </Button>
                 )
             }
+
             <Button
                 className={classes.button}
                 variant="contained"
