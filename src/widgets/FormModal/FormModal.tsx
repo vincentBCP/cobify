@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             fontWeight: 'bold', 
-            marginBottom: 25,
+            marginBottom: 20,
             fontSize: 18
         },
         actions: {
-            marginTop: 30
+            marginTop: 20
         }
     })
 );
@@ -78,7 +78,7 @@ const FormModal: React.FC<IFormModalProps> = props => {
                     
                     <form onSubmit={props.useFormHandleSubmit(handleSubmit)}>
                         {props.children}
-                        <div style={{marginTop: 20}}>
+                        <div className={classes.actions}>
                             <FormActions
                                 loading={loading}
                                 success={success}
