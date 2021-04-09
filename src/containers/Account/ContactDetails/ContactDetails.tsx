@@ -15,7 +15,7 @@ import AppAPI from '../../../api/AppAPI';
 import Aux from '../../../hoc/Auxi';
 
 import CodeAuthenticator from '../../../components/CodeAuthenticator';
-import FormActions from '../../../widgets/FormActions';
+import FormActions from '../../../widgets/FormModal/FormActions';
 
 import * as actions from '../../../store/actions';
 

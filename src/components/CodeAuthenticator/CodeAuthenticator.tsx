@@ -7,7 +7,7 @@ import AppAPI from '../../api/AppAPI';
 
 import CodeForm from './CodeForm';
 
-import { SUCCESS_DELAY } from '../../widgets/FormActions/SendButton/SendButton';
+import { SUCCESS_DELAY } from '../../widgets/FormModal/FormActions/SendButton/SendButton';
 
 interface ICodeAuthenticatorProps {
     open?: boolean,

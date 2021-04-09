@@ -16,7 +16,7 @@ import * as actions from '../../../store/actions';
 
 import UserDetails from '../../../models/types/UserDetails';
 
-import SendButton from '../../../widgets/FormActions/SendButton';
+import SendButton from '../../../widgets/FormModal/FormActions/SendButton';
 
 interface IPublicInfoProps {
     user: any,

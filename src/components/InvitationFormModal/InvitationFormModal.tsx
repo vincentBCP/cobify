@@ -16,8 +16,8 @@ import Invitation from '../../models/types/Invitation';
 import InvitationDTO from '../../models/dto/InvitationDTO';
 
 import Avatar from '../../widgets/Avatar';
-import FormActions from '../../widgets/FormActions';
-import { SUCCESS_DELAY } from '../../widgets/FormActions/SendButton/SendButton';
+import FormActions from '../../widgets/FormModal/FormActions';
+import { SUCCESS_DELAY } from '../../widgets/FormModal/FormActions/SendButton/SendButton';
 
 import Form1 from './Form1';
 import Form2 from './Form2';
