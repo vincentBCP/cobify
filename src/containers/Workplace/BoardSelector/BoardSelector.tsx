@@ -31,7 +31,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const BoardSelector: React.FC = props => {
+interface IBoardSelectorProps {
+    handleChange: (arg1: Board) => void
+}
+
+const BoardSelector: React.FC<IBoardSelectorProps> = props => {
     const theme = useTheme();
     const classes = useStyles();
 
@@ -49,6 +53,7 @@ const BoardSelector: React.FC = props => {
     }
 
     const handleSelect = (board: Board) => {
+        props.handleChange(board);
         setSelectedBoard(board);
         setAnchorEl(null);
     }
