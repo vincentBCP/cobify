@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '100%'
         },
         header: {
-            padding: "30px 20px 20px 20px"
+            padding: "30px 50px 20px 50px"
         },
         button: {
             marginRight: 10

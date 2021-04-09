@@ -18,17 +18,17 @@ import { Typography } from '@material-ui/core';
 
 import './SideNavigation.scss';
 
-const drawerWidth = 240;
+export const SIDE_NAVIGATION_WIDTH = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         drawer: {
-            width: drawerWidth,
+            width: SIDE_NAVIGATION_WIDTH,
             flexShrink: 0
         },
         drawerPaper: {
             backgroundColor: '#233044',
-            width: drawerWidth,
+            width: SIDE_NAVIGATION_WIDTH,
         },
         drawerItemIcon: {
             color: '#777f8a'

@@ -11,7 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import Avatar from '../../widgets/Avatar';
 
-const drawerWidth = 240;
+import { SIDE_NAVIGATION_WIDTH } from '../SideNavigation/SideNavigation';
 
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundColor: 'white',
             padding: 2,
             boxShadow: 'none',
-            paddingLeft: drawerWidth
+            paddingLeft: SIDE_NAVIGATION_WIDTH
         },
         icon: {
             color: '#9e9e9e',
