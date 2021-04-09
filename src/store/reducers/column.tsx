@@ -20,7 +20,7 @@ const initialState: IState = {
         },
         {
             id: "1",
-            name: "Done",
+            name: "Completed",
             boardID: "1",
             hostID: "1"
         }

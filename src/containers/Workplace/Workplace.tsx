@@ -13,6 +13,7 @@ import ApplicationBar from '../../components/ApplicationBar';
 
 import BoardSelector from './BoardSelector';
 import GuestList from './GuestList';
+import Columns from './Columns';
 
 import Board from '../../models/types/Board';
 
@@ -65,7 +66,9 @@ const Workplace: React.FC = props => {
                             boardID={board?.id}
                         />
                     </Grid>
-                    
+                    <Columns
+                        boardID={board.id}
+                    />
                 </Paper>
                 : null
             }
