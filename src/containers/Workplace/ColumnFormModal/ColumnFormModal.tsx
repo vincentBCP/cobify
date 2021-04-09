@@ -19,7 +19,7 @@ interface IBoardInvitationFormModalProps {
 }
 
 const ColumnFormModal: React.FC<IBoardInvitationFormModalProps> = props => {
-    const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit(data);
@@ -29,6 +29,7 @@ const ColumnFormModal: React.FC<IBoardInvitationFormModalProps> = props => {
         <FormModal
             title="Add column"
             open={props.open}
+            reset={reset}
             useFormHandleSubmit={handleSubmit}
             handleSubmit={handleFormSubmit}
             handleCancel={props.handleCancel}

@@ -1,11 +1,11 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import ColumnAPI from '../../api/ColumnAPI';
 
 import ColumnDTO from '../../models/dto/ColumnDTO';
 import Column from '../../models/types/Column';
 
 import * as actionTypes from './actionTypes';
-
-const ObjectID = require('bson-objectid');
 
 export const createColumn = (dto: ColumnDTO) => {
     return (dispatch: any) => {
@@ -16,7 +16,7 @@ export const createColumn = (dto: ColumnDTO) => {
                 dispatch({
                     type: actionTypes.ADD_COLUMN,
                     payload: {
-                        id: ObjectID(),
+                        id: uuidv4(),
                         name: dto.name,
                         boardID: dto.boardID,
                         hostID: dto.hostID

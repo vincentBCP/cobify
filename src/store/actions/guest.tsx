@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import GuestAPI from '../../api/GuestAPI';
 
 import * as actionTypes from './actionTypes';
@@ -6,15 +8,13 @@ import Guest from '../../models/types/Guest';
 import Invitation from '../../models/types/Invitation';
 import GuestDTO from '../../models/dto/GuestDTO';
 
-const ObjectID = require('bson-objectid');
-
 export const sendGuestInvitation = (dto: GuestDTO) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             GuestAPI.sendGuestInvitation(dto)
             .then(response => {
                 const guest: Guest = {
-                    id: ObjectID(),
+                    id: uuidv4(),
                     firstName: dto.firstName,
                     lastName: dto.lastName,
                     email: dto.email,
@@ -23,7 +23,7 @@ export const sendGuestInvitation = (dto: GuestDTO) => {
                 };
 
                 const invitation: Invitation = {
-                    id: ObjectID(),
+                    id: uuidv4(),
                     guestID: guest.id,
                     boardID: dto.boardID,
                     hostID: "1",

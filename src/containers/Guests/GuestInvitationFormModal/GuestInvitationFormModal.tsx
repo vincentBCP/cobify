@@ -30,7 +30,7 @@ interface IGuestInvitationFormModalProps {
 }
 
 const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props => {
-    const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
     const [guest, setGuest] = useState<Guest | null>();
 
@@ -61,6 +61,7 @@ const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props
         <FormModal
             title="Invitation"
             open={Boolean(props.guest)}
+            reset={reset}
             useFormHandleSubmit={handleSubmit}
             handleSubmit={handleFormSubmit}
             handleCancel={props.handleCancel}

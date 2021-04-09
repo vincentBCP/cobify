@@ -1,11 +1,11 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import InvitationAPI from '../../api/InvitationAPI';
 
 import * as actionTypes from './actionTypes';
 
 import Invitation from '../../models/types/Invitation';
 import InvitationDTO from '../../models/dto/InvitationDTO';
-
-const ObjectID = require('bson-objectid');
 
 export const deleteInvitation = (id: string) => {
     return (dispatch: any) => {
@@ -30,7 +30,7 @@ export const sendInvitation = (dto: InvitationDTO) => {
             InvitationAPI.sendInvitation(dto)
             .then(response => {
                 const inv: Invitation = {
-                    id: ObjectID(),
+                    id: uuidv4(),
                     guestID: dto.guestID,
                     boardID: dto.boardID,
                     hostID: "1",

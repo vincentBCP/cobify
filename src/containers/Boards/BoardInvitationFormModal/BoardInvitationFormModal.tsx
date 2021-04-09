@@ -30,7 +30,7 @@ interface IBoardInvitationFormModalProps {
 }
 
 const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props => {
-    const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
     const [board, setBoard] = useState<Board | null>();
 
@@ -61,6 +61,7 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
         <FormModal
             title="Invitation"
             open={Boolean(props.board)}
+            reset={reset}
             useFormHandleSubmit={handleSubmit}
             handleSubmit={handleFormSubmit}
             handleCancel={props.handleCancel}
