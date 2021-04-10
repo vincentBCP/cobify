@@ -4,7 +4,7 @@ type Guest = {
     lastName: string,
     email: string,
     color: string,
-    hostID: string,
+    accountID: string,
     // computed
     displayName?: string,
     initials?: string

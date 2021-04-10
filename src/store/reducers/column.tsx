@@ -12,7 +12,7 @@ const initialState: IState = {
             id: "1",
             name: "Backlog",
             boardID: "1",
-            hostID: "1",
+            accountID: "1",
             taskIDs: [
                 "1",
                 "2"
@@ -22,7 +22,7 @@ const initialState: IState = {
             id: "2",
             name: "In Progress",
             boardID: "1",
-            hostID: "1",
+            accountID: "1",
             taskIDs: [
                 "3"
             ]
@@ -31,7 +31,7 @@ const initialState: IState = {
             id: "3",
             name: "Completed",
             boardID: "1",
-            hostID: "1"
+            accountID: "1"
         }
     ]
 };

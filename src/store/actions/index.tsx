@@ -9,9 +9,13 @@ export {
 } from './invitation';
 
 export {
-    sendGuestInvitation
+    createGuest
 } from './guest';
 
 export {
     createColumn
-} from './column'
+} from './column';
+
+export {
+    createBoard
+} from './board';

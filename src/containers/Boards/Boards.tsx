@@ -4,6 +4,8 @@ import { useSelector, connect } from 'react-redux';
 
 import IconButton from '@material-ui/core/IconButton';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Tooltip from '@material-ui/core/Tooltip';
+import AddIcon from '@material-ui/icons/Add';
 
 import './Boards.scss';
 
@@ -124,6 +126,14 @@ const Boards: React.FC<IBoardsProps> = props => {
         { id: "actions", label: "Actions", align: "center", render: renderActions }
     ];
 
+    const tableActions = (
+        <Tooltip title="Add Board">
+            <IconButton aria-label="Add Board">
+                <AddIcon />
+            </IconButton>
+        </Tooltip>
+    );
+
     return (
         <Auxi>
             <ApplicationBar title="Boards" />
@@ -139,6 +149,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                     dataList={boards}
                     headCells={headCells}
                     defaultOrderBy="name"
+                    actions={tableActions}
                 />
             </Page>
         </Auxi>

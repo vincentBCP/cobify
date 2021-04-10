@@ -53,7 +53,8 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit({
             boardID: (board || {}).id || "",
-            guestID: data.guestID
+            guestID: data.guestID,
+            accountID: (board || {}).accountID || "",
         } as InvitationDTO);
     }
 

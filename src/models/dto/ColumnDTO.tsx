@@ -1,7 +1,7 @@
 type ColumnDTO = {
     name: string,
     boardID: string,
-    hostID: string
+    accountID: string
 }
 
 export default ColumnDTO;

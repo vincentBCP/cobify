@@ -11,7 +11,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 interface ITableToolbarProps {
     title?: string,
-    numSelected: number
+    numSelected: number,
+    actions?: JSX.Element
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -61,10 +62,10 @@ const TableToolbar: React.FC<ITableToolbarProps> = props => {
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
-            ) : null/*(
+            ) : props.actions/*(
                 <Tooltip title="Filter list">
-                    <IconButton aria-label="filter list">
-                        <FilterListIcon />
+                    <IconButton aria-label="Add">
+                        <AddIcon />
                     </IconButton>
                 </Tooltip>
             )*/}

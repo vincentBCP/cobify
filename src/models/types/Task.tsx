@@ -3,7 +3,7 @@ type Task = {
     title: string,
     columnID: string,
     boardID: string,
-    hostID: string
+    accountID: string
 }
 
 export default Task;

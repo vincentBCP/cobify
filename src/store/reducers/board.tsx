@@ -1,5 +1,7 @@
 import Board from '../../models/types/Board';
 
+import * as actionTypes from '../actions/actionTypes';
+
 interface IState {
     boards: Board[]
 }
@@ -45,7 +47,31 @@ const initialState: IState = {
     ]
 };
 
+const addBoard = (state: IState, board: Board) => {
+    return {
+        ...state,
+        boards: [
+            ...state.boards,
+            board
+        ]
+    };
+};
+
+const updateBoard = (state: IState, board: Board) => {
+    const ind = state.boards.findIndex(b => b.id === board.id);
+
+    const updatedBoards = [...state.boards];
+    updatedBoards[ind] = { ...board };
+
+    return {
+        ...state,
+        boards: [...updatedBoards]
+    }
+}
+
 const actions: any = [];
+actions[actionTypes.ADD_BOARD] = addBoard;
+actions[actionTypes.UPDATE_BOARD] = updateBoard;
 
 const boardReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

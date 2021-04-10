@@ -1,48 +1,32 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import GuestAPI from '../../api/GuestAPI';
+
+import GuestDTO from '../../models/dto/GuestDTO';
 
 import * as actionTypes from './actionTypes';
 
-import Guest from '../../models/types/Guest';
-import Invitation from '../../models/types/Invitation';
-import GuestDTO from '../../models/dto/GuestDTO';
-
-export const sendGuestInvitation = (dto: GuestDTO) => {
+export const createGuest = (dto: GuestDTO) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            GuestAPI.sendGuestInvitation(dto)
-            .then(response => {
-                const guest: Guest = {
-                    id: uuidv4(),
-                    firstName: dto.firstName,
-                    lastName: dto.lastName,
-                    email: dto.email,
-                    color: dto.color,
-                    hostID: "1"
-                };
-
-                const invitation: Invitation = {
-                    id: uuidv4(),
-                    guestID: guest.id,
-                    boardID: dto.boardID,
-                    hostID: "1",
-                    link: ""
+            GuestAPI
+            .createGuest(dto)
+            .then(guest => {
+                const g = {
+                    ...guest,
+                    displayName: guest.firstName + " " + guest.lastName,
+                    initials: ((guest.firstName).charAt(0).toUpperCase() + (guest.lastName).charAt(0)).toUpperCase()
                 };
 
                 dispatch({
                     type: actionTypes.ADD_GUEST,
-                    payload: guest
+                    payload: g
                 });
 
-                dispatch({
-                    type: actionTypes.ADD_INVITATION,
-                    payload: invitation
-                });
-
-                resolve(true);
+                resolve(g);
             })
-            .catch(error => reject(error));
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
         });
-    }
+    };
 };

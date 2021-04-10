@@ -1,9 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import ColumnAPI from '../../api/ColumnAPI';
 
 import ColumnDTO from '../../models/dto/ColumnDTO';
-import Column from '../../models/types/Column';
 
 import * as actionTypes from './actionTypes';
 
@@ -12,18 +9,13 @@ export const createColumn = (dto: ColumnDTO) => {
         return new Promise((resolve, reject) => {
             ColumnAPI
             .createColumn(dto)
-            .then(response => {
+            .then(column => {
                 dispatch({
                     type: actionTypes.ADD_COLUMN,
-                    payload: {
-                        id: uuidv4(),
-                        name: dto.name,
-                        boardID: dto.boardID,
-                        hostID: dto.hostID
-                    } as Column
+                    payload: column
                 });
 
-                resolve(true);
+                resolve(column);
             })
             .catch(error => {
                 console.log(error);

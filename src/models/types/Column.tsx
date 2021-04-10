@@ -2,7 +2,7 @@ type Column = {
     id: string,
     name: string,
     boardID: string,
-    hostID: string,
+    accountID: string,
     taskIDs?: string[]
 };
 

@@ -3,7 +3,7 @@ type GuestDTO = {
     lastName: string,
     email: string,
     color: string,
-    boardID: string
+    accountID: string
 }
 
 export default GuestDTO;

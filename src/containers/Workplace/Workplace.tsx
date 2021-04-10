@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import {makeStyles, createStyles, Theme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -22,6 +22,7 @@ import Board from '../../models/types/Board';
 import ColumnDTO from '../../models/dto/ColumnDTO';
 
 import * as actions from '../../store/actions';
+import * as actionTypes from '../../store/actions/actionTypes'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,6 +48,7 @@ interface IWorkplaceProps {
 
 const Workplace: React.FC<IWorkplaceProps> = props => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const [openColumnFormModal, setOpenColumnFormModal] = useState(false);
     const [board, setBoard] = useState<Board>();
@@ -60,10 +62,30 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
             props.createColumn({
                 name: data.name,
                 boardID: board?.id,
-                hostID: "1"
-            } as ColumnDTO),
+                accountID: board?.accountID,
+            } as ColumnDTO)
+            .then(column => {
+                if (!board) return column;
+                
+                const updatedBoard: Board = {
+                    ...board,
+                    columnIDs: [
+                        ...(board?.columnIDs || []),
+                        column.id
+                    ]
+                };
+
+                dispatch({
+                    type: actionTypes.UPDATE_BOARD,
+                    payload: updatedBoard
+                });
+
+                setBoard(updatedBoard);
+
+                return column;
+            }),
             () => {
-                setOpenColumnFormModal(false)
+                setOpenColumnFormModal(false);
             },
             () => { }
         ];

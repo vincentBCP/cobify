@@ -82,7 +82,8 @@ interface ITableProps {
     dataList: any[],
     headCells: HeadCell[],
     defaultOrderBy: string,
-    title?: string
+    title?: string,
+    actions?: JSX.Element
 }
 
 const CustomTable: React.FC<ITableProps> = props => {
@@ -144,7 +145,11 @@ const CustomTable: React.FC<ITableProps> = props => {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={0}>
-                <TableToolbar title={props.title} numSelected={selected.length} />
+                <TableToolbar
+                    title={props.title} 
+                    numSelected={selected.length}
+                    actions={props.actions}
+                />
                 <TableContainer>
                     <Table className={classes.table}>
                         <TableHead

@@ -1,7 +1,7 @@
 type Invitation = {
     id: string,
     guestID: string,
-    hostID: string,
+    accountID: string,
     boardID: string,
     link: string
 };

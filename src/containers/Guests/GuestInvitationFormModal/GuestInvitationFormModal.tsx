@@ -53,7 +53,8 @@ const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit({
             guestID: (guest || {}).id || "",
-            boardID: data.boardID
+            boardID: data.boardID,
+            accountID: (guest || {}).accountID || "",
         } as InvitationDTO);
     }
 

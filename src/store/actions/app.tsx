@@ -16,7 +16,10 @@ export const updateUserDetails = (userDetails: UserDetails) => {
 
                 resolve(response);
             })
-            .catch(error => reject(error));
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
         });
     };
 };
@@ -35,6 +38,7 @@ export const updateEmail = (email: string) => {
                 resolve(true);
             })
             .catch(error => {
+                console.log(error);
                 reject(error);
             });
         });

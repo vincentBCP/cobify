@@ -13,21 +13,21 @@ const initialState: IState = {
             title: "Redesign the homepage",
             boardID: "1",
             columnID: "1",
-            hostID: "1"
+            accountID: "1"
         },
         {
             id: "2",
             title: "Upgrade dependencies to latest versions",
             boardID: "1",
             columnID: "1",
-            hostID: "1"
+            accountID: "1"
         },
         {
             id: "3",
             title: "Stripe payment integration",
             boardID: "1",
             columnID: "2",
-            hostID: "1"
+            accountID: "1"
         }
     ]
 };
