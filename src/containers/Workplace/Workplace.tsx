@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
 import {makeStyles, createStyles, Theme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -16,10 +16,13 @@ import ApplicationBar from '../../components/ApplicationBar';
 import BoardSelector from './BoardSelector';
 import GuestList from './GuestList';
 import Columns from './Columns';
-import ColumnFormModal from './ColumnFormModal';
+import CreateColumnFormModal from './CreateColumnFormModal';
+import CreateTaskFormModal from './CreateTaskFormModal';
 
 import Board from '../../models/types/Board';
 import ColumnDTO from '../../models/dto/ColumnDTO';
+import TaskDTO from '../../models/dto/TaskDTO';
+import Column from '../../models/types/Column';
 
 import * as actions from '../../store/actions';
 import * as actionTypes from '../../store/actions/actionTypes'
@@ -43,14 +46,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IWorkplaceProps {
-    createColumn: (arg1: ColumnDTO) => Promise<any>
+    createColumn: (arg1: ColumnDTO) => Promise<any>,
+    createTask: (arg1: TaskDTO) => Promise<any>
 }
 
 const Workplace: React.FC<IWorkplaceProps> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [openColumnFormModal, setOpenColumnFormModal] = useState(false);
+    const columns: Column[] = useSelector((state: any) => state.column.columns);
+
+    const [addColumn, setAddColumn] = useState(false);
+    const [addTask, setAddTask] = useState(false);
     const [board, setBoard] = useState<Board>();
 
     const handleBoardChange = (board: Board) => {
@@ -85,14 +92,53 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                 return column;
             }),
             () => {
-                setOpenColumnFormModal(false);
+                setAddColumn(false);
             },
             () => { }
         ];
     }
 
     const handleCancelCreateColumn = () => {
-        setOpenColumnFormModal(false);
+        setAddColumn(false);
+    }
+
+    const handleSumbitTask = (data: any): [Promise<any>, () => void, () => void] => {
+        return [
+            props.createTask({
+                title: data.title,
+                columnID: board?.columnIDs[0],
+                boardID: board?.id,
+                accountID: board?.accountID,
+            } as TaskDTO)
+            .then(task => {
+                const column = columns.find(c => c.id === task.columnID);
+
+                if (!column) return task;
+                
+                const updatedColumn = {
+                    ...column,
+                    taskIDs: [
+                        ...(column?.taskIDs || []),
+                        task.id
+                    ]
+                };
+                
+                dispatch({
+                    type: actionTypes.UPDATE_COLUMN,
+                    payload: updatedColumn
+                });
+
+                return task;
+            }),
+            () => {
+                setAddTask(false);
+            },
+            () => { }
+        ];
+    }
+
+    const handleCancelCreateTask = () => {
+        setAddTask(false);
     }
 
     return (
@@ -102,10 +148,16 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                 component={<BoardSelector handleChange={handleBoardChange} />}
             />
 
-            <ColumnFormModal
-                open={openColumnFormModal}
+            <CreateColumnFormModal
+                open={addColumn}
                 handleSubmit={handleSumbitColumn}
                 handleCancel={handleCancelCreateColumn}
+            />
+
+            <CreateTaskFormModal
+                open={addTask}
+                handleSubmit={handleSumbitTask}
+                handleCancel={handleCancelCreateTask}
             />
 
             {
@@ -117,7 +169,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                             className={classes.button}
                             startIcon={<AddIcon />}
                             color="primary"
-                            onClick={() => setOpenColumnFormModal(true)}
+                            onClick={() => setAddColumn(true)}
                         >Column</Button>
                         <Button
                             variant="contained" 
@@ -125,6 +177,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                             startIcon={<AddIcon />}
                             color="primary"
                             disabled={!board?.columnIDs || board?.columnIDs.length < 1}
+                            onClick={() => setAddTask(true)}
                         >Task</Button>
                         <span style={{flexGrow: 1}}></span>
                         <GuestList
@@ -143,7 +196,8 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        createColumn: (dto: ColumnDTO) => dispatch(actions.createColumn(dto))
+        createColumn: (dto: ColumnDTO) => dispatch(actions.createColumn(dto)),
+        createTask: (dto: TaskDTO) => dispatch(actions.createTask(dto))
     }
 }
 

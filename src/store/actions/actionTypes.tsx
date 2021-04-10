@@ -9,6 +9,7 @@ export const ADD_GUEST = "ADD_GUEST";
 export const ADD_COLUMN = "ADD_COLUMN";
 export const UPDATE_COLUMN = "UPDATE_COLUMN";
 
+export const ADD_TASK = "ADD_TASK";
 export const UPDATE_TASK = "UPDATE_TASK";
 
 export const ADD_BOARD = "ADD_BOARD";

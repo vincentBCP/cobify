@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
 
@@ -102,7 +103,7 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
             >
                 <List className={classes.list}>
                     {
-                        boards.map(board =>
+                        _.orderBy(boards, ["name"]).map(board =>
                             <ListItem
                                 button
                                 key={board.id}

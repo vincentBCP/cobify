@@ -12,13 +12,13 @@ interface IFormInputs {
     name: string
 };
 
-interface IBoardInvitationFormModalProps {
+interface ICreateColumnFormModalProps {
     open?: boolean,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
 }
 
-const ColumnFormModal: React.FC<IBoardInvitationFormModalProps> = props => {
+const CreateColumnFormModal: React.FC<ICreateColumnFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
@@ -54,4 +54,4 @@ const ColumnFormModal: React.FC<IBoardInvitationFormModalProps> = props => {
     );
 };
 
-export default ColumnFormModal;
+export default CreateColumnFormModal;

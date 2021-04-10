@@ -32,6 +32,16 @@ const initialState: IState = {
     ]
 };
 
+const addTask = (state: IState, task: Task) => {
+    return {
+        ...state,
+        tasks: [
+            ...state.tasks,
+            task
+        ]
+    };
+};
+
 const updateTask = (state: IState, task: Task) => {
     const ind = state.tasks.findIndex(t => t.id === task.id);
 
@@ -46,6 +56,7 @@ const updateTask = (state: IState, task: Task) => {
 
 const actions: any = [];
 actions[actionTypes.UPDATE_TASK] = updateTask;
+actions[actionTypes.ADD_TASK] = addTask;
 
 const taskReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

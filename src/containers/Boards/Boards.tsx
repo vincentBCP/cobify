@@ -21,8 +21,10 @@ import Guest from '../../models/types/Guest';
 import Column from '../../models/types/Column';
 import Task from '../../models/types/Task';
 import InvitationDTO from '../../models/dto/InvitationDTO';
+import BoardDTO from '../../models/dto/BoardDTO';
 
 import BoardInvitationFormModal from './BoardInvitationFormModal';
+import CreateBoardFormModal from './CreateBoardFormModal';
 
 import Chip from '../../widgets/Chip';
 
@@ -30,11 +32,13 @@ import * as actions from '../../store/actions';
 
 interface IBoardsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
-    sendInvitation: (arg1: InvitationDTO) => Promise<any>
+    sendInvitation: (arg1: InvitationDTO) => Promise<any>,
+    createBoard: (arg1: BoardDTO) => Promise<any>
 }
 
 const Boards: React.FC<IBoardsProps> = props => {
     const [board, setBoard] = useState<Board | null>(null);
+    const [add, setAdd] = useState(false);
 
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
@@ -60,7 +64,23 @@ const Boards: React.FC<IBoardsProps> = props => {
         setBoard(board);
     }
 
-    const handleSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
+    const handleCreateBoardSubmit = (dto: BoardDTO): [Promise<any>, () => void, () => void] =>  {
+        return [
+            props.createBoard(dto),
+            () => { // succes callback
+                setAdd(false);
+            },
+            () => { // fail callback
+
+            }
+        ];
+    }
+
+    const handleCreateBoardCancel = () => {
+        setAdd(false);
+    }
+
+    const handleBoardInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
         return [
             props.sendInvitation(dto),
             () => { // succes callback
@@ -72,7 +92,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         ];
     }
 
-    const handleCancel = () => {
+    const handleBoardInvitationCancel = () => {
         setBoard(null);
     }
 
@@ -128,7 +148,10 @@ const Boards: React.FC<IBoardsProps> = props => {
 
     const tableActions = (
         <Tooltip title="Add Board">
-            <IconButton aria-label="Add Board">
+            <IconButton
+                aria-label="Add Board"
+                onClick={() => setAdd(true)}
+            >
                 <AddIcon />
             </IconButton>
         </Tooltip>
@@ -140,8 +163,14 @@ const Boards: React.FC<IBoardsProps> = props => {
 
             <BoardInvitationFormModal
                 board={board}
-                handleSubmit={handleSubmit}
-                handleCancel={handleCancel}
+                handleSubmit={handleBoardInvitationSubmit}
+                handleCancel={handleBoardInvitationCancel}
+            />
+
+            <CreateBoardFormModal
+                open={add}
+                handleSubmit={handleCreateBoardSubmit}
+                handleCancel={handleCreateBoardCancel}
             />
 
             <Page key="lorem" title="Boards">
@@ -159,7 +188,8 @@ const Boards: React.FC<IBoardsProps> = props => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
-        sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto))
+        sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
+        createBoard: (dto: BoardDTO) => dispatch(actions.createBoard(dto))
     }
 };
 

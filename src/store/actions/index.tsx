@@ -19,3 +19,7 @@ export {
 export {
     createBoard
 } from './board';
+
+export {
+    createTask
+} from './task';
