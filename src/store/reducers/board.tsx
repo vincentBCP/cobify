@@ -11,28 +11,36 @@ const initialState: IState = {
             name: "Congrego",
             code: "C",
             accountID: "1",
-            color: "#8B56F0"
+            color: "#8B56F0",
+            columnIDs: [
+                "1",
+                "2",
+                "3"
+            ]
         },
         {
             id: "2",
             name: "IHS",
             code: "I",
             accountID: "1",
-            color: "#CB4AAF"
+            color: "#CB4AAF",
+            columnIDs: []
         },
         {
             id: "3",
             name: "Safeplaces",
             code: "S",
             accountID: "1",
-            color: "#B8F393"
+            color: "#B8F393",
+            columnIDs: []
         },
         {
             id: "4",
             name: "Congrego version 2",
             code: "CC",
             accountID: "1",
-            color: "#144EEB"
+            color: "#144EEB",
+            columnIDs: []
         }
     ]
 };

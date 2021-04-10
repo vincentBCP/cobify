@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Tasks from './Tasks';
 
+import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
 import Task from '../../../models/types/Task';
 
@@ -15,7 +16,7 @@ import { SIDE_NAVIGATION_WIDTH } from '../../../components/SideNavigation/SideNa
 import * as actionTypes from '../../../store/actions/actionTypes';
 
 interface IColumnsProps {
-    boardID: string
+    board: Board
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,8 +58,7 @@ const Columns: React.FC<IColumnsProps> = props => {
     const [targetTask, setTargetTask] = useState<Task | null>(null);
     const [targetColumn, setTargetColumn] = useState<Column | null>(null);
 
-    const columns: Column[] = useSelector((state: any) => 
-        state.column.columns.filter((c: Column) => c.boardID === props.boardID));
+    const columns: Column[] = useSelector((state: any) => state.column.columns);
 
     const handleDragStart = (ev: React.DragEvent, task: Task) => {
         setSourceTask(task);
@@ -139,30 +139,34 @@ const Columns: React.FC<IColumnsProps> = props => {
     return (
         <div className={classes.root}>
             {
-                columns.map(col =>
-                    <div
-                        key={"columns-" + col.id}
+                props.board.columnIDs.map(colID => {
+                    const column = columns.find(c => c.id === colID);
+
+                    if (!column) return null;
+
+                    return <div
+                        key={"columns-" + column.id}
                         className={classes.column}
                         onDragOver={(ev: React.DragEvent) => {
-                            if (sourceTask?.columnID === col.id) return false;
+                            if (sourceTask?.columnID === column.id) return false;
                             
                             ev.preventDefault();
-                            setTargetColumn(col);
+                            setTargetColumn(column);
                             setTargetTask(null);
                         }}
                         onDrop={handleDrop}
                     >
-                        <Typography className={classes.columnTitle}>{col.name}</Typography>
+                        <Typography className={classes.columnTitle}>{column.name}</Typography>
                         <Tasks
-                            column={col}
+                            column={column}
                             sourceTask={sourceTask}
                             targetTask={targetTask}
                             handleDragStart={handleDragStart}
                             handleDragOver={handleDragOver}
                             handleDrop={handleDrop}
                         />
-                    </div>    
-                )
+                    </div>
+                })
             }
         </div>
     );

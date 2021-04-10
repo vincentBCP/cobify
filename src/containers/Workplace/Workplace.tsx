@@ -102,6 +102,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                             className={classes.button}
                             startIcon={<AddIcon />}
                             color="primary"
+                            disabled={!board?.columnIDs || board?.columnIDs.length < 1}
                         >Task</Button>
                         <span style={{flexGrow: 1}}></span>
                         <GuestList
@@ -109,7 +110,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                         />
                     </Grid>
                     <Columns
-                        boardID={board.id}
+                        board={board}
                     />
                 </Paper>
                 : null
