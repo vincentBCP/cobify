@@ -8,7 +8,7 @@ interface IState {
 
 const initialState: IState = {
     boards: [
-        {
+        /*{
             id: "1",
             name: "Congrego",
             code: "C",
@@ -43,7 +43,7 @@ const initialState: IState = {
             accountID: "1",
             color: "#144EEB",
             columnIDs: []
-        }
+        }*/
     ]
 };
 
@@ -69,9 +69,17 @@ const updateBoard = (state: IState, board: Board) => {
     }
 }
 
+const setBoards = (state: IState, boards: Board[]) => {
+    return {
+        ...state,
+        boards: [...boards]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.ADD_BOARD] = addBoard;
 actions[actionTypes.UPDATE_BOARD] = updateBoard;
+actions[actionTypes.SET_BOARDS] = setBoards;
 
 const boardReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

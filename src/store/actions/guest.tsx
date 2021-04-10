@@ -38,18 +38,12 @@ export const updateGuest = (guest: Guest) => {
             GuestAPI
             .updateGuest(guest)
             .then(guest => {
-                const g = {
-                    ...guest,
-                    displayName: guest.firstName + " " + guest.lastName,
-                    initials: ((guest.firstName).charAt(0).toUpperCase() + (guest.lastName).charAt(0)).toUpperCase()
-                };
-
                 dispatch({
                     type: actionTypes.UPDATE_GUEST,
-                    payload: g
+                    payload: guest
                 });
 
-                resolve(g);
+                resolve(guest);
             })
             .catch(error => {
                 console.log(error);

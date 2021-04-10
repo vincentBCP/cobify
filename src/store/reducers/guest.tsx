@@ -8,7 +8,7 @@ interface IState {
 
 const initialState: IState = {
     guests: [
-        {
+        /*{
             id: "1",
             firstName: "John",
             lastName: "Doe",
@@ -67,7 +67,7 @@ const initialState: IState = {
             color: "#9FB075",
             displayName: "Bakugo Katsuki",
             initials: "BK"
-        }
+        }*/
     ]
 };
 
@@ -93,9 +93,17 @@ const updateGuest = (state: IState, guest: Guest) => {
     }
 }
 
+const setGuests = (state: IState, guests: Guest[]) => {
+    return {
+        ...state,
+        guests: [...guests]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.ADD_GUEST] = addGuest;
 actions[actionTypes.UPDATE_GUEST] = updateGuest;
+actions[actionTypes.SET_GUESTS] = setGuests;
 
 const guestReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

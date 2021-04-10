@@ -5,19 +5,34 @@ import axios from '../axios';
 import ColumnDTO from '../models/dto/ColumnDTO';
 import Column from '../models/types/Column';
 
+const path = "columns/";
+const extension = ".json";
+
 class ColumnAPI {
+    public static getColumns(): Promise<Column[]> {
+        return axios.get(path + extension)
+            .then(response => {
+                const data: any = response.data || {};
+
+                return Object.keys(data).map(key =>
+                    ({...data[key]} as Column))
+            });
+    };
+
     public static createColumn(dto: ColumnDTO): Promise<Column> {
-        return axios.post('column', dto)
-            .then(response => (
-                {
-                    id: uuidv4(),
-                    ...dto
-                } as Column
-            ));
+        const columnID = uuidv4();
+
+        const newColumn: Column = {
+            id: columnID,
+            ...dto
+        };
+
+        return axios.put(path + columnID + extension, newColumn)
+            .then(response => newColumn);
     };
 
     public static updateColumn(column: Column): Promise<Column> {
-        return axios.put('column/' + column.id, column)
+        return axios.put(path + column.id + extension, column)
             .then(response => column);
     }
 };

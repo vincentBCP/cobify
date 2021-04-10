@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3001'
+    baseURL: 'https://cobify-59a63-default-rtdb.firebaseio.com/'
 });
 
 /*instance.interceptors.request.use(
@@ -22,7 +22,7 @@ instance.interceptors.response.use(
     }
 );*/
 
-instance.post = (url: string, data: any): Promise<any> => {
+/*instance.post = (url: string, data: any): Promise<any> => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(true);
@@ -52,6 +52,6 @@ instance.delete = (url: string, config: any): Promise<any> => {
             resolve(true);
         }, 1000);
     });
-}
+}*/
 
 export default instance;

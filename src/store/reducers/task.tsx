@@ -8,7 +8,7 @@ interface IState {
 
 const initialState: IState = {
     tasks: [
-        {
+        /*{
             id: "1",
             title: "Redesign the homepage",
             boardID: "1",
@@ -28,7 +28,7 @@ const initialState: IState = {
             boardID: "1",
             columnID: "2",
             accountID: "1"
-        }
+        }*/
     ]
 };
 
@@ -54,9 +54,17 @@ const updateTask = (state: IState, task: Task) => {
     }
 }
 
+const setTasks = (state: IState, tasks: Task[]) => {
+    return {
+        ...state,
+        tasks: [...tasks]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.UPDATE_TASK] = updateTask;
 actions[actionTypes.ADD_TASK] = addTask;
+actions[actionTypes.SET_TASKS] = setTasks;
 
 const taskReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

@@ -8,7 +8,7 @@ interface IState {
 
 const initialState: IState = {
     invitations: [
-        {
+        /*{
             id: "1",
             guestID: "1",
             accountID: "1",
@@ -56,7 +56,7 @@ const initialState: IState = {
             accountID: "1",
             boardID: "4",
             link: ""
-        }
+        }*/
     ]
 };
 
@@ -81,9 +81,17 @@ const addInvitation = (state: any, invitation: Invitation) => {
     };
 };
 
+const setInvitations = (state: IState, invitations: Invitation[]) => {
+    return {
+        ...state,
+        invitations: [...invitations]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.DELETE_INVITATION] = deleteInvitation;
 actions[actionTypes.ADD_INVITATION] = addInvitation;
+actions[actionTypes.SET_INVITATIONS] = setInvitations;
 
 const invitationReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

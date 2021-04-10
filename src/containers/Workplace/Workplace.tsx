@@ -27,6 +27,9 @@ import Column from '../../models/types/Column';
 import * as actions from '../../store/actions';
 import * as actionTypes from '../../store/actions/actionTypes';
 
+import BoardAPI from '../../api/BoardAPI';
+import ColumnAPI from '../../api/ColumnAPI';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -86,6 +89,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                     type: actionTypes.UPDATE_BOARD,
                     payload: updatedBoard
                 });
+                BoardAPI.updateBoard(updatedBoard);
 
                 setBoard(updatedBoard);
 
@@ -127,6 +131,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                     type: actionTypes.UPDATE_COLUMN,
                     payload: updatedColumn
                 });
+                ColumnAPI.updateColumn(updatedColumn);
 
                 return task;
             }),

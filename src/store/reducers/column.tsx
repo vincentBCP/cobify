@@ -8,7 +8,7 @@ interface IState {
 
 const initialState: IState = {
     columns: [
-        {
+        /*{
             id: "1",
             name: "Backlog",
             boardID: "1",
@@ -32,7 +32,7 @@ const initialState: IState = {
             name: "Completed",
             boardID: "1",
             accountID: "1"
-        }
+        }*/
     ]
 };
 
@@ -58,9 +58,17 @@ const updateColumn = (state: IState, column: Column) => {
     }
 }
 
+const setColumns = (state: IState, columns: Column[]) => {
+    return {
+        ...state,
+        columns: [...columns]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.ADD_COLUMN] = addColumn;
 actions[actionTypes.UPDATE_COLUMN] = updateColumn;
+actions[actionTypes.SET_COLUMNS] = setColumns;
 
 const columnReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;
