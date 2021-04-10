@@ -25,7 +25,7 @@ import TaskDTO from '../../models/dto/TaskDTO';
 import Column from '../../models/types/Column';
 
 import * as actions from '../../store/actions';
-import * as actionTypes from '../../store/actions/actionTypes'
+import * as actionTypes from '../../store/actions/actionTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

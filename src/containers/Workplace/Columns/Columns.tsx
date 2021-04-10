@@ -15,6 +15,9 @@ import { SIDE_NAVIGATION_WIDTH } from '../../../components/SideNavigation/SideNa
 
 import * as actionTypes from '../../../store/actions/actionTypes';
 
+import ColumnAPI from '../../../api/ColumnAPI';
+import TaskAPI from '../../../api/TaskAPI';
+
 interface IColumnsProps {
     board: Board
 };
@@ -104,6 +107,7 @@ const Columns: React.FC<IColumnsProps> = props => {
                 type: actionTypes.UPDATE_COLUMN,
                 payload: {...updatedTargetColumn}
             });
+            ColumnAPI.updateColumn(updatedTargetColumn);
 
             return;
         }
@@ -112,6 +116,7 @@ const Columns: React.FC<IColumnsProps> = props => {
             type: actionTypes.UPDATE_COLUMN,
             payload: {...updatedTargetColumn}
         });
+        ColumnAPI.updateColumn(updatedTargetColumn);
 
         const updatedSourceTask: Task = {
             ...sourceTask,
@@ -122,6 +127,7 @@ const Columns: React.FC<IColumnsProps> = props => {
             type: actionTypes.UPDATE_TASK,
             payload: {...updatedSourceTask}
         });
+        TaskAPI.updateTask(updatedSourceTask);
         
         const updatedSourceColumn: Column = {
             ...sColumn,
@@ -134,6 +140,7 @@ const Columns: React.FC<IColumnsProps> = props => {
             type: actionTypes.UPDATE_COLUMN,
             payload: {...updatedSourceColumn}
         });
+        ColumnAPI.updateColumn(updatedSourceColumn);
     }
 
     return (

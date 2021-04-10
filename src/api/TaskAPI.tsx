@@ -15,6 +15,11 @@ class TaskAPI {
                 } as Task
             ));
     };
+
+    public static updateTask(task: Task): Promise<Task> {
+        return axios.put('task/' + task.id, task)
+                .then(response => task);
+    }
 };
 
 export default TaskAPI;

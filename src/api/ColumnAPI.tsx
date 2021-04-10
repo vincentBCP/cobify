@@ -15,6 +15,11 @@ class ColumnAPI {
                 } as Column
             ));
     };
+
+    public static updateColumn(column: Column): Promise<Column> {
+        return axios.put('column/' + column.id, column)
+            .then(response => column);
+    }
 };
 
 export default ColumnAPI;

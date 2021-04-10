@@ -94,6 +94,11 @@ const CustomTable: React.FC<ITableProps> = props => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+    const filterDataList = () => {
+        return stableSort(props.dataList, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    }
+
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && order === Order.ASC;
         setOrder(isAsc ? Order.DESC : Order.ASC);
@@ -102,7 +107,7 @@ const CustomTable: React.FC<ITableProps> = props => {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelecteds = props.dataList.map((n) => n.id);
+            const newSelecteds = filterDataList().map((n: any) => n.id);
             setSelected(newSelecteds);
             return;
         }
@@ -130,6 +135,7 @@ const CustomTable: React.FC<ITableProps> = props => {
     };
 
     const handleChangePage = (event: unknown, newPage: number) => {
+        setSelected([]);
         setPage(newPage);
     };
 
@@ -159,12 +165,10 @@ const CustomTable: React.FC<ITableProps> = props => {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={props.dataList.length}
+                            rowCount={rowsPerPage}
                         />
                         <TableBody>
-                            {stableSort(props.dataList, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row: any, index) => {
+                            {filterDataList().map((row: any, index) => {
                                 const isItemSelected = isSelected(row.id);
 
                                 return (
