@@ -163,7 +163,7 @@ const Guests: React.FC<IGuestsProps> = props => {
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
         { id: 'boards', label: 'Boards', render: renderInvitations },
-        { id: 'actions', label: 'Actions', render: renderActions }
+        { id: 'actions', label: 'Actions', align: 'center', render: renderActions }
     ];
 
     const tableActions = (
