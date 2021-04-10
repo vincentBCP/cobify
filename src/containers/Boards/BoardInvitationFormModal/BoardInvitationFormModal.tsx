@@ -24,6 +24,7 @@ interface IFormInputs {
 };
 
 interface IBoardInvitationFormModalProps {
+    open?: boolean,
     board: Board | null,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
@@ -61,7 +62,7 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
     return (
         <FormModal
             title="Invitation"
-            open={Boolean(props.board)}
+            open={props.open}
             reset={reset}
             useFormHandleSubmit={handleSubmit}
             handleSubmit={handleFormSubmit}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import randomcolor from 'randomcolor';
 
 import { useSelector, connect } from 'react-redux';
 
@@ -6,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import './Boards.scss';
 
@@ -24,7 +26,7 @@ import InvitationDTO from '../../models/dto/InvitationDTO';
 import BoardDTO from '../../models/dto/BoardDTO';
 
 import BoardInvitationFormModal from './BoardInvitationFormModal';
-import CreateBoardFormModal from './CreateBoardFormModal';
+import BoardFormModal from './BoardFormModal';
 
 import Chip from '../../widgets/Chip';
 
@@ -33,13 +35,16 @@ import * as actions from '../../store/actions';
 interface IBoardsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
-    createBoard: (arg1: BoardDTO) => Promise<any>
+    createBoard: (arg1: BoardDTO) => Promise<any>,
+    updateBoard: (arg1: Board) => Promise<any>
 }
 
 const Boards: React.FC<IBoardsProps> = props => {
     const [board, setBoard] = useState<Board | null>(null);
-    const [add, setAdd] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [openInvitation, setOpenInvitation] = useState(false);
 
+    const user: any = useSelector((state: any) => state.app.user);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
     const boards: Board[] = useSelector((state: any) =>
@@ -60,15 +65,22 @@ const Boards: React.FC<IBoardsProps> = props => {
         ];
     };
 
-    const handleShareInvitation = (board: Board) => {
-        setBoard(board);
-    }
+    const handleBoardSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
+        const request = board
+            ? props.updateBoard({
+                ...board,
+                ...data
+            })
+            : props.createBoard({
+                ...data,
+                color: randomcolor(),
+                accountID: user.id
+            } as BoardDTO);
 
-    const handleCreateBoardSubmit = (dto: BoardDTO): [Promise<any>, () => void, () => void] =>  {
         return [
-            props.createBoard(dto),
+            request,
             () => { // succes callback
-                setAdd(false);
+                setOpen(false);
             },
             () => { // fail callback
 
@@ -76,14 +88,15 @@ const Boards: React.FC<IBoardsProps> = props => {
         ];
     }
 
-    const handleCreateBoardCancel = () => {
-        setAdd(false);
+    const handleBoardCancel = () => {
+        setOpen(false);
     }
 
     const handleBoardInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
         return [
             props.sendInvitation(dto),
             () => { // succes callback
+                setOpenInvitation(false);
                 setBoard(null);
             },
             () => { // fail callback
@@ -93,6 +106,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     }
 
     const handleBoardInvitationCancel = () => {
+        setOpenInvitation(false);
         setBoard(null);
     }
 
@@ -129,7 +143,18 @@ const Boards: React.FC<IBoardsProps> = props => {
                     size="medium"
                     onClick={(ev: React.MouseEvent) => {
                         ev.stopPropagation();
-                        handleShareInvitation(board);
+                        setOpen(true);
+                        setBoard(board);
+                    }}
+                >
+                    <EditIcon />
+                </IconButton>
+                <IconButton
+                    size="medium"
+                    onClick={(ev: React.MouseEvent) => {
+                        ev.stopPropagation();
+                        setOpenInvitation(true);
+                        setBoard(board);
                     }}
                 >
                     <PersonAddIcon />
@@ -150,7 +175,10 @@ const Boards: React.FC<IBoardsProps> = props => {
         <Tooltip title="Add Board">
             <IconButton
                 aria-label="Add Board"
-                onClick={() => setAdd(true)}
+                onClick={() => {
+                    setBoard(null);
+                    setOpen(true);
+                }}
             >
                 <AddIcon />
             </IconButton>
@@ -162,15 +190,17 @@ const Boards: React.FC<IBoardsProps> = props => {
             <ApplicationBar title="Boards" />
 
             <BoardInvitationFormModal
+                open={openInvitation}
                 board={board}
                 handleSubmit={handleBoardInvitationSubmit}
                 handleCancel={handleBoardInvitationCancel}
             />
 
-            <CreateBoardFormModal
-                open={add}
-                handleSubmit={handleCreateBoardSubmit}
-                handleCancel={handleCreateBoardCancel}
+            <BoardFormModal
+                open={open}
+                board={board}
+                handleSubmit={handleBoardSubmit}
+                handleCancel={handleBoardCancel}
             />
 
             <Page key="lorem" title="Boards">
@@ -189,7 +219,8 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
-        createBoard: (dto: BoardDTO) => dispatch(actions.createBoard(dto))
+        createBoard: (dto: BoardDTO) => dispatch(actions.createBoard(dto)),
+        updateBoard: (board: Board) => dispatch(actions.updateBoard(board))
     }
 };
 

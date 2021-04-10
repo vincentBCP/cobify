@@ -1,14 +1,12 @@
 import React from 'react';
-import randomcolor from 'randomcolor';
 
-import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
 import TextField from '@material-ui/core/TextField';
 
 import FormModal from '../../../widgets/FormModal';
 
-import BoardDTO from '../../../models/dto/BoardDTO';
+import Board from '../../../models/types/Board';
 
 import { nameRegExp } from '../../../constants';
 
@@ -17,29 +15,23 @@ interface IFormInputs {
     code: string
 };
 
-interface ICreateBoardFormModalProps {
+interface IBoardFormModalModalProps {
     open?: boolean,
+    board: Board | null,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
 }
 
-const CreateBoardFormModal: React.FC<ICreateBoardFormModalProps> = props => {
+const BoardFormModal: React.FC<IBoardFormModalModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
-    const user: any = useSelector((state: any) => state.app.user);
-
     const handleFormSubmit = (data: IFormInputs): [Promise<any>, () => void, () => void] => {
-        return props.handleSubmit({
-            name: data.name,
-            code: data.code,
-            color: randomcolor(),
-            accountID: user.id
-        } as BoardDTO);
+        return props.handleSubmit(data);
     }
 
     return (
         <FormModal
-            title="Add board"
+            title={props.board ? "Update board" : "Add board"}
             open={Boolean(props.open)}
             reset={reset}
             useFormHandleSubmit={handleSubmit}
@@ -48,6 +40,7 @@ const CreateBoardFormModal: React.FC<ICreateBoardFormModalProps> = props => {
         >
             <TextField
                 label="Name"
+                defaultValue={props.board ? props.board.name : ""}
                 fullWidth
                 required
                 error={errors.name !== undefined}
@@ -66,15 +59,16 @@ const CreateBoardFormModal: React.FC<ICreateBoardFormModalProps> = props => {
 
             <TextField
                 label="Code"
+                defaultValue={props.board ? props.board.code : ""}
                 fullWidth
                 required
                 error={errors.code !== undefined}
                 helperText={errors.code ? errors.code.message : ''}
                 inputProps={{
                     ...register('code', { 
-                        required: 'Required',
+                        required: 'Required', 
                         pattern: {
-                            value: /[a-zA-Z]*/,
+                            value: nameRegExp,
                             message: 'Invalid code format'
                         },
                         maxLength: {
@@ -88,4 +82,4 @@ const CreateBoardFormModal: React.FC<ICreateBoardFormModalProps> = props => {
     );
 };
 
-export default CreateBoardFormModal;
+export default BoardFormModal;

@@ -17,7 +17,8 @@ export {
 } from './column';
 
 export {
-    createBoard
+    createBoard,
+    updateBoard
 } from './board';
 
 export {

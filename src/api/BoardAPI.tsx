@@ -20,6 +20,11 @@ class BoardAPI {
                 } as Board;
             });
     };
+
+    public static updateBoard(board: Board): Promise<Board> {
+        return axios.put('board/' + board.id, board)
+            .then(response => board);
+    };
 };
 
 export default BoardAPI;

@@ -30,6 +30,14 @@ instance.post = (url: string, data: any): Promise<any> => {
     });
 }
 
+instance.put = (url: string, data: any): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(true);
+        }, 1000);
+    });
+}
+
 instance.get = (url: string, config: any): Promise<any> => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
