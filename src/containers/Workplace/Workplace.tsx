@@ -65,9 +65,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
             () => {
                 setOpenColumnFormModal(false)
             },
-            () => {
-                console.log("failed?");
-            }
+            () => { }
         ];
     }
 

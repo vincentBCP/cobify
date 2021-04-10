@@ -12,13 +12,20 @@ const initialState: IState = {
             id: "1",
             name: "Backlog",
             boardID: "1",
-            hostID: "1"
+            hostID: "1",
+            taskIDs: [
+                "1",
+                "2"
+            ]
         },
         {
             id: "2",
             name: "In Progress",
             boardID: "1",
-            hostID: "1"
+            hostID: "1",
+            taskIDs: [
+                "3"
+            ]
         },
         {
             id: "3",
@@ -39,8 +46,21 @@ const addColumn = (state: IState, column: Column) => {
     };
 };
 
+const updateColumn = (state: IState, column: Column) => {
+    const ind = state.columns.findIndex(c => c.id === column.id);
+
+    const updatedColumns = [...state.columns];
+    updatedColumns[ind] = { ...column };
+
+    return {
+        ...state,
+        columns: [...updatedColumns]
+    }
+}
+
 const actions: any = [];
-actions[actionTypes.ADD_COLUMN] = addColumn
+actions[actionTypes.ADD_COLUMN] = addColumn;
+actions[actionTypes.UPDATE_COLUMN] = updateColumn;
 
 const columnReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

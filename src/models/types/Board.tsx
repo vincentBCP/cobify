@@ -4,6 +4,7 @@ type Board = {
     code: string,
     accountID: string,
     color: string,
+    columnIDs: string[],
     // computed
     columnCount?: number,
     taskCount?: number,
