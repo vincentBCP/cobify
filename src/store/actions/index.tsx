@@ -9,7 +9,8 @@ export {
 } from './invitation';
 
 export {
-    createGuest
+    createGuest,
+    updateGuest
 } from './guest';
 
 export {

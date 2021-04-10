@@ -24,6 +24,7 @@ interface IFormInputs {
 };
 
 interface IGuestInvitationFormModalProps {
+    open?: boolean,
     guest: Guest | null,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
@@ -61,7 +62,7 @@ const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props
     return (
         <FormModal
             title="Invitation"
-            open={Boolean(props.guest)}
+            open={props.open}
             reset={reset}
             useFormHandleSubmit={handleSubmit}
             handleSubmit={handleFormSubmit}

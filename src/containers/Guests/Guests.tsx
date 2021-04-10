@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import randomcolor from 'randomcolor';
 
 import { useSelector, connect } from 'react-redux';
 
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
+import Tooltip from '@material-ui/core/Tooltip';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import './Guests.scss';
 
@@ -17,20 +21,26 @@ import Guest from '../../models/types/Guest';
 import Invitation from '../../models/types/Invitation';
 import Board from '../../models/types/Board';
 import InvitationDTO from '../../models/dto/InvitationDTO';
+import GuestDTO from '../../models/dto/GuestDTO';
 
 import Chip from '../../widgets/Chip';
 
 import GuestInvitationFormModal from './GuestInvitationFormModal';
+import GuestFormModal from './GuestFormModal';
 
 import * as actions from '../../store/actions';
 
 interface IGuestsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
-    sendInvitation: (arg1: InvitationDTO) => Promise<any>
+    sendInvitation: (arg1: InvitationDTO) => Promise<any>,
+    createGuest: (arg1: GuestDTO) => Promise<any>,
+    updateGuest: (arg21: Guest) => Promise<any>
 }
 
 const Guests: React.FC<IGuestsProps> = props => {
+    const [openInvitation, setOpenInvitation] = useState(false);
     const [guest, setGuest] = useState<Guest | null>(null);
+    const [open, setOpen] = useState(false);
 
     const guests: Guest[] = useSelector((state: any) => 
         state.guest.guests.map((guest: Guest) => ({
@@ -39,17 +49,42 @@ const Guests: React.FC<IGuestsProps> = props => {
         })
     ));
 
+    const user: any = useSelector((state: any) => state.app.user);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => state.board.boards);
 
-    const handleShareInvitation = (g: Guest) => {
-        setGuest(g);
+    const handleGuestSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
+        const request = guest
+            ? props.updateGuest({
+                ...guest,
+                ...data
+            })
+            : props.createGuest({
+                ...data,
+                color: randomcolor(),
+                accountID: user.id
+            } as GuestDTO);
+
+        return [
+            request,
+            () => { // succes callback
+                setOpen(false);
+            },
+            () => { // fail callback
+
+            }
+        ];
     }
 
-    const handleSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
+    const handleGuestCancel = () => {
+        setOpen(false);
+    }
+
+    const handleGuestInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
         return [
             props.sendInvitation(dto),
             () => { // succes callback
+                setOpenInvitation(false);
                 setGuest(null);
             },
             () => { // fail callback
@@ -58,7 +93,8 @@ const Guests: React.FC<IGuestsProps> = props => {
         ];
     }
 
-    const handleCancel = () => {
+    const handleGuestInvitationCancel = () => {
+        setOpenInvitation(false);
         setGuest(null);
     }
 
@@ -103,7 +139,18 @@ const Guests: React.FC<IGuestsProps> = props => {
                     size="medium"
                     onClick={(ev: React.MouseEvent) => {
                         ev.stopPropagation();
-                        handleShareInvitation(guest);
+                        setGuest(guest);
+                        setOpen(true);
+                    }}
+                >
+                    <EditIcon />
+                </IconButton>
+                <IconButton
+                    size="medium"
+                    onClick={(ev: React.MouseEvent) => {
+                        ev.stopPropagation();
+                        setGuest(guest);
+                        setOpenInvitation(true);
                     }}
                 >
                     <ShareIcon />
@@ -119,18 +166,41 @@ const Guests: React.FC<IGuestsProps> = props => {
         { id: 'actions', label: 'Actions', render: renderActions }
     ];
 
+    const tableActions = (
+        <Tooltip title="Add Guest">
+            <IconButton
+                aria-label="Add Guest"
+                onClick={() => {
+                    setGuest(null);
+                    setOpen(true);
+                }}
+            >
+                <AddIcon />
+            </IconButton>
+        </Tooltip>
+    );
+
     return (
         <Auxi>
             <ApplicationBar title="Guests" />
 
             <GuestInvitationFormModal
+                open={openInvitation}
                 guest={guest}
-                handleSubmit={handleSubmit}
-                handleCancel={handleCancel}
+                handleSubmit={handleGuestInvitationSubmit}
+                handleCancel={handleGuestInvitationCancel}
+            />
+
+            <GuestFormModal
+                open={open}
+                guest={guest}
+                handleSubmit={handleGuestSubmit}
+                handleCancel={handleGuestCancel}
             />
 
             <Page title="Guests">
                 <Table
+                    actions={tableActions}
                     dataList={guests}
                     headCells={headCells}
                     defaultOrderBy="displayName"
@@ -143,7 +213,9 @@ const Guests: React.FC<IGuestsProps> = props => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
-        sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto))
+        sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
+        createGuest: (dto: GuestDTO) => dispatch(actions.createGuest(dto)),
+        updateGuest: (guest: Guest) => dispatch(actions.updateGuest(guest))
     }
 };
 

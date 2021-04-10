@@ -15,6 +15,11 @@ class GuestAPI {
                 } as Guest;
             });
     };
+
+    public static updateGuest(guest: Guest): Promise<Guest> {
+        return axios.put('guest/' + guest.id, guest)
+            .then(response => guest);
+    };
 };
 
 export default GuestAPI;

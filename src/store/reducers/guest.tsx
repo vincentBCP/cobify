@@ -81,8 +81,21 @@ const addGuest = (state: any, guest: Guest) => {
     };
 };
 
+const updateGuest = (state: IState, guest: Guest) => {
+    const ind = state.guests.findIndex(g => g.id === guest.id);
+
+    const updatedGuest = [...state.guests];
+    updatedGuest[ind] = { ...guest };
+
+    return {
+        ...state,
+        guests: [...updatedGuest]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.ADD_GUEST] = addGuest;
+actions[actionTypes.UPDATE_GUEST] = updateGuest;
 
 const guestReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

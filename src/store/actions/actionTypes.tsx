@@ -5,6 +5,7 @@ export const DELETE_INVITATION = "DELETE_INVITATION";
 export const ADD_INVITATION = "ADD_INVITATION";
 
 export const ADD_GUEST = "ADD_GUEST";
+export const UPDATE_GUEST = "UPDATE_GUEST";
 
 export const ADD_COLUMN = "ADD_COLUMN";
 export const UPDATE_COLUMN = "UPDATE_COLUMN";
