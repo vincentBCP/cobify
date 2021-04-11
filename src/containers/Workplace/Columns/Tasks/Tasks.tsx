@@ -64,6 +64,7 @@ const Tasks: React.FC<ITasksProps> = props => {
                         onDrop={props.handleDrop}
                     >
                         <Typography className={classes.taskTitle}>{task.title}</Typography>
+                        {/*<div dangerouslySetInnerHTML={{__html: (task.description || "")}} />*/}
                     </div>
                 })
             }

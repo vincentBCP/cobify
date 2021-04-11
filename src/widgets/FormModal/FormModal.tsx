@@ -24,7 +24,7 @@ interface IFormModalProps {
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
-            width: 300,
+            minWidth: 300,
             padding: "10px 0"
         },
         title: {

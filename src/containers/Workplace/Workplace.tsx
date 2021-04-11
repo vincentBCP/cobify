@@ -109,7 +109,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
     const handleSumbitTask = (data: any): [Promise<any>, () => void, () => void] => {
         return [
             props.createTask({
-                title: data.title,
+                ...data,
                 columnID: board?.columnIDs[0],
                 boardID: board?.id,
                 accountID: board?.accountID,

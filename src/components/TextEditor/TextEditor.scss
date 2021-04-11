@@ -1,0 +1,29 @@
+#text-editor {
+    display: block;
+    min-width: 500px;
+    width: 100%;
+
+
+    #text-editor-title {
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 13px;
+        margin: 0;
+        margin-bottom: 10px;
+    }
+
+    .ck.ck-editor {
+        border: 1px solid #c4c4c4;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .ck.ck-toolbar {
+        background-color: white;
+        border: none;
+    }
+
+    .ck.ck-content {
+        border: none;
+        box-shadow: none;
+    }
+}

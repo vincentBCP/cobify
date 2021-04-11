@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
 import TextField from '@material-ui/core/TextField';
 
+import TextEditor from '../../../components/TextEditor';
 import FormModal from '../../../widgets/FormModal';
 
 interface IFormInputs {
@@ -18,9 +19,13 @@ interface ICreateTaskFormModalProps {
 
 const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
+    const [taskDescription, setTaskDescription] = useState("");
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
-        return props.handleSubmit(data);
+        return props.handleSubmit({
+            ...data,
+            description: taskDescription
+        });
     }
 
     return (
@@ -42,6 +47,14 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
                     ...register('title', { 
                         required: 'Required'
                     })
+                }}
+                style={{marginBottom: 20}}
+            />
+
+            <TextEditor
+                title="Description"
+                handleBlur={(data: any) => {
+                    setTaskDescription(data);
                 }}
             />
         </FormModal>
