@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -17,6 +17,7 @@ import * as actionTypes from '../../../store/actions/actionTypes';
 
 import ColumnAPI from '../../../api/ColumnAPI';
 import TaskAPI from '../../../api/TaskAPI';
+import BoardAPI from '../../../api/BoardAPI';
 
 interface IColumnsProps {
     board: Board
@@ -57,18 +58,32 @@ const Columns: React.FC<IColumnsProps> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const [board, setBoard] = useState<Board>();
     const [sourceTask, setSourceTask] = useState<Task | null>(null);
     const [targetTask, setTargetTask] = useState<Task | null>(null);
+    const [sourceColumn, setSourceColumn] = useState<Column | null>(null);
     const [targetColumn, setTargetColumn] = useState<Column | null>(null);
 
     const columns: Column[] = useSelector((state: any) => state.column.columns);
 
-    const handleDragStart = (ev: React.DragEvent, task: Task) => {
+    useEffect(() => {
+        setBoard(props.board);
+    }, [props.board]);
+
+    const handleTaskDragStart = (ev: React.DragEvent, task: Task) => {
+        ev.stopPropagation();
         setSourceTask(task);
-        ev.dataTransfer.setData("text", task.id);
     }
 
-    const handleDragOver = (ev: React.DragEvent, task: Task) => {
+    const handleColumnDragStart = (ev: React.DragEvent, column: Column) => {
+        ev.stopPropagation();
+        setSourceTask(null);
+        setSourceColumn(column);
+    }
+
+    const handleTaskDragOver = (ev: React.DragEvent, task: Task) => {
+        if (sourceColumn) return false;
+
         ev.stopPropagation();
 
         if (sourceTask?.id === task.id) return false;
@@ -80,9 +95,50 @@ const Columns: React.FC<IColumnsProps> = props => {
         return true;
     }
 
+    const handleColumnDragOver = (ev: React.DragEvent, column: Column) => {
+        if (sourceColumn) { // COLUMN is over column
+            if (sourceColumn.id === column.id) return false;
+
+            ev.preventDefault();
+            setTargetColumn(column);
+            
+            return true;
+        }
+        
+        // TASK is over column
+        if (sourceTask?.columnID === column.id) return false;
+                            
+        ev.preventDefault();
+        setTargetColumn(column);
+        setTargetTask(null);
+    }
+
     const handleDrop = (ev: React.DragEvent) => {
         ev.preventDefault();
 
+        if (!board) return;
+
+        // COLUMN is dropped in the column
+        if (sourceColumn && targetColumn) {
+            const sourceIndex = board.columnIDs.findIndex(id => id === sourceColumn.id)
+            const targetIndex = board.columnIDs.findIndex(id => id === targetColumn.id);
+
+            const updatedBoard = {...board};
+            updatedBoard.columnIDs = [...board.columnIDs];
+            updatedBoard.columnIDs.splice(sourceIndex < targetIndex ? targetIndex + 1: targetIndex, 0, sourceColumn.id);
+            updatedBoard.columnIDs.splice(sourceIndex > targetIndex ? sourceIndex + 1 : sourceIndex, 1);
+
+            dispatch({
+                type: actionTypes.UPDATE_BOARD,
+                payload: updatedBoard
+            });
+            setBoard(updatedBoard);
+            BoardAPI.updateBoard(updatedBoard);
+
+            return;
+        }
+
+        // TASK is dropped in the column or task
         if (!sourceTask) return;
 
         const sColumn = columns.find(c => c.id === sourceTask?.columnID);
@@ -146,7 +202,7 @@ const Columns: React.FC<IColumnsProps> = props => {
     return (
         <div className={classes.root}>
             {
-                props.board.columnIDs.map(colID => {
+                (board?.columnIDs || []).map(colID => {
                     const column = columns.find(c => c.id === colID);
 
                     if (!column) return null;
@@ -154,13 +210,9 @@ const Columns: React.FC<IColumnsProps> = props => {
                     return <div
                         key={"columns-" + column.id}
                         className={classes.column}
-                        onDragOver={(ev: React.DragEvent) => {
-                            if (sourceTask?.columnID === column.id) return false;
-                            
-                            ev.preventDefault();
-                            setTargetColumn(column);
-                            setTargetTask(null);
-                        }}
+                        draggable
+                        onDragStart={(ev: React.DragEvent) => handleColumnDragStart(ev, column)}
+                        onDragOver={(ev: React.DragEvent) => handleColumnDragOver(ev, column)}
                         onDrop={handleDrop}
                     >
                         <Typography className={classes.columnTitle}>{column.name}</Typography>
@@ -168,8 +220,8 @@ const Columns: React.FC<IColumnsProps> = props => {
                             column={column}
                             sourceTask={sourceTask}
                             targetTask={targetTask}
-                            handleDragStart={handleDragStart}
-                            handleDragOver={handleDragOver}
+                            handleDragStart={handleTaskDragStart}
+                            handleDragOver={handleTaskDragOver}
                             handleDrop={handleDrop}
                         />
                     </div>
