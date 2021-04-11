@@ -147,17 +147,17 @@ const Columns: React.FC<IColumnsProps> = props => {
         if (!sColumn || !tColumn) return;
 
         const sourceIndex = !sColumn.taskIDs ? 0 : sColumn.taskIDs.findIndex(str => str === sourceTask?.id);
-        let targetIndex = !tColumn.taskIDs ? 0 : tColumn.taskIDs.findIndex(str => str === targetTask?.id) + 1;
+        let targetIndex = !tColumn.taskIDs ? 0 : tColumn.taskIDs.findIndex(str => str === targetTask?.id);
         
         const updatedTargetColumn: Column = {
             ...tColumn,
             taskIDs: [...(tColumn.taskIDs || [])]
         }
         
-        updatedTargetColumn.taskIDs?.splice(targetIndex, 0, sourceTask?.id); // add duplicate taskID to the list
 
         if (tColumn.id === sColumn.id) {
-            updatedTargetColumn.taskIDs?.splice(sourceIndex, 1); // remove original taskID from the list
+            updatedTargetColumn.taskIDs?.splice(sourceIndex < targetIndex ? targetIndex + 1 : targetIndex, 0, sourceTask?.id);
+            updatedTargetColumn.taskIDs?.splice(sourceIndex > targetIndex ? sourceIndex + 1 : sourceIndex, 1);
 
             dispatch({
                 type: actionTypes.UPDATE_COLUMN,
@@ -167,6 +167,8 @@ const Columns: React.FC<IColumnsProps> = props => {
 
             return;
         }
+
+        updatedTargetColumn.taskIDs?.splice(targetIndex, 0, sourceTask?.id);
 
         dispatch({
             type: actionTypes.UPDATE_COLUMN,
