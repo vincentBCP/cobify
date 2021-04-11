@@ -76,10 +76,23 @@ const setBoards = (state: IState, boards: Board[]) => {
     }
 }
 
+const deleteBoard = (state: IState, id: string) => {
+    const ind = state.boards.findIndex(b => b.id === id);
+
+    const updatedBoards = [...state.boards];
+    updatedBoards.splice(ind, 1);
+
+    return {
+        ...state,
+        boards: [...updatedBoards]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.ADD_BOARD] = addBoard;
 actions[actionTypes.UPDATE_BOARD] = updateBoard;
 actions[actionTypes.SET_BOARDS] = setBoards;
+actions[actionTypes.DELETE_BOARD] = deleteBoard;
 
 const boardReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

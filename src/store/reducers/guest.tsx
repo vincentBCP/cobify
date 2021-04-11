@@ -100,10 +100,23 @@ const setGuests = (state: IState, guests: Guest[]) => {
     }
 }
 
+const deleteGuest = (state: IState, id: string) => {
+    const ind = state.guests.findIndex(g => g.id === id);
+
+    const updatedGuests = [...state.guests];
+    updatedGuests.splice(ind, 1);
+
+    return {
+        ...state,
+        guests: [...updatedGuests]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.ADD_GUEST] = addGuest;
 actions[actionTypes.UPDATE_GUEST] = updateGuest;
 actions[actionTypes.SET_GUESTS] = setGuests;
+actions[actionTypes.DELETE_GUEST] = deleteGuest;
 
 const guestReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

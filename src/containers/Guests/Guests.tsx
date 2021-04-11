@@ -34,7 +34,8 @@ interface IGuestsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
     createGuest: (arg1: GuestDTO) => Promise<any>,
-    updateGuest: (arg21: Guest) => Promise<any>
+    updateGuest: (arg21: Guest) => Promise<any>,
+    deleteGuest: (arg1: string) => Promise<any>
 }
 
 const Guests: React.FC<IGuestsProps> = props => {
@@ -78,6 +79,14 @@ const Guests: React.FC<IGuestsProps> = props => {
 
     const handleGuestCancel = () => {
         setOpen(false);
+    }
+
+    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, () => void, () => void] => {
+        const promises: any = [];
+
+        ids.forEach(id => promises.push(props.deleteGuest(id)));
+
+        return [Promise.all(promises), () => {}, () => {}];
     }
 
     const handleGuestInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
@@ -204,6 +213,7 @@ const Guests: React.FC<IGuestsProps> = props => {
                     dataList={guests}
                     headCells={headCells}
                     defaultOrderBy="displayName"
+                    handleDeleteSelectedRows={handleDeleteSelectedRows}
                 />
             </Page>
         </Auxi>
@@ -215,7 +225,8 @@ const mapDispatchToProps = (dispatch: any) => {
         deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
         createGuest: (dto: GuestDTO) => dispatch(actions.createGuest(dto)),
-        updateGuest: (guest: Guest) => dispatch(actions.updateGuest(guest))
+        updateGuest: (guest: Guest) => dispatch(actions.updateGuest(guest)),
+        deleteGuest: (id: string) => dispatch(actions.deleteGuest(id))
     }
 };
 

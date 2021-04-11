@@ -52,3 +52,24 @@ export const updateGuest = (guest: Guest) => {
         });
     };
 };
+
+export const deleteGuest = (id: string) => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            GuestAPI
+            .deleteGuest(id)
+            .then(id => {
+                dispatch({
+                    type: actionTypes.DELETE_GUEST,
+                    payload: id
+                });
+
+                resolve(id);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            })
+        });
+    };
+};

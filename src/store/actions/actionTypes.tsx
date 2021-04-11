@@ -8,6 +8,7 @@ export const ADD_INVITATION = "ADD_INVITATION";
 export const SET_GUESTS = "SET_GUEST";
 export const ADD_GUEST = "ADD_GUEST";
 export const UPDATE_GUEST = "UPDATE_GUEST";
+export const DELETE_GUEST = "DELETE_GUEST";
 
 export const SET_COLUMNS = "SET_COLUMNS";
 export const ADD_COLUMN = "ADD_COLUMN";
@@ -20,3 +21,4 @@ export const UPDATE_TASK = "UPDATE_TASK";
 export const SET_BOARDS = "SET_BOARDS";
 export const ADD_BOARD = "ADD_BOARD";
 export const UPDATE_BOARD = "UPDATE_BOARD";
+export const DELETE_BOARD = "DELETE_BOARD";

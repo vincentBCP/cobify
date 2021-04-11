@@ -36,7 +36,8 @@ interface IBoardsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
     createBoard: (arg1: BoardDTO) => Promise<any>,
-    updateBoard: (arg1: Board) => Promise<any>
+    updateBoard: (arg1: Board) => Promise<any>,
+    deleteBoard: (arg1: string) => Promise<any>
 }
 
 const Boards: React.FC<IBoardsProps> = props => {
@@ -90,6 +91,14 @@ const Boards: React.FC<IBoardsProps> = props => {
 
     const handleBoardCancel = () => {
         setOpen(false);
+    }
+
+    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, () => void, () => void] => {
+        const promises: any = [];
+
+        ids.forEach(id => promises.push(props.deleteBoard(id)));
+
+        return [Promise.all(promises), () => {}, () => {}];
     }
 
     const handleBoardInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
@@ -209,6 +218,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                     headCells={headCells}
                     defaultOrderBy="name"
                     actions={tableActions}
+                    handleDeleteSelectedRows={handleDeleteSelectedRows}
                 />
             </Page>
         </Auxi>
@@ -220,7 +230,8 @@ const mapDispatchToProps = (dispatch: any) => {
         deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
         createBoard: (dto: BoardDTO) => dispatch(actions.createBoard(dto)),
-        updateBoard: (board: Board) => dispatch(actions.updateBoard(board))
+        updateBoard: (board: Board) => dispatch(actions.updateBoard(board)),
+        deleteBoard: (id: string) => dispatch(actions.deleteBoard(id))
     }
 };
 

@@ -10,7 +10,8 @@ export {
 
 export {
     createGuest,
-    updateGuest
+    updateGuest,
+    deleteGuest
 } from './guest';
 
 export {
@@ -19,7 +20,8 @@ export {
 
 export {
     createBoard,
-    updateBoard
+    updateBoard,
+    deleteBoard
 } from './board';
 
 export {

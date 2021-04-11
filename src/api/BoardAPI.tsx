@@ -49,6 +49,14 @@ class BoardAPI {
         return axios.put(path + board.id + extension, board)
             .then(response => board);
     };
+
+    public static deleteBoard(id: string): Promise<string> {
+        return axios.delete(path + id + extension)
+            .then(response => {
+                console.log(response);
+                return id;
+            });
+    };
 };
 
 export default BoardAPI;

@@ -61,3 +61,24 @@ export const updateBoard = (board: Board) => {
         });
     };
 };
+
+export const deleteBoard = (id: string) => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            BoardAPI
+            .deleteBoard(id)
+            .then(id => {
+                dispatch({
+                    type: actionTypes.DELETE_BOARD,
+                    payload: id
+                });
+
+                resolve(id);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            })
+        });
+    };
+};

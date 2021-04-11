@@ -8,11 +8,14 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface ITableToolbarProps {
     title?: string,
     numSelected: number,
-    actions?: JSX.Element
+    actions?: JSX.Element,
+    loading?: boolean,
+    handleDelete: () => void
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,19 +59,15 @@ const TableToolbar: React.FC<ITableToolbarProps> = props => {
                     {props.title}
                 </Typography>
             )}
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
+            {props.loading ? <CircularProgress size={30} color="inherit" /> : null}
+            {(!props.loading && numSelected > 0) ? (
+                <Tooltip title="Delete" onClick={props.handleDelete}>
                     <IconButton aria-label="delete">
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
-            ) : props.actions/*(
-                <Tooltip title="Filter list">
-                    <IconButton aria-label="Add">
-                        <AddIcon />
-                    </IconButton>
-                </Tooltip>
-            )*/}
+            ) : null}
+            {(!props.loading && numSelected < 1) ? props.actions : null}
         </Toolbar>
     )
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { createStyles, makeStyles, Theme, lighten } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -83,7 +83,8 @@ interface ITableProps {
     headCells: HeadCell[],
     defaultOrderBy: string,
     title?: string,
-    actions?: JSX.Element
+    actions?: JSX.Element,
+    handleDeleteSelectedRows: (arg1: string[]) => [Promise<any>, () => void, () => void]
 }
 
 const CustomTable: React.FC<ITableProps> = props => {
@@ -93,6 +94,7 @@ const CustomTable: React.FC<ITableProps> = props => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [loading, setLoading] = useState(false);
 
     const filterDataList = () => {
         return stableSort(props.dataList, getComparator(order, orderBy))
@@ -144,6 +146,20 @@ const CustomTable: React.FC<ITableProps> = props => {
         setPage(0);
     };
 
+    const handleDelete = () => {
+        const [request, successCallback, failCallback] = props.handleDeleteSelectedRows(selected);
+
+        setLoading(true);
+
+        request
+        .then(() => {
+            setLoading(false);
+            setSelected([]);
+            successCallback();
+        })
+        .catch(() => failCallback());
+    }
+
     const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.dataList.length - page * rowsPerPage);
@@ -155,6 +171,8 @@ const CustomTable: React.FC<ITableProps> = props => {
                     title={props.title} 
                     numSelected={selected.length}
                     actions={props.actions}
+                    handleDelete={handleDelete}
+                    loading={loading}
                 />
                 <TableContainer>
                     <Table className={classes.table}>
@@ -165,7 +183,7 @@ const CustomTable: React.FC<ITableProps> = props => {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={rowsPerPage}
+                            rowCount={Math.min(props.dataList.length, rowsPerPage)}
                         />
                         <TableBody>
                             {filterDataList().map((row: any, index) => {
