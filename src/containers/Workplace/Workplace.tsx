@@ -107,13 +107,17 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
     }
 
     const handleSumbitTask = (data: any): [Promise<any>, () => void, () => void] => {
+        const t: TaskDTO = {
+            ...data,
+            columnID: board?.columnIDs[0],
+            boardID: board?.id,
+            accountID: board?.accountID,
+        };
+
+        console.log(t);
+
         return [
-            props.createTask({
-                ...data,
-                columnID: board?.columnIDs[0],
-                boardID: board?.id,
-                accountID: board?.accountID,
-            } as TaskDTO)
+            props.createTask(t)
             .then(task => {
                 const column = columns.find(c => c.id === task.columnID);
 

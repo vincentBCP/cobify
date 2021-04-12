@@ -23,8 +23,12 @@ interface IFormModalProps {
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
+        dialog: {
+            '& .MuiDialog-paper': {
+                maxWidth: 1000
+            }
+        },
         root: {
-            minWidth: 300,
             padding: "10px 0"
         },
         title: {
@@ -74,7 +78,7 @@ const FormModal: React.FC<IFormModalProps> = props => {
     };
 
     return (
-        <Dialog open={props.open || false}>
+        <Dialog open={props.open || false} className={classes.dialog}>
             <DialogContent>
                 <Paper elevation={0} className={classes.root}>
                     <Typography className={classes.title}>{props.title || "Form"}</Typography>

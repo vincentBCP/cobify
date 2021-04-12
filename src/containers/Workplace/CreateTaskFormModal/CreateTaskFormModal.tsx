@@ -19,12 +19,13 @@ interface ICreateTaskFormModalProps {
 
 const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
-    const [taskDescription, setTaskDescription] = useState("");
+    const [textEditorValue, setTextEditorValue] = useState<any>();
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit({
             ...data,
-            description: taskDescription
+            description: textEditorValue.text,
+            attachments: textEditorValue.attachments
         });
     }
 
@@ -54,7 +55,7 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
             <TextEditor
                 title="Description"
                 handleBlur={(data: any) => {
-                    setTaskDescription(data);
+                    setTextEditorValue(data);
                 }}
             />
         </FormModal>
