@@ -25,6 +25,8 @@
 
         & > div {
             display: inline-block;
+            max-height: 150px;
+            overflow: hidden;
             margin-bottom: 10px;
             margin-right: 10px;
         }
