@@ -1,4 +1,5 @@
 import GuestAPI from '../../api/GuestAPI';
+import InvitationAPI from '../../api/InvitationAPI';
 
 import GuestDTO from '../../models/dto/GuestDTO';
 import Guest from '../../models/types/Guest';
@@ -53,15 +54,27 @@ export const updateGuest = (guest: Guest) => {
     };
 };
 
-export const deleteGuest = (id: string) => {
+export const deleteGuest = (id: string, invitationIDs: string[]) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            GuestAPI
-            .deleteGuest(id)
+            const promises = [];
+
+            promises.push(GuestAPI.deleteGuest(id));
+
+            invitationIDs.forEach(id => promises.push(InvitationAPI.deleteInvitation(id)));
+
+            Promise.all(promises)
             .then(id => {
                 dispatch({
                     type: actionTypes.DELETE_GUEST,
                     payload: id
+                });
+
+                invitationIDs.forEach(id => {
+                    dispatch({
+                        type: actionTypes.DELETE_INVITATION,
+                        payload: id
+                    })
                 });
 
                 resolve(id);

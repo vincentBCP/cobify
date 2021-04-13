@@ -35,7 +35,7 @@ interface IGuestsProps {
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
     createGuest: (arg1: GuestDTO) => Promise<any>,
     updateGuest: (arg21: Guest) => Promise<any>,
-    deleteGuest: (arg1: string) => Promise<any>
+    deleteGuest: (arg1: string, arg2: string[]) => Promise<any>
 }
 
 const Guests: React.FC<IGuestsProps> = props => {
@@ -84,7 +84,17 @@ const Guests: React.FC<IGuestsProps> = props => {
     const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, () => void, () => void] => {
         const promises: any = [];
 
-        ids.forEach(id => promises.push(props.deleteGuest(id)));
+        ids.forEach(id => {
+            const invitationIDs: string[] = [];
+
+            invitations.forEach(inv => {
+                if(inv.guestID !== id) return;
+
+                invitationIDs.push(inv.id);
+            });
+
+            promises.push(props.deleteGuest(id, invitationIDs));
+        });
 
         return [Promise.all(promises), () => {}, () => {}];
     }
@@ -226,7 +236,7 @@ const mapDispatchToProps = (dispatch: any) => {
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
         createGuest: (dto: GuestDTO) => dispatch(actions.createGuest(dto)),
         updateGuest: (guest: Guest) => dispatch(actions.updateGuest(guest)),
-        deleteGuest: (id: string) => dispatch(actions.deleteGuest(id))
+        deleteGuest: (id: string, invitationIDs: string[]) => dispatch(actions.deleteGuest(id, invitationIDs))
     }
 };
 

@@ -96,29 +96,31 @@ const Boards: React.FC<IBoardsProps> = props => {
     const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, () => void, () => void] => {
         const promises: any = [];
 
-        const columnIDs: string[] = [];
-        const taskIDs: string[] = [];
-        const invitationIDs: string[] = [];
+        ids.forEach(id => {
+            const columnIDs: string[] = [];
+            const taskIDs: string[] = [];
+            const invitationIDs: string[] = [];
 
-        columns.forEach(col => {
-            if (!ids.includes(col.boardID)) return;
+            columns.forEach(col => {
+                if (col.boardID !== id) return;
 
-            columnIDs.push(col.id);
+                columnIDs.push(col.id);
+            });
+
+            tasks.forEach(t => {
+                if (t.boardID !== id) return;
+
+                taskIDs.push(t.id);
+            });
+
+            invitations.forEach(i => {
+                if (i.boardID !== id) return;
+
+                invitationIDs.push(i.id);
+            });
+        
+            promises.push(props.deleteBoard(id, columnIDs, taskIDs, invitationIDs));
         });
-
-        tasks.forEach(t => {
-            if (!ids.includes(t.boardID)) return;
-
-            taskIDs.push(t.id);
-        });
-
-        invitations.forEach(i => {
-            if (!ids.includes(i.boardID)) return;
-
-            invitationIDs.push(i.id);
-        });
-
-        ids.forEach(id => promises.push(props.deleteBoard(id, columnIDs, taskIDs, invitationIDs)));
 
         return [Promise.all(promises), () => {}, () => {}];
     }
