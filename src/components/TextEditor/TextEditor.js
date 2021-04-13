@@ -29,11 +29,8 @@ const TextEditor = props => {
             if (!f.type.startsWith("image")) return;
             updatedAttachments.push(f);
         });
-
-        console.log(updatedAttachments);
+        
         setAttachments(updatedAttachments);
-
-        console.log(files);
     }
 
     const handleRemoveAttachment = index => {

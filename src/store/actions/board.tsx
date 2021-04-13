@@ -1,4 +1,6 @@
 import BoardAPI from '../../api/BoardAPI';
+import ColumnAPI from '../../api/ColumnAPI';
+import TaskAPI from '../../api/TaskAPI';
 
 import BoardDTO from '../../models/dto/BoardDTO';
 import Board from '../../models/types/Board';
@@ -62,12 +64,18 @@ export const updateBoard = (board: Board) => {
     };
 };
 
-export const deleteBoard = (id: string) => {
+export const deleteBoard = (id: string, columnIDs: string[], taskIDs: string[]) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            BoardAPI
-            .deleteBoard(id)
-            .then(id => {
+            const promises = [];
+
+            promises.push(BoardAPI.deleteBoard(id));
+
+            columnIDs.forEach(id => promises.push(ColumnAPI.deleteColumn(id)));
+            taskIDs.forEach(id => promises.push(TaskAPI.deleteTask(id)));
+
+            Promise.all(promises)
+            .then(responses => {
                 dispatch({
                     type: actionTypes.DELETE_BOARD,
                     payload: id

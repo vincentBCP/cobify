@@ -35,6 +35,11 @@ class ColumnAPI {
         return axios.put(path + column.id + extension, column)
             .then(response => column);
     }
+
+    public static deleteColumn(id: string): Promise<string> {
+        return axios.delete(path + id + extension)
+            .then(response => id);
+    };
 };
 
 export default ColumnAPI;

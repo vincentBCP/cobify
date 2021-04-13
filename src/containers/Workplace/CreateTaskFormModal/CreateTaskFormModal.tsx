@@ -24,8 +24,8 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit({
             ...data,
-            description: textEditorValue.text,
-            attachments: textEditorValue.attachments
+            description: textEditorValue?.text || "",
+            attachments: textEditorValue?.attachments || []
         });
     }
 

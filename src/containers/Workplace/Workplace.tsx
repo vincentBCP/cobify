@@ -114,8 +114,6 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
             accountID: board?.accountID,
         };
 
-        console.log(t);
-
         return [
             props.createTask(t)
             .then(task => {

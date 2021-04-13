@@ -44,10 +44,7 @@ class GuestAPI {
 
     public static deleteGuest(id: string): Promise<string> {
         return axios.delete(path + id + extension)
-            .then(response => {
-                console.log(response);
-                return id;
-            });
+            .then(response => id);
     };
 };
 

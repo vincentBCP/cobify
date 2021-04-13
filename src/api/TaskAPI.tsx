@@ -35,6 +35,11 @@ class TaskAPI {
         return axios.put(path + task.id + extension, task)
                 .then(response => task);
     }
+
+    public static deleteTask(id: string): Promise<string> {
+        return axios.delete(path + id + extension)
+            .then(response => id);
+    };
 };
 
 export default TaskAPI;
