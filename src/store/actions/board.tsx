@@ -1,6 +1,7 @@
 import BoardAPI from '../../api/BoardAPI';
 import ColumnAPI from '../../api/ColumnAPI';
 import TaskAPI from '../../api/TaskAPI';
+import InvitationAPI from '../../api/InvitationAPI';
 
 import BoardDTO from '../../models/dto/BoardDTO';
 import Board from '../../models/types/Board';
@@ -64,7 +65,7 @@ export const updateBoard = (board: Board) => {
     };
 };
 
-export const deleteBoard = (id: string, columnIDs: string[], taskIDs: string[]) => {
+export const deleteBoard = (id: string, columnIDs: string[], taskIDs: string[], invitationIDs: string[]) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             const promises = [];
@@ -73,6 +74,7 @@ export const deleteBoard = (id: string, columnIDs: string[], taskIDs: string[]) 
 
             columnIDs.forEach(id => promises.push(ColumnAPI.deleteColumn(id)));
             taskIDs.forEach(id => promises.push(TaskAPI.deleteTask(id)));
+            invitationIDs.forEach(id => promises.push(InvitationAPI.deleteInvitation(id)));
 
             Promise.all(promises)
             .then(responses => {

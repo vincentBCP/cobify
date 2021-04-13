@@ -37,7 +37,7 @@ interface IBoardsProps {
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
     createBoard: (arg1: BoardDTO) => Promise<any>,
     updateBoard: (arg1: Board) => Promise<any>,
-    deleteBoard: (arg1: string, arg2: string[], agr3: string[]) => Promise<any>
+    deleteBoard: (arg1: string, arg2: string[], agr3: string[], arg4: string[]) => Promise<any>
 }
 
 const Boards: React.FC<IBoardsProps> = props => {
@@ -98,6 +98,7 @@ const Boards: React.FC<IBoardsProps> = props => {
 
         const columnIDs: string[] = [];
         const taskIDs: string[] = [];
+        const invitationIDs: string[] = [];
 
         columns.forEach(col => {
             if (!ids.includes(col.boardID)) return;
@@ -111,7 +112,13 @@ const Boards: React.FC<IBoardsProps> = props => {
             taskIDs.push(t.id);
         });
 
-        ids.forEach(id => promises.push(props.deleteBoard(id, columnIDs, taskIDs)));
+        invitations.forEach(i => {
+            if (!ids.includes(i.boardID)) return;
+
+            invitationIDs.push(i.id);
+        });
+
+        ids.forEach(id => promises.push(props.deleteBoard(id, columnIDs, taskIDs, invitationIDs)));
 
         return [Promise.all(promises), () => {}, () => {}];
     }
@@ -246,7 +253,8 @@ const mapDispatchToProps = (dispatch: any) => {
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
         createBoard: (dto: BoardDTO) => dispatch(actions.createBoard(dto)),
         updateBoard: (board: Board) => dispatch(actions.updateBoard(board)),
-        deleteBoard: (id: string, columnIDs: string[], taskIDs: string[]) => dispatch(actions.deleteBoard(id, columnIDs, taskIDs))
+        deleteBoard: (id: string, columnIDs: string[], taskIDs: string[], invitationIDs: string[]) => 
+            dispatch(actions.deleteBoard(id, columnIDs, taskIDs, invitationIDs))
     }
 };
 
