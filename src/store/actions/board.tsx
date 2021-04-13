@@ -9,6 +9,27 @@ import Column from '../../models/types/Column';
 
 import * as actionTypes from './actionTypes';
 
+export const getBoards = () => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            BoardAPI
+            .getBoards()
+            .then(boards => {
+                dispatch({
+                    type: actionTypes.SET_BOARDS,
+                    payload: boards
+                });
+
+                resolve(true);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+        })
+    }
+};
+
 export const createBoard = (dto: BoardDTO) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {

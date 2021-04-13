@@ -6,6 +6,27 @@ import Guest from '../../models/types/Guest';
 
 import * as actionTypes from './actionTypes';
 
+export const getGuests = () => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            GuestAPI
+            .getGuests()
+            .then(guests => {
+                dispatch({
+                    type: actionTypes.SET_GUESTS,
+                    payload: guests
+                });
+
+                resolve(true);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+        })
+    }
+};
+
 export const createGuest = (dto: GuestDTO) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 
 import './App.scss';
 
@@ -12,59 +12,44 @@ import Boards from './containers/Boards';
 import Guests from './containers/Guests';
 import ContactSupport from './containers/ContactSupport';
 import Logout from './containers/Logout';
+import PreLoader from './components/PreLoader';
 
-import BoardAPI from './api/BoardAPI';
-import ColumnAPI from './api/ColumnAPI';
-import GuestAPI from './api/GuestAPI';
-import TaskAPI from './api/TaskAPI';
-import InvitationAPI from './api/InvitationAPI';
+import * as actions from './store/actions';
 
-import * as actionTypes from './store/actions/actionTypes';
+interface IAppProps {
+    getBoards: () => Promise<any>,
+    getColumns: () => Promise<any>,
+    getGuests: () => Promise<any>,
+    getTasks: () => Promise<any>,
+    getInvitations: () => Promise<any>
+}
 
-const App: React.FC = props => {
+const App: React.FC<IAppProps> = props => {
+    const { getBoards, getColumns, getGuests, getTasks, getInvitations } = props;
+
     const dispatch = useDispatch();
+    
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        BoardAPI.getBoards()
-        .then(boards => {
-            dispatch({
-                type: actionTypes.SET_BOARDS,
-                payload: boards
-            })
-        });
+        const promises = [];
 
-        ColumnAPI.getColumns()
-        .then(columns => {
-            dispatch({
-                type: actionTypes.SET_COLUMNS,
-                payload: columns
-            })
-        });
+        promises.push(
+            getBoards(),
+            getColumns(),
+            getGuests(),
+            getTasks(),
+            getInvitations()
+        );
 
-        GuestAPI.getGuests()
-        .then(guests => {
-            dispatch({
-                type: actionTypes.SET_GUESTS,
-                payload: guests
-            })
-        });
-
-        TaskAPI.getTasks()
-        .then(tasks => {
-            dispatch({
-                type: actionTypes.SET_TASKS,
-                payload: tasks
-            })
-        });
-
-        InvitationAPI.getInvitations()
-        .then(invitations => {
-            dispatch({
-                type: actionTypes.SET_INVITATIONS,
-                payload: invitations
-            })
-        });
-    }, [ dispatch ]);
+        Promise.all(promises)
+        .then(responses => {
+            setTimeout(() => {
+                setLoading(false);
+            }, 2000);
+        })
+        .catch(error => { });
+    }, [ dispatch, getBoards, getColumns, getGuests, getTasks, getInvitations ]);
 
     let routes = (
         <Switch>
@@ -78,6 +63,8 @@ const App: React.FC = props => {
         </Switch>
     );
 
+    if(loading) return <PreLoader />;
+
     return (
         <div id="App">
             <SideNavigation />
@@ -88,4 +75,14 @@ const App: React.FC = props => {
     );
 };
 
-export default App;
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        getBoards: () => dispatch(actions.getBoards()),
+        getColumns: () => dispatch(actions.getColumns()),
+        getGuests: () => dispatch(actions.getGuests()),
+        getTasks: () => dispatch(actions.getTasks()),
+        getInvitations: () => dispatch(actions.getInvitations())
+    }
+};
+
+export default connect(null, mapDispatchToProps)(App);

@@ -4,6 +4,27 @@ import * as actionTypes from './actionTypes';
 
 import InvitationDTO from '../../models/dto/InvitationDTO';
 
+export const getInvitations = () => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            InvitationAPI
+            .getInvitations()
+            .then(invitations => {
+                dispatch({
+                    type: actionTypes.SET_INVITATIONS,
+                    payload: invitations
+                });
+
+                resolve(true);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+        })
+    }
+};
+
 export const deleteInvitation = (id: string) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
