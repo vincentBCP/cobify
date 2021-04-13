@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { connect, useDispatch, useSelector } from 'react-redux';
 
-import {makeStyles, createStyles, Theme} from '@material-ui/core';
+import {makeStyles, createStyles, Theme, CircularProgress} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             borderRadius: 0,
             backgroundColor: 'transparent',
-            height: '100%'
+            height: '100%',
+            position: 'relative'
         },
         header: {
             padding: "30px 50px 20px 50px"
@@ -62,9 +63,15 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
     const [addColumn, setAddColumn] = useState(false);
     const [addTask, setAddTask] = useState(false);
     const [board, setBoard] = useState<Board>();
+    const [loading, setLoading] = useState(false);
 
     const handleBoardChange = (board: Board) => {
+        setLoading(true);
         setBoard(board);
+
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000)
     }
 
     const handleSumbitColumn = (data: any): [Promise<any>, () => void, () => void] => {
@@ -167,36 +174,47 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
                 handleCancel={handleCancelCreateTask}
             />
 
-            {
-                board
-                ? <Paper elevation={0} className={classes.root}>
-                    <Grid container direction="row" className={classes.header}>
-                        <Button
-                            variant="contained"
-                            className={classes.button}
-                            startIcon={<AddIcon />}
-                            color="primary"
-                            onClick={() => setAddColumn(true)}
-                        >Column</Button>
-                        <Button
-                            variant="contained" 
-                            className={classes.button}
-                            startIcon={<AddIcon />}
-                            color="primary"
-                            disabled={!board?.columnIDs || board?.columnIDs.length < 1}
-                            onClick={() => setAddTask(true)}
-                        >Task</Button>
-                        <span style={{flexGrow: 1}}></span>
-                        <GuestList
-                            boardID={board?.id}
+            <Paper elevation={0} className={classes.root}>
+                {
+                    loading
+                    ? <div id="workspace-preloader">
+                        <CircularProgress />
+                        <span>Loading workspace...</span>
+                    </div>
+                    : null
+                }
+                
+                {
+                    board
+                    ? <Auxi>
+                        <Grid container direction="row" className={classes.header}>
+                            <Button
+                                variant="contained"
+                                className={classes.button}
+                                startIcon={<AddIcon />}
+                                color="primary"
+                                onClick={() => setAddColumn(true)}
+                            >Column</Button>
+                            <Button
+                                variant="contained" 
+                                className={classes.button}
+                                startIcon={<AddIcon />}
+                                color="primary"
+                                disabled={!board?.columnIDs || board?.columnIDs.length < 1}
+                                onClick={() => setAddTask(true)}
+                            >Task</Button>
+                            <span style={{flexGrow: 1}}></span>
+                            <GuestList
+                                boardID={board?.id}
+                            />
+                        </Grid>
+                        <Columns
+                            board={board}
                         />
-                    </Grid>
-                    <Columns
-                        board={board}
-                    />
-                </Paper>
-                : null
-            }
+                    </Auxi>
+                    : null
+                }
+            </Paper>
         </Auxi>
     );
 };
