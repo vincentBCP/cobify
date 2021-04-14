@@ -18,7 +18,8 @@ export {
 
 export {
     getColumns,
-    createColumn
+    createColumn,
+    updateColumn
 } from './column';
 
 export {
@@ -30,5 +31,6 @@ export {
 
 export {
     getTasks,
-    createTask
+    createTask,
+    updateTask
 } from './task';

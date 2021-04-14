@@ -2,6 +2,7 @@ import TaskAPI from '../../api/TaskAPI';
 import StorageAPI from '../../api/StorageAPI';
 
 import TaskDTO from '../../models/dto/TaskDTO';
+import Task from '../../models/types/Task';
 
 import * as actionTypes from './actionTypes';
 
@@ -49,6 +50,27 @@ export const createTask = (dto: TaskDTO) => {
             .then(task => {
                 dispatch({
                     type: actionTypes.ADD_TASK,
+                    payload: task
+                });
+
+                resolve(task);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+        });
+    };
+};
+
+export const updateTask = (task: Task) => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            TaskAPI
+            .updateTask(task)
+            .then(task => {
+                dispatch({
+                    type: actionTypes.UPDATE_TASK,
                     payload: task
                 });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { connect, useSelector } from 'react-redux';
 
 import { makeStyles, createStyles,Theme } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,10 +19,15 @@ import ColumnSelector from './ColumnSelector';
 
 import Task from '../../../models/types/Task';
 import Board from '../../../models/types/Board';
+import Column from '../../../models/types/Column';
+
+import * as actions from '../../../store/actions';
 
 interface ITaskViewModalProps {
     board?: Board,
-    task?: Task
+    task?: Task,
+    updateTask: (arg1: Task) => Promise<Task>,
+    updateColumn: (arg1: Column) => Promise<Column>
 }
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -124,9 +130,46 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         setTask(props.task);
     }, [ props.task ]);
 
+    const columns: Column[] = useSelector((state: any) => state.column.columns);
+
     const handleClose = () => {
         props.history.push("/workplace/" + props.board?.code);
     }
+
+    const handleColumnChange = (column: Column) => {
+        if (!task) return;
+
+        const sourceColumn = columns.find(c => c.id === task.columnID);
+
+        if (!sourceColumn) return;
+
+        const updatedTask: Task = {
+            ...task,
+            columnID: column.id
+        }
+
+        props.updateTask(updatedTask)
+        .then(newTask => setTask({...newTask}));
+
+        const updatedSourceColumn: Column = { ...sourceColumn};
+        const sNewTaskIDs = [...(updatedSourceColumn.taskIDs || [])];
+        const ind = sNewTaskIDs.findIndex(tID => tID === task.id);
+        sNewTaskIDs.splice(ind, 1); // remove task from the source column
+        updatedSourceColumn.taskIDs = [...sNewTaskIDs];
+
+        const updatedTargetColumn: Column = {
+            ...column,
+            taskIDs: [
+                ...(column.taskIDs || []),
+                task.id // append task to the target column
+            ]
+        };
+
+        Promise.all([
+            props.updateColumn(updatedSourceColumn),
+            props.updateColumn(updatedTargetColumn)
+        ]);
+    };
 
     return (
         <Dialog
@@ -180,7 +223,11 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                         <div className={classes.side}>
                             {
                                 task && props.board
-                                ? <ColumnSelector task={task} board={props.board} />
+                                ? <ColumnSelector
+                                    task={task}
+                                    board={props.board}
+                                    handleChange={handleColumnChange}
+                                />
                                 : <span>ha?</span>
                             }
 
@@ -208,5 +255,12 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     )
 };
 
-export default withRouter(TaskViewModal);
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        updateTask: (task: Task) => dispatch(actions.updateTask(task)),
+        updateColumn: (column: Column) => dispatch(actions.updateColumn(column))
+    }
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(TaskViewModal));
 

@@ -17,7 +17,8 @@ import Board from '../../../../models/types/Board';
 
 interface IColumnSelectorProps {
     task: Task,
-    board: Board
+    board: Board,
+    handleChange: (arg1: Column) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -63,6 +64,7 @@ const ColumnSelector: React.FC<IColumnSelectorProps> = props => {
 
     const handlelistItemClick = (column: Column) => {
         setAnchorEl(null);
+        props.handleChange(column);
     }
 
     return (
