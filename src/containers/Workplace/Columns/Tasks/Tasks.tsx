@@ -1,16 +1,28 @@
 import React from 'react';
 
 import { useSelector } from 'react-redux';
+import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { makeStyles, createStyles, Theme, Typography } from '@material-ui/core';
 
 import Task from '../../../../models/types/Task';
 import Column from '../../../../models/types/Column';
+import Board from '../../../../models/types/Board';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
             display: "block"
+        },
+        taskLink: {
+            display: 'block',
+            color: 'inherit',
+            textDecoration: 'none',
+            marginBottom: 20,
+
+            '&:last-of-type': {
+                marginBottom: 0
+            }
         },
         task: {
             display: "flex",
@@ -18,10 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: "20px",
             borderRadius: 5,
             border: '1px solid #ccc',
-            marginBottom: 20,
-            '&:last-of-type': {
-                marginBottom: 0
-            }
         },
         taskTitle: {
             fontSize: 15,
@@ -36,6 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ITasksProps {
+    board: Board,
     column: Column,
     sourceTask: Task | null,
     targetTask: Task | null,
@@ -44,7 +53,7 @@ interface ITasksProps {
     handleDrop: (arg1: React.DragEvent) => void
 }
 
-const Tasks: React.FC<ITasksProps> = props => {
+const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
     const classes = useStyles();
 
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
@@ -58,23 +67,28 @@ const Tasks: React.FC<ITasksProps> = props => {
 
                     if (!task) return null;
 
-                    return <div
-                        id={task.id}
-                        key={"tasks-" + task.id}
-                        className={classes.task}
-                        draggable
-                        onDragStart={(ev: React.DragEvent) => props.handleDragStart(ev, task)}
-                        onDragOver={(ev: React.DragEvent) => props.handleDragOver(ev, task)}
-                        onDrop={props.handleDrop}
-                    >
-                        <Typography className={classes.taskCode}>{task.code}</Typography>
-                        <Typography className={classes.taskTitle}>{task.title}</Typography>
-                        {/*<div dangerouslySetInnerHTML={{__html: (task.description || "")}} />*/}
-                    </div>
+                    return <NavLink
+                            key={"tasks-" + task.id}
+                            to={"/workplace/" + props.board.code + "/" + task.code}
+                            className={classes.taskLink}
+                        >
+                        <div
+                            id={task.id}
+                            className={classes.task}
+                            draggable
+                            onDragStart={(ev: React.DragEvent) => props.handleDragStart(ev, task)}
+                            onDragOver={(ev: React.DragEvent) => props.handleDragOver(ev, task)}
+                            onDrop={props.handleDrop}
+                        >
+                            <Typography className={classes.taskCode}>{task.code}</Typography>
+                            <Typography className={classes.taskTitle}>{task.title}</Typography>
+                            {/*<div dangerouslySetInnerHTML={{__html: (task.description || "")}} />*/}
+                        </div>
+                    </NavLink>
                 })
             }
         </div>
     );
 };
 
-export default Tasks;
+export default withRouter(Tasks);

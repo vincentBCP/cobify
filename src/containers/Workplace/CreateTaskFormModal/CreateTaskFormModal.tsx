@@ -38,26 +38,28 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
             handleSubmit={handleFormSubmit}
             handleCancel={props.handleCancel}
         >
-            <TextField
-                label="Title"
-                fullWidth
-                required
-                error={errors.title !== undefined}
-                helperText={errors.title ? errors.title.message : ''}
-                inputProps={{
-                    ...register('title', { 
-                        required: 'Required'
-                    })
-                }}
-                style={{marginBottom: 20}}
-            />
+            <div style={{width: 650}}>
+                <TextField
+                    label="Title"
+                    fullWidth
+                    required
+                    error={errors.title !== undefined}
+                    helperText={errors.title ? errors.title.message : ''}
+                    inputProps={{
+                        ...register('title', { 
+                            required: 'Required'
+                        })
+                    }}
+                    style={{marginBottom: 20}}
+                />
 
-            <TextEditor
-                title="Description"
-                handleBlur={(data: any) => {
-                    setTextEditorValue(data);
-                }}
-            />
+                <TextEditor
+                    title="Description"
+                    handleBlur={(data: any) => {
+                        setTextEditorValue(data);
+                    }}
+                />
+            </div>
         </FormModal>
     );
 };

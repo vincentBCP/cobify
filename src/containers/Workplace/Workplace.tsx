@@ -19,6 +19,7 @@ import GuestList from './GuestList';
 import Columns from './Columns';
 import CreateColumnFormModal from './CreateColumnFormModal';
 import CreateTaskFormModal from './CreateTaskFormModal';
+import TaskViewModal from './TaskViewModal';
 
 import Board from '../../models/types/Board';
 import ColumnDTO from '../../models/dto/ColumnDTO';
@@ -63,6 +64,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const [addColumn, setAddColumn] = useState(false);
     const [addTask, setAddTask] = useState(false);
     const [board, setBoard] = useState<Board | undefined>();
+    const [viewingTask, setViewingTask] = useState<Task | undefined>();
     const [loading, setLoading] = useState(false);
 
     const boards: Board[] = useSelector((state: any) => state.board.boards);
@@ -72,6 +74,14 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     useEffect(() => {
         const params: any = props.match.params || {};
         const boardCode = params.boardCode;
+        const taskCode = params.taskCode;
+
+        const task = tasks.find(t => t.code === taskCode);
+
+        if (board && board.code === boardCode) {
+            if (!loading) setViewingTask(task);
+            return;
+        };
         
         if (!boardCode) {
             setBoard(undefined);
@@ -90,8 +100,9 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
 
         setTimeout(() => {
             setLoading(false);
+            setViewingTask(task);
         }, 2000);
-    }, [props.match, boards]);
+    }, [props.match, boards, board, tasks, loading]);
 
     const handleSumbitColumn = (data: any): [Promise<any>, () => void, () => void] => {
         return [
@@ -192,6 +203,11 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 open={addTask}
                 handleSubmit={handleSumbitTask}
                 handleCancel={handleCancelCreateTask}
+            />
+
+            <TaskViewModal
+                board={board}
+                task={viewingTask}
             />
 
             <Paper elevation={0} className={classes.root}>

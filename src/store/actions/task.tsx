@@ -40,17 +40,9 @@ export const createTask = (dto: TaskDTO) => {
             const req = promises.length > 0 ? Promise.all(promises) : Promise.resolve([]);
             
             req
-            .then(responses => {
+            .then(attachments => {
                 const data: any = {...dto};
-                data.attachments = [];// replace list of File with empty array
-
-                (responses || []).forEach(uploadResponse => {
-                    data.attachments.push({
-                        name: uploadResponse.data.name,
-                        downloadTokens: uploadResponse.data.downloadTokens,
-                        timeCreated: uploadResponse.data.timeCreated
-                    });
-                });
+                data.attachments = attachments || [];// replace list of File with empty array
 
                 return TaskAPI.createTask(data);
             })

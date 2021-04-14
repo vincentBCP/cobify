@@ -219,6 +219,7 @@ const Columns: React.FC<IColumnsProps> = props => {
                     >
                         <Typography className={classes.columnTitle}>{column.name}</Typography>
                         <Tasks
+                            board={props.board}
                             column={column}
                             sourceTask={sourceTask}
                             targetTask={targetTask}
