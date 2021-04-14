@@ -11,6 +11,10 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import TextEditor from '../../../components/TextEditor';
 import ImagePreview from '../../../widgets/ImagePreview';
+import Avatar from '../../../widgets/Avatar';
+
+import AsigneeSelector from './AsigneeSelector';
+import ColumnSelector from './ColumnSelector';
 
 import Task from '../../../models/types/Task';
 import Board from '../../../models/types/Board';
@@ -32,7 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             width: 900,
             maxheight: '70vh',
-            marginBottom: 10
+            marginBottom: 10,
+        },
+        label: {
+            fontSize: 12,
+            marginBottom: 2,
+            color: "#ccc"
         },
         header: {
             display: 'flex',
@@ -63,20 +72,18 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: 20
         },
         description: {
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            fontSize: 14
         },
         attachments: {
             marginTop: 20,
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'space-between',
+            //justifyContent: 'space-between',
         },
         attachment: {
-            marginBottom: 10
-        },
-        side: {
-            //border: '1px solid green',
-            width: '35%'
+            marginBottom: 10,
+            marginRight: 10
         },
         comments: {
             width: '100%',
@@ -84,7 +91,27 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         comment:{
             
-        }
+        },
+        side: {
+            //border: '1px solid green',
+            width: '25%',
+            padding: '0 0 0 20px',
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        reporter: {
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+
+            '& p': {
+                flexGrow: 1,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                marginLeft: 10
+            }
+        },
     })
 );
 
@@ -151,7 +178,28 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                             </div>
                         </div>
                         <div className={classes.side}>
+                            {
+                                task && props.board
+                                ? <ColumnSelector task={task} board={props.board} />
+                                : <span>ha?</span>
+                            }
 
+                            <Typography className={classes.label}>Assignee</Typography>
+                            {
+                                task
+                                ? <AsigneeSelector task={task} />
+                                : null
+                            }
+                            
+                            <Typography className={classes.label}>Reporter</Typography>
+                            <div className={classes.reporter}>
+                                <Avatar
+                                    color="#ccc"
+                                    initials="U"
+                                    size={25}
+                                />
+                                <Typography>Lorem ipsum dolor sit amet consectutar</Typography>
+                            </div>
                         </div>
                     </div>
                 </Paper>

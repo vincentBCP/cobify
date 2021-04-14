@@ -8,7 +8,8 @@ type Task = {
     columnID: string,
     boardID: string,
     accountID: string,
-    attachments?: IAttachment[]
+    attachments?: IAttachment[],
+    asigneeID?: string
 }
 
 export default Task;
