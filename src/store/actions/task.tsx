@@ -11,8 +11,6 @@ export const getTasks = () => {
             TaskAPI
             .getTasks()
             .then(tasks => {
-                console.log(tasks);
-                
                 dispatch({
                     type: actionTypes.SET_TASKS,
                     payload: tasks

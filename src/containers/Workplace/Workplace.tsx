@@ -23,6 +23,7 @@ import Board from '../../models/types/Board';
 import ColumnDTO from '../../models/dto/ColumnDTO';
 import TaskDTO from '../../models/dto/TaskDTO';
 import Column from '../../models/types/Column';
+import Task from '../../models/types/Task';
 
 import * as actions from '../../store/actions';
 import * as actionTypes from '../../store/actions/actionTypes';
@@ -58,12 +59,13 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const columns: Column[] = useSelector((state: any) => state.column.columns);
-
     const [addColumn, setAddColumn] = useState(false);
     const [addTask, setAddTask] = useState(false);
     const [board, setBoard] = useState<Board>();
     const [loading, setLoading] = useState(false);
+
+    const columns: Column[] = useSelector((state: any) => state.column.columns);
+    const tasks: Task[] = useSelector((state: any) => state.task.tasks);
 
     const handleBoardChange = (board: Board) => {
         setLoading(true);
@@ -116,6 +118,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
     const handleSumbitTask = (data: any): [Promise<any>, () => void, () => void] => {
         const t: TaskDTO = {
             ...data,
+            code: (board?.code || "") + "-" + (tasks.filter(t => t.boardID === board?.id).length + 1),
             columnID: board?.columnIDs[0],
             boardID: board?.id,
             accountID: board?.accountID,

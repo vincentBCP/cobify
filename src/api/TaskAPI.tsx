@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from '../axios';
 
 import TaskDTO from '../models/dto/TaskDTO';
-import IAttachment from '../models/interfaces/IAttachment';
 import Task from '../models/types/Task';
 
 const path = "tasks/";
@@ -23,14 +22,11 @@ class TaskAPI {
     public static createTask(dto: TaskDTO): Promise<Task> {
         const taskID = uuidv4();
 
+        const d: any = {...dto};
+
         const newTask: Task = {
             id: taskID,
-            title: dto.title,
-            description: dto.description || "",
-            columnID: dto.columnID,
-            boardID: dto.boardID,
-            accountID: dto.boardID,
-            attachments: dto.attachments ? (dto.attachments as IAttachment[]) : []
+            ...d
         }
 
         return axios.put(path + taskID + extension, newTask)

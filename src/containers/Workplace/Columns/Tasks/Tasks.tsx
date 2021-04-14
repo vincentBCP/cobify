@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 15,
             fontWeight: 'bold',
             whiteSpace: 'normal'
+        },
+        taskCode: {
+            color: 'gray',
+            marginBottom: 10
         }
     })
 );
@@ -63,6 +67,7 @@ const Tasks: React.FC<ITasksProps> = props => {
                         onDragOver={(ev: React.DragEvent) => props.handleDragOver(ev, task)}
                         onDrop={props.handleDrop}
                     >
+                        <Typography className={classes.taskCode}>{task.code}</Typography>
                         <Typography className={classes.taskTitle}>{task.title}</Typography>
                         {/*<div dangerouslySetInnerHTML={{__html: (task.description || "")}} />*/}
                     </div>

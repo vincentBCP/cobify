@@ -1,6 +1,7 @@
 import IAttachment from "../interfaces/IAttachment";
 
 type TaskDTO = {
+    code: string,
     title: string,
     description?: string,
     columnID: string,
