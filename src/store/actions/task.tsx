@@ -1,4 +1,5 @@
 import TaskAPI from '../../api/TaskAPI';
+import StorageAPI from '../../api/StorageAPI';
 
 import TaskDTO from '../../models/dto/TaskDTO';
 
@@ -10,6 +11,8 @@ export const getTasks = () => {
             TaskAPI
             .getTasks()
             .then(tasks => {
+                console.log(tasks);
+                
                 dispatch({
                     type: actionTypes.SET_TASKS,
                     payload: tasks
@@ -28,8 +31,31 @@ export const getTasks = () => {
 export const createTask = (dto: TaskDTO) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            TaskAPI
-            .createTask(dto)
+            const promises: any[] = [];
+
+            dto.attachments?.forEach((file: any) => {
+                if (!(file instanceof File)) return;
+
+                promises.push(StorageAPI.upload(file as File))
+            });
+
+            const req = promises.length > 0 ? Promise.all(promises) : Promise.resolve([]);
+            
+            req
+            .then(responses => {
+                const data: any = {...dto};
+                data.attachments = [];// replace list of File with empty array
+
+                (responses || []).forEach(uploadResponse => {
+                    data.attachments.push({
+                        name: uploadResponse.data.name,
+                        downloadTokens: uploadResponse.data.downloadTokens,
+                        timeCreated: uploadResponse.data.timeCreated
+                    });
+                });
+
+                return TaskAPI.createTask(data);
+            })
             .then(task => {
                 dispatch({
                     type: actionTypes.ADD_TASK,
