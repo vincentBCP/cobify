@@ -39,61 +39,63 @@ const GuestFormModal: React.FC<IGuestFormModalProps> = props => {
             handleSubmit={handleFormSubmit}
             handleCancel={props.handleCancel}
         >
-            <TextField
-                label="First name"
-                defaultValue={props.guest ? props.guest.firstName : ""}
-                fullWidth
-                required
-                error={errors.firstName !== undefined}
-                helperText={errors.firstName ? errors.firstName.message : ''}
-                inputProps={{
-                    ...register('firstName', { 
-                        required: 'Required', 
-                        pattern: {
-                            value: nameRegExp,
-                            message: 'Invalid name format'
-                        }
-                    })
-                }}
-                style={{marginBottom: 20}}
-            />
+            <div style={{width: "300px"}}>
+                <TextField
+                    label="First name"
+                    defaultValue={props.guest ? props.guest.firstName : ""}
+                    fullWidth
+                    required
+                    error={errors.firstName !== undefined}
+                    helperText={errors.firstName ? errors.firstName.message : ''}
+                    inputProps={{
+                        ...register('firstName', { 
+                            required: 'Required', 
+                            pattern: {
+                                value: nameRegExp,
+                                message: 'Invalid name format'
+                            }
+                        })
+                    }}
+                    style={{marginBottom: 20}}
+                />
 
-            <TextField
-                label="Last name"
-                defaultValue={props.guest ? props.guest.lastName : ""}
-                fullWidth
-                required
-                error={errors.lastName !== undefined}
-                helperText={errors.lastName ? errors.lastName.message : ''}
-                inputProps={{
-                    ...register('lastName', { 
-                        required: 'Required', 
-                        pattern: {
-                            value: nameRegExp,
-                            message: 'Invalid name format'
-                        }
-                    })
-                }}
-                style={{marginBottom: 20}}
-            />
+                <TextField
+                    label="Last name"
+                    defaultValue={props.guest ? props.guest.lastName : ""}
+                    fullWidth
+                    required
+                    error={errors.lastName !== undefined}
+                    helperText={errors.lastName ? errors.lastName.message : ''}
+                    inputProps={{
+                        ...register('lastName', { 
+                            required: 'Required', 
+                            pattern: {
+                                value: nameRegExp,
+                                message: 'Invalid name format'
+                            }
+                        })
+                    }}
+                    style={{marginBottom: 20}}
+                />
 
-            <TextField
-                label="Email"
-                defaultValue={props.guest ? props.guest.email : ""}
-                fullWidth
-                required
-                error={errors.email !== undefined}
-                helperText={errors.email ? errors.email.message : ''}
-                inputProps={{
-                    ...register('email', { 
-                        required: 'Required', 
-                        pattern: {
-                            value: emailRegExp,
-                            message: 'Invalid email format'
-                        }
-                    })
-                }}
-            />
+                <TextField
+                    label="Email"
+                    defaultValue={props.guest ? props.guest.email : ""}
+                    fullWidth
+                    required
+                    error={errors.email !== undefined}
+                    helperText={errors.email ? errors.email.message : ''}
+                    inputProps={{
+                        ...register('email', { 
+                            required: 'Required', 
+                            pattern: {
+                                value: emailRegExp,
+                                message: 'Invalid email format'
+                            }
+                        })
+                    }}
+                />
+            </div>
         </FormModal>
     );
 };

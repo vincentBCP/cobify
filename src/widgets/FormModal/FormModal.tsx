@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
             }
         },
         root: {
+            minWidth: 300,
             padding: "10px 0"
         },
         title: {
