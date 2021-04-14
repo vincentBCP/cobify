@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -28,20 +29,29 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         list: {
             minWidth: 250
+        },
+        link: {
+            display: "inline-block",
+            color: 'inherit',
+            width: '100%',
+            textDecoration: 'none'
         }
     })
 );
 
 interface IBoardSelectorProps {
-    handleChange: (arg1: Board) => void
+    board?: Board
 }
 
 const BoardSelector: React.FC<IBoardSelectorProps> = props => {
     const theme = useTheme();
     const classes = useStyles();
 
-    const [selectedBoard, setSelectedBoard] = useState<Board | null>();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+    useEffect(() => {
+        setAnchorEl(null);
+    }, [ props.board ]);
 
     const boards: Board[] = useSelector((state: any) => state.board.boards);
 
@@ -50,12 +60,6 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
-    }
-
-    const handleSelect = (board: Board) => {
-        props.handleChange(board);
-        setSelectedBoard(board);
         setAnchorEl(null);
     }
 
@@ -69,10 +73,10 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                 onClick={handleClick}
                 className={classes.button}
                 startIcon={
-                    selectedBoard
+                    props.board
                     ? <Avatar
-                        initials={selectedBoard.code}
-                        color={selectedBoard.color}
+                        initials={props.board.code}
+                        color={props.board.color}
                         size={30}
                     />
                     : <Avatar
@@ -83,7 +87,7 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                 }
             >
                 <Typography>
-                    { selectedBoard ? selectedBoard.name : 'Workplace' }
+                    { props.board ? props.board.name : 'Workplace' }
                 </Typography>
             </Button>
 
@@ -104,11 +108,10 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                 <List className={classes.list}>
                     {
                         _.orderBy(boards, ["name"]).map(board =>
-                            <ListItem
-                                button
-                                key={board.id}
-                                selected={(selectedBoard || {}).id === board.id}
-                                onClick={() => { handleSelect(board) }}
+                            (props.board || {}).id === board.id
+                            ? <ListItem
+                                key={"board-selector-" + board.id}
+                                selected={true}
                             >
                                 <ListItemIcon>
                                     <Avatar
@@ -119,7 +122,27 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                                 </ListItemIcon>
 
                                 <Typography>{board.name}</Typography>
-                            </ListItem>    
+                            </ListItem>
+                            : <NavLink
+                                key={"board-selector-" + board.id}
+                                to={"/workplace/" + board.code}
+                                className={classes.link}
+                            >
+                                <ListItem
+                                    button
+                                    selected={false}
+                                >
+                                    <ListItemIcon>
+                                        <Avatar
+                                            initials={board.code}
+                                            color={board.color}
+                                            size={30}
+                                        />
+                                    </ListItemIcon>
+
+                                    <Typography>{board.name}</Typography>
+                                </ListItem>
+                            </NavLink>
                         )
                     }
                 </List>

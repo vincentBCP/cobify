@@ -53,7 +53,7 @@ const App: React.FC<IAppProps> = props => {
 
     let routes = (
         <Switch>
-            <Route path="/workplace" component={Workplace} exact={true} />
+            <Route path="/workplace/:boardCode?/:taskCode?" component={Workplace} />
             <Route path="/account" component={Account} exact={true} />
             <Route path="/boards" component={Boards} exact={true} />
             <Route path="/guests" component={Guests} exact={true} />

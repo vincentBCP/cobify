@@ -82,7 +82,7 @@ const SideNavigation: React.FC = props => {
                     </ListItem>
                 </NavLink>
 
-                <NavLink to="boards" activeClassName="active">
+                <NavLink to="/boards" activeClassName="active">
                     <ListItem key="Boards">
                     <ListItemIcon>
                         <BoardIcon className={classes.drawerItemIcon} />
@@ -91,7 +91,7 @@ const SideNavigation: React.FC = props => {
                     </ListItem>
                 </NavLink>
 
-                <NavLink to="guests" activeClassName="active">
+                <NavLink to="/guests" activeClassName="active">
                     <ListItem key="Guests">
                     <ListItemIcon>
                         <PeopleIcon className={classes.drawerItemIcon} />
@@ -103,13 +103,13 @@ const SideNavigation: React.FC = props => {
             
             <footer id="SideNavigation_Footer">
                 <Tooltip title="Contact support">
-                    <NavLink to="contactSupport">
+                    <NavLink to="/contactSupport">
                         <ContactSupportIcon className={classes.drawerItemText} />
                     </NavLink>
                 </Tooltip>
 
                 <Tooltip title="Logout">
-                    <NavLink to="logout">
+                    <NavLink to="/logout">
                         <PowerIcon className={classes.drawerItemText} />
                     </NavLink>
                 </Tooltip>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { connect, useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import {makeStyles, createStyles, Theme, CircularProgress} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -55,26 +56,42 @@ interface IWorkplaceProps {
     createTask: (arg1: TaskDTO) => Promise<any>
 }
 
-const Workplace: React.FC<IWorkplaceProps> = props => {
+const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
     const [addColumn, setAddColumn] = useState(false);
     const [addTask, setAddTask] = useState(false);
-    const [board, setBoard] = useState<Board>();
+    const [board, setBoard] = useState<Board | undefined>();
     const [loading, setLoading] = useState(false);
 
+    const boards: Board[] = useSelector((state: any) => state.board.boards);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
 
-    const handleBoardChange = (board: Board) => {
+    useEffect(() => {
+        const params: any = props.match.params || {};
+        const boardCode = params.boardCode;
+        
+        if (!boardCode) {
+            setBoard(undefined);
+            return;
+        };
+
+        const selectedBoard = boards.find(b => b.code === boardCode);
+
+        if (!selectedBoard) {
+            setBoard(undefined);
+            return;
+        };
+
         setLoading(true);
-        setBoard(board);
+        setBoard(selectedBoard);
 
         setTimeout(() => {
             setLoading(false);
-        }, 2000)
-    }
+        }, 2000);
+    }, [props.match, boards]);
 
     const handleSumbitColumn = (data: any): [Promise<any>, () => void, () => void] => {
         return [
@@ -162,7 +179,7 @@ const Workplace: React.FC<IWorkplaceProps> = props => {
         <Auxi>
             <ApplicationBar
                 title="Workplace"
-                component={<BoardSelector handleChange={handleBoardChange} />}
+                component={<BoardSelector board={board} />}
             />
 
             <CreateColumnFormModal
@@ -229,4 +246,4 @@ const mapDispatchToProps = (dispatch: any) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Workplace);
+export default withRouter(connect(null, mapDispatchToProps)(Workplace));
