@@ -246,6 +246,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                         </Grid>
                         <Columns
                             board={board}
+                            handleBoardUpdate={b => setBoard(b)}
                         />
                     </Auxi>
                     : null

@@ -20,7 +20,8 @@ import TaskAPI from '../../../api/TaskAPI';
 import BoardAPI from '../../../api/BoardAPI';
 
 interface IColumnsProps {
-    board: Board
+    board: Board,
+    handleBoardUpdate: (board: Board) => void
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -132,7 +133,8 @@ const Columns: React.FC<IColumnsProps> = props => {
                 type: actionTypes.UPDATE_BOARD,
                 payload: updatedBoard
             });
-            setBoard(updatedBoard);
+            // setBoard(updatedBoard);
+            props.handleBoardUpdate(updatedBoard);
             BoardAPI.updateBoard(updatedBoard);
 
             return;
