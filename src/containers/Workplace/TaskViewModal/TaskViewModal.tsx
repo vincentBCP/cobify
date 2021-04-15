@@ -20,6 +20,7 @@ import ColumnSelector from './ColumnSelector';
 import Task from '../../../models/types/Task';
 import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
+import Guest from '../../../models/types/Guest';
 
 import * as actions from '../../../store/actions';
 
@@ -188,6 +189,18 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         ]);
     };
 
+    const handleAsigneeChange = (asignee: Guest) => {
+        if (!task) return;
+        
+        const updatedTask: Task = {
+            ...task,
+            asigneeID: asignee.id
+        }
+
+        props.updateTask(updatedTask)
+        .then(newTask => setTask({...newTask}));
+    };
+
     return (
         <Dialog
             open={Boolean(props.task)}
@@ -252,7 +265,10 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                 <Typography>Assignee</Typography>
                                 {
                                     task
-                                    ? <AsigneeSelector task={task} />
+                                    ? <AsigneeSelector
+                                        task={task}
+                                        handleChange={handleAsigneeChange}
+                                    />
                                     : null
                                 }
                             </div>

@@ -17,9 +17,11 @@ import Auxi from '../../../../hoc/Auxi';
 
 import Task from '../../../../models/types/Task';
 import Guest from '../../../../models/types/Guest';
+import Invitation from '../../../../models/types/Invitation';
 
 interface IAsigneeSelectorProps {
-    task: Task
+    task: Task,
+    handleChange: (arg1: Guest) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,11 +77,19 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
         setListWidth(elem.offsetWidth);
     }, [ elemRef ]);
 
-    const guests: Guest[] = useSelector((state: any) => state.guest.guests);
+    const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
+    const guests: Guest[] = useSelector((state: any) => {
+        return state.guest.guests.filter((guest: Guest) => {
+            const invitation = invitations.find(i => i.boardID === props.task.boardID && i.guestID === guest.id);
+
+            return Boolean(invitation);
+        });
+    });
     const asignee = guests.find(g => g.id === props.task.asigneeID);
 
     const handlelistItemClick = (asignee: Guest) => {
         setAnchorEl(null);
+        props.handleChange(asignee);
     }
 
     return (
@@ -91,11 +101,19 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                         setAnchorEl(event.currentTarget);
                     }}
                 >
-                    <Avatar
-                        color="#ccc"
-                        initials="U"
-                        size={30}
-                    />
+                    {
+                        asignee
+                        ? <Avatar
+                            color={asignee.color}
+                            initials={asignee.initials}
+                            size={30}
+                        />
+                        : <Avatar
+                            color="#ccc"
+                            initials="U"
+                            size={30}
+                        />
+                    }
                     <Typography>{asignee?.displayName || 'Unassigned'}</Typography>
                 </Button>
             </div>
