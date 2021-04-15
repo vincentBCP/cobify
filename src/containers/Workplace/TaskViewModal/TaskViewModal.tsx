@@ -34,20 +34,21 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         dialog: {
             '& .MuiDialog-paper': {
-                maxWidth: 1000
+                maxWidth: '100vw'
             }
         },
         root: {
             display: 'flex',
             flexDirection: 'column',
-            width: 900,
-            maxheight: '70vh',
+            width: 1000,
+            height: '80vh',
+            maxHeight: '80vh',
             marginBottom: 10,
-        },
-        label: {
-            fontSize: 12,
-            marginBottom: 2,
-            color: "#ccc"
+            overflow: 'hidden',
+            
+            '& *': {
+                color: 'rgb(23, 43, 77)'
+            }
         },
         header: {
             display: 'flex',
@@ -63,23 +64,24 @@ const useStyles = makeStyles((theme: Theme) =>
             cursor: 'pointer'
         },
         content: {
-            //border: '1px solid red',
+            flexGrow: 1,
+            overflow: 'hidden',
             display: 'flex'
         },
         main: {
-            //border: '1px solid blue',
             flexGrow: 1,
             borderRight: '1px solid #ccc',
-            padding: "5px 20px 5px 0"
+            padding: "5px 20px 5px 0",
+            overflowX: 'hidden',
+            overflowY: 'auto'
         },
         title: {
-            fontSize: '1.5em',
-            fontWeight: 'bold',
+            fontSize: '2em',
+            fontWeight: 500,
             marginBottom: 20
         },
         description: {
-            fontWeight: 'bold',
-            fontSize: 14
+            fontWeight: 500
         },
         attachments: {
             marginTop: 20,
@@ -99,25 +101,40 @@ const useStyles = makeStyles((theme: Theme) =>
             
         },
         side: {
-            //border: '1px solid green',
-            width: '25%',
-            padding: '0 0 0 20px',
+            width: '30%',
+            padding: '5px 0 5px 20px',
             display: 'flex',
             flexDirection: 'column'
+        },
+        row: {
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: 10,
+
+            '& > p': {
+                fontSize: 14,
+                minWidth: 70,
+                maxWidth: 70
+            }
         },
         reporter: {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
+            flexGrow: 1,
+            overflow: 'hidden',
+            paddingLeft: 10,
 
             '& p': {
                 flexGrow: 1,
+                fontSize: 14,
+                fontWeight: 300,
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
                 marginLeft: 10
             }
-        },
+        }
     })
 );
 
@@ -188,7 +205,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                             <Typography className={classes.title}>{task?.title}</Typography>
                             {
                                 task?.description
-                                ? <Typography className={classes.description}>Description:</Typography>
+                                ? <Typography className={classes.description}>Description</Typography>
                                 : null
                             }
                             {
@@ -231,22 +248,27 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                 : <span>ha?</span>
                             }
 
-                            <Typography className={classes.label}>Assignee</Typography>
-                            {
-                                task
-                                ? <AsigneeSelector task={task} />
-                                : null
-                            }
-                            
-                            <Typography className={classes.label}>Reporter</Typography>
-                            <div className={classes.reporter}>
-                                <Avatar
-                                    color="#ccc"
-                                    initials="U"
-                                    size={25}
-                                />
-                                <Typography>Lorem ipsum dolor sit amet consectutar</Typography>
+                            <div className={classes.row}>
+                                <Typography>Assignee</Typography>
+                                {
+                                    task
+                                    ? <AsigneeSelector task={task} />
+                                    : null
+                                }
                             </div>
+                                
+                            <div className={classes.row}>
+                                <Typography>Reporter</Typography>
+                                <div className={classes.reporter}>
+                                    <Avatar
+                                        color="#ccc"
+                                        initials="U"
+                                        size={30}
+                                    />
+                                    <Typography>Kick Butowski</Typography>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </Paper>

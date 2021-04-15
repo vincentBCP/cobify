@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
 
@@ -8,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import Avatar from '../../../../widgets/Avatar';
 
@@ -29,22 +31,29 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         root: {
             display: 'flex',
-            marginBottom: 10,
+            flexGrow: 1
         },
         button: {
             flexGrow: 1,
             display: 'flex',
             justifyContent: 'flex-start',
-            padding: 0,
+            padding: "5px 10px",
             borderRadius: 0,
+            overflow: 'hidden',
 
             '& p': {
                 flexGrow: 1,
+                fontSize: 14,
+                fontWeight: 300,
                 textAlign: 'left',
                 marginLeft: 10,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis'
+            },
+
+            '& *': {
+                fontWeight: 400
             }
         }
     })
@@ -85,7 +94,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                     <Avatar
                         color="#ccc"
                         initials="U"
-                        size={25}
+                        size={30}
                     />
                     <Typography>{asignee?.displayName || 'Unassigned'}</Typography>
                 </Button>
@@ -112,7 +121,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                     }}
                 >
                     {
-                        guests.map(guest => {
+                        (_.orderBy(guests, ["firstName"])).map(guest => {
                             const isSelected = props.task.asigneeID === guest.id;
 
                             return isSelected
@@ -120,6 +129,13 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                                     key={"guest-selector-" + guest.id}
                                     selected
                                 >
+                                    <ListItemIcon>
+                                        <Avatar
+                                            color={guest.color}
+                                            initials={guest.initials}
+                                            size={30}
+                                        />
+                                    </ListItemIcon>
                                     <Typography>{guest.displayName}</Typography>
                                 </ListItem>
                                 : <ListItem
@@ -127,6 +143,13 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                                     key={"guest-selector-" + guest.id}
                                     onClick={() => handlelistItemClick(guest)}
                                 >
+                                    <ListItemIcon>
+                                        <Avatar
+                                            color={guest.color}
+                                            initials={guest.initials}
+                                            size={30}
+                                        />
+                                    </ListItemIcon>
                                     <Typography>{guest.displayName}</Typography>
                                 </ListItem>;
                         })

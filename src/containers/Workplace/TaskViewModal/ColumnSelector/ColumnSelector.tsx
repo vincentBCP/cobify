@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
 
 import Auxi from '../../../../hoc/Auxi';
 
@@ -30,14 +31,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         root: {
             display: 'flex',
-            marginBottom: 20,
+            marginBottom: 30,
         },
         button: {
-            flexGrow: 1,
             display: 'flex',
             justifyContent: 'flex-start',
-            padding: "0 5px 0 5px",
-            borderRadius: 0
+            padding: "7px 15px",
+
+            '& *': {
+                color: 'white !important'
+            }
         }
     })
 );
@@ -79,6 +82,7 @@ const ColumnSelector: React.FC<IColumnSelectorProps> = props => {
                     }}
                 >
                     <Typography>{column?.name}</Typography>
+                    <ArrowDown />
                 </Button>
             </div>
 
