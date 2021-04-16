@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 
 import Tasks from './Tasks';
 
@@ -49,8 +51,15 @@ const useStyles = makeStyles((theme: Theme) =>
                 marginRight: 0
             }
         },
-        columnTitle: {
-            marginBottom: 20
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 20,
+
+            '& svg': {
+                cursor: 'pointer'
+            }
         }
     })
 );
@@ -187,7 +196,7 @@ const Columns: React.FC<IColumnsProps> = props => {
             return;
         }
 
-        updatedTargetColumn.taskIDs?.splice(targetIndex, 0, sourceTask?.id);
+        updatedTargetColumn.taskIDs?.splice(targetIndex, 0, sourceTask?.id); // add task id to the list
 
         dispatch({
             type: actionTypes.UPDATE_COLUMN,
@@ -238,7 +247,16 @@ const Columns: React.FC<IColumnsProps> = props => {
                         onDragOver={(ev: React.DragEvent) => handleColumnDragOver(ev, column)}
                         onDrop={handleDrop}
                     >
-                        <Typography className={classes.columnTitle}>{column.name}</Typography>
+                        <div className={classes.header}>
+                            <Typography>{column.name}</Typography>
+                            {
+                                (column.taskIDs || []).length < 1
+                                ? <Tooltip title="Remove">
+                                    <RemoveOutlinedIcon />
+                                </Tooltip>
+                                : null
+                            }
+                        </div>
                         <Tasks
                             board={props.board}
                             column={column}
