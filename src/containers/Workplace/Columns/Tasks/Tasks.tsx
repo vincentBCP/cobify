@@ -4,10 +4,14 @@ import { useSelector } from 'react-redux';
 import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { makeStyles, createStyles, Theme, Typography } from '@material-ui/core';
+import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
+
+import Avatar from '../../../../widgets/Avatar';
 
 import Task from '../../../../models/types/Task';
 import Column from '../../../../models/types/Column';
 import Board from '../../../../models/types/Board';
+import Guest from '../../../../models/types/Guest';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -29,7 +33,12 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
             padding: "20px",
             borderRadius: 5,
-            border: '1px solid #ccc',
+            border: '1px solid rgba(224, 224, 224, 1)',
+            transitionDuration: "0.3s",
+
+            '&:hover': {
+                backgroundColor: '#f7f9fc'
+            }
         },
         taskTitle: {
             fontSize: 15,
@@ -39,6 +48,22 @@ const useStyles = makeStyles((theme: Theme) =>
         taskCode: {
             color: 'gray',
             marginBottom: 10
+        },
+        footer: {
+            marginTop: 20,
+            display: 'flex',
+            alignItems: 'center'
+        },
+        commentsCount: {
+            flexGrow: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            color: '#ccc',
+
+            '& > span': {
+                marginRight: 5
+            }
         }
     })
 );
@@ -57,6 +82,7 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
     const classes = useStyles();
 
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
+    const guests: Guest[] = useSelector((state: any) => state.guest.guests);
 
     return (
         <div className={classes.root}>
@@ -66,6 +92,8 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                     const task = tasks.find(t => t.id === taskID);
 
                     if (!task) return null;
+
+                    const asignee = guests.find(g => g.id === task.asigneeID);
 
                     return <NavLink
                             key={"tasks-" + task.id}
@@ -82,7 +110,21 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                         >
                             <Typography className={classes.taskCode}>{task.code}</Typography>
                             <Typography className={classes.taskTitle}>{task.title}</Typography>
-                            {/*<div dangerouslySetInnerHTML={{__html: (task.description || "")}} />*/}
+                            <div className={classes.footer}>
+                                {
+                                    asignee
+                                    ? <Avatar
+                                        color={asignee.color}
+                                        initials={asignee.initials}
+                                        size={30}
+                                    />
+                                    : null
+                                }
+                                <div className={classes.commentsCount}>
+                                    <span>2</span>
+                                    <ChatBubbleOutlineOutlinedIcon />
+                                </div>
+                            </div>
                         </div>
                     </NavLink>
                 })

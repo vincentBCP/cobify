@@ -45,11 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '80vh',
             maxHeight: '80vh',
             marginBottom: 10,
-            overflow: 'hidden',
-            
-            '& *': {
-                color: 'rgb(23, 43, 77)'
-            }
+            overflow: 'hidden'
         },
         header: {
             display: 'flex',
@@ -79,10 +75,12 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             fontSize: '2em',
             fontWeight: 500,
-            marginBottom: 20
+            marginBottom: 20,
+            color: 'rgb(23, 43, 77)'
         },
         description: {
-            fontWeight: 500
+            fontWeight: 500,
+            color: 'rgb(23, 43, 77)'
         },
         attachments: {
             marginTop: 20,
