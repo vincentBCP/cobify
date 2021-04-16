@@ -114,10 +114,20 @@ const Columns: React.FC<IColumnsProps> = props => {
         setTargetTask(null);
     }
 
+    const clearDnD = () => {
+        setSourceTask(null);
+        setTargetTask(null);
+        setSourceColumn(null);
+        setTargetColumn(null);
+    };
+
     const handleDrop = (ev: React.DragEvent) => {
         ev.preventDefault();
 
-        if (!board) return;
+        if (!board) {
+            clearDnD();
+            return;
+        }
 
         // COLUMN is dropped in the column
         if (sourceColumn && targetColumn) {
@@ -137,16 +147,23 @@ const Columns: React.FC<IColumnsProps> = props => {
             props.handleBoardUpdate(updatedBoard);
             BoardAPI.updateBoard(updatedBoard);
 
+            clearDnD();
             return;
         }
 
         // TASK is dropped in the column or task
-        if (!sourceTask) return;
+        if (!sourceTask) {
+            clearDnD();
+            return;
+        }
 
         const sColumn = columns.find(c => c.id === sourceTask?.columnID);
         const tColumn = targetColumn || columns.find(c => c.id === targetTask?.columnID);
 
-        if (!sColumn || !tColumn) return;
+        if (!sColumn || !tColumn) {
+            clearDnD();
+            return;
+        }
 
         const sourceIndex = !sColumn.taskIDs ? 0 : sColumn.taskIDs.findIndex(str => str === sourceTask?.id);
         let targetIndex = !tColumn.taskIDs ? 0 : tColumn.taskIDs.findIndex(str => str === targetTask?.id);
@@ -155,7 +172,6 @@ const Columns: React.FC<IColumnsProps> = props => {
             ...tColumn,
             taskIDs: [...(tColumn.taskIDs || [])]
         }
-        
 
         if (tColumn.id === sColumn.id) {
             updatedTargetColumn.taskIDs?.splice(sourceIndex < targetIndex ? targetIndex + 1 : targetIndex, 0, sourceTask?.id);
@@ -167,6 +183,7 @@ const Columns: React.FC<IColumnsProps> = props => {
             });
             ColumnAPI.updateColumn(updatedTargetColumn);
 
+            clearDnD();
             return;
         }
 
@@ -201,6 +218,8 @@ const Columns: React.FC<IColumnsProps> = props => {
             payload: {...updatedSourceColumn}
         });
         ColumnAPI.updateColumn(updatedSourceColumn);
+
+        clearDnD();
     }
 
     return (
