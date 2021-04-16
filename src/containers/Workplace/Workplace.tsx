@@ -186,6 +186,22 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         setAddTask(false);
     }
 
+    const handleColumnDelete = (column: Column) => {
+        if (!board) return;
+        const updatedBoard: Board = {
+            ...board,
+            columnIDs: [...board.columnIDs]
+        };
+        const ind = updatedBoard.columnIDs.findIndex(cID => cID === column.id);
+        updatedBoard.columnIDs.splice(ind, 1); // remove column id from the list
+
+        setBoard({...updatedBoard});
+        Promise.all([
+            ColumnAPI.deleteColumn(column.id),
+            BoardAPI.updateBoard(updatedBoard)
+        ]);
+    }
+
     return (
         <Auxi>
             <ApplicationBar
@@ -247,6 +263,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                         <Columns
                             board={board}
                             handleBoardUpdate={b => setBoard(b)}
+                            handleColumnDelete={c => handleColumnDelete(c)}
                         />
                     </Auxi>
                     : null

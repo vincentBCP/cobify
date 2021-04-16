@@ -23,7 +23,8 @@ import BoardAPI from '../../../api/BoardAPI';
 
 interface IColumnsProps {
     board: Board,
-    handleBoardUpdate: (board: Board) => void
+    handleBoardUpdate: (arg1: Board) => void,
+    handleColumnDelete: (arg1: Column) => void
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -252,7 +253,9 @@ const Columns: React.FC<IColumnsProps> = props => {
                             {
                                 (column.taskIDs || []).length < 1
                                 ? <Tooltip title="Remove">
-                                    <RemoveOutlinedIcon />
+                                    <RemoveOutlinedIcon
+                                        onClick={() => props.handleColumnDelete(column)}
+                                    />
                                 </Tooltip>
                                 : null
                             }
