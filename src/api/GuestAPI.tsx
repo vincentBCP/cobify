@@ -21,6 +21,14 @@ class GuestAPI {
             });
     };
 
+    public static getGuest(recordPath: string): Promise<Guest> {
+        return axios.get(path + recordPath + extension)
+        .then(response => {
+            const guest: Guest = {...response.data}
+            return guest;
+        });
+    };
+
     public static createGuest(dto: GuestDTO): Promise<Guest> {
         return new Promise((resolve, reject) => {
             const guestID = uuidv4();
@@ -32,10 +40,10 @@ class GuestAPI {
                 initials: ((dto.firstName).charAt(0).toUpperCase() + (dto.lastName).charAt(0)).toUpperCase()
             };
 
-            axios.put(path + (dto.email.split("@")[0] + "_" + guestID) + extension, newGuest)
+            axios.put(path + dto.email.split("@")[0] + extension, newGuest)
             .then(response => {
                 return axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + API_KEY,
-                    { email: response.data.email, password: "D3f@ult!", displayName: newGuest.displayName, returnSecureToken: true});
+                    { email: response.data.email, password: "D3f@ult!", returnSecureToken: true});
             })
             .then(response => {
                 resolve(newGuest);
