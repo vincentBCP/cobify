@@ -35,7 +35,7 @@ class GuestAPI {
             axios.put(path + (dto.email.split("@")[0] + "_" + guestID) + extension, newGuest)
             .then(response => {
                 return axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + API_KEY,
-                    { email: response.data.email, password: "D3f@ult!", returnSecureToken: true});
+                    { email: response.data.email, password: "D3f@ult!", displayName: newGuest.displayName, returnSecureToken: true});
             })
             .then(response => {
                 resolve(newGuest);
