@@ -85,12 +85,12 @@ const SideNavigation: React.FC = props => {
                     </ListItem>
                 </NavLink>
 
-                <NavLink to="/guests" activeClassName="active">
-                    <ListItem key="Guests">
+                <NavLink to="/users" activeClassName="active">
+                    <ListItem key="users">
                     <ListItemIcon>
                         <PeopleIcon className={classes.drawerItemIcon} />
                     </ListItemIcon>
-                    <ListItemText className={classes.drawerItemText} primary="Guests" />
+                    <ListItemText className={classes.drawerItemText} primary="Users" />
                     </ListItem>
                 </NavLink>
             </div>

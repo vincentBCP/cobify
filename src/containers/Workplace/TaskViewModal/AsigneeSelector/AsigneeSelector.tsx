@@ -16,12 +16,12 @@ import Avatar from '../../../../widgets/Avatar';
 import Auxi from '../../../../hoc/Auxi';
 
 import Task from '../../../../models/types/Task';
-import Guest from '../../../../models/types/Guest';
+import User from '../../../../models/types/User';
 import Invitation from '../../../../models/types/Invitation';
 
 interface IAsigneeSelectorProps {
     task: Task,
-    handleChange: (arg1: Guest) => void
+    handleChange: (arg1: User) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -78,16 +78,16 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
     }, [ elemRef ]);
 
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
-    const guests: Guest[] = useSelector((state: any) => {
-        return state.guest.guests.filter((guest: Guest) => {
-            const invitation = invitations.find(i => i.boardID === props.task.boardID && i.guestID === guest.id);
+    const users: User[] = useSelector((state: any) => {
+        return state.user.users.filter((user: User) => {
+            const invitation = invitations.find(i => i.boardID === props.task.boardID && i.userID === user.id);
 
             return Boolean(invitation);
         });
     });
-    const asignee = guests.find(g => g.id === props.task.asigneeID);
+    const asignee = users.find(g => g.id === props.task.asigneeID);
 
-    const handlelistItemClick = (asignee: Guest) => {
+    const handlelistItemClick = (asignee: User) => {
         setAnchorEl(null);
         props.handleChange(asignee);
     }
@@ -139,36 +139,36 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                     }}
                 >
                     {
-                        (_.orderBy(guests, ["firstName"])).map(guest => {
-                            const isSelected = props.task.asigneeID === guest.id;
+                        (_.orderBy(users, ["firstName"])).map(user => {
+                            const isSelected = props.task.asigneeID === user.id;
 
                             return isSelected
                                 ? <ListItem
-                                    key={"guest-selector-" + guest.id}
+                                    key={"user-selector-" + user.id}
                                     selected
                                 >
                                     <ListItemIcon>
                                         <Avatar
-                                            color={guest.color}
-                                            initials={guest.initials}
+                                            color={user.color}
+                                            initials={user.initials}
                                             size={30}
                                         />
                                     </ListItemIcon>
-                                    <Typography>{guest.displayName}</Typography>
+                                    <Typography>{user.displayName}</Typography>
                                 </ListItem>
                                 : <ListItem
                                     button
-                                    key={"guest-selector-" + guest.id}
-                                    onClick={() => handlelistItemClick(guest)}
+                                    key={"user-selector-" + user.id}
+                                    onClick={() => handlelistItemClick(user)}
                                 >
                                     <ListItemIcon>
                                         <Avatar
-                                            color={guest.color}
-                                            initials={guest.initials}
+                                            color={user.color}
+                                            initials={user.initials}
                                             size={30}
                                         />
                                     </ListItemIcon>
-                                    <Typography>{guest.displayName}</Typography>
+                                    <Typography>{user.displayName}</Typography>
                                 </ListItem>;
                         })
                     }

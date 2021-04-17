@@ -9,7 +9,7 @@ import SideNavigation from './components/SideNavigation';
 import Workplace from './containers/Workplace';
 import Account from './containers/Account';
 import Boards from './containers/Boards';
-import Guests from './containers/Guests';
+import Users from './containers/Users';
 import ContactSupport from './containers/ContactSupport';
 import Login from './containers/Login';
 import ResetPassword from './containers/ResetPassword';
@@ -22,13 +22,13 @@ interface IAppProps {
     checkAuth: () => Promise<boolean>,
     getBoards: () => Promise<any>,
     getColumns: () => Promise<any>,
-    getGuests: () => Promise<any>,
+    getUsers: () => Promise<any>,
     getTasks: () => Promise<any>,
     getInvitations: () => Promise<any>,
 }
 
 const App: React.FC<IAppProps> = props => {
-    const { checkAuth, getBoards, getColumns, getGuests, getTasks, getInvitations } = props;
+    const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations } = props;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const dispatch = useDispatch();
@@ -51,7 +51,7 @@ const App: React.FC<IAppProps> = props => {
             promises.push(
                 getBoards(),
                 getColumns(),
-                getGuests(),
+                getUsers(),
                 getTasks(),
                 getInvitations()
             );
@@ -64,14 +64,14 @@ const App: React.FC<IAppProps> = props => {
             }, 2000);
         })
         .catch(error => {});
-    }, [ checkAuth, dispatch, getBoards, getColumns, getGuests, getTasks, getInvitations ]);
+    }, [ checkAuth, dispatch, getBoards, getColumns, getUsers, getTasks, getInvitations ]);
 
     let routes = (
         <Switch>
             <Route path="/workplace/:boardCode?/:taskCode?" component={Workplace} />
             <Route path="/account" component={Account} exact={true} />
             <Route path="/boards" component={Boards} exact={true} />
-            <Route path="/guests" component={Guests} exact={true} />
+            <Route path="/users" component={Users} exact={true} />
             <Route path="/contactSupport" component={ContactSupport} exact={true} />
             <Route path="/logout" component={Logout} exact={true} />
             <Redirect to="/workplace" />
@@ -105,7 +105,7 @@ const mapDispatchToProps = (dispatch: any) => {
         checkAuth: () => dispatch(actions.checkAuth()),
         getBoards: () => dispatch(actions.getBoards()),
         getColumns: () => dispatch(actions.getColumns()),
-        getGuests: () => dispatch(actions.getGuests()),
+        getUsers: () => dispatch(actions.getUsers()),
         getTasks: () => dispatch(actions.getTasks()),
         getInvitations: () => dispatch(actions.getInvitations())
     }

@@ -15,7 +15,7 @@ import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
 
 import BoardSelector from './BoardSelector';
-import GuestList from './GuestList';
+import UserList from './UserList';
 import Columns from './Columns';
 import CreateColumnFormModal from './CreateColumnFormModal';
 import CreateTaskFormModal from './CreateTaskFormModal';
@@ -256,7 +256,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                 onClick={() => setAddTask(true)}
                             >Task</Button>
                             <span style={{flexGrow: 1}}></span>
-                            <GuestList
+                            <UserList
                                 boardID={board?.id}
                             />
                         </Grid>

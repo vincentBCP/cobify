@@ -7,6 +7,8 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Avatar from '../../../../widgets/Avatar';
 
+import User from '../../../../models/types/User';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProfilePictureProps {
-    user: any
+    account: User
 }
 
 const ProfilePicture: React.FC<IProfilePictureProps> = props => {
@@ -37,11 +39,8 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
         <Grid item xs={4} className={classes.root}>
             <Avatar
                 size={130}
-                color={props.user.color}
-                initials={
-                    ((props.user.firstName || '').charAt(0).toUpperCase() + 
-                    (props.user.lastName || '').charAt(0)).toUpperCase()
-                }
+                color={props.account.color}
+                initials={props.account.initials}
             />
             <input
                 accept="image/*"

@@ -8,7 +8,7 @@ type Board = {
     // computed
     columnCount?: number,
     taskCount?: number,
-    guestCount?: number
+    userCount?: number
 }
 
 export default Board;

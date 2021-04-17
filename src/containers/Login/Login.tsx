@@ -87,6 +87,7 @@ const Login: React.FC<ILoginProps> = props => {
             window.location.reload();
         })
         .catch(error => {
+            console.log(error);
             // https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
             const errMsg = error.response.data.error.message;
 

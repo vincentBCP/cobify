@@ -5,10 +5,10 @@ export const SET_INVITATIONS = "SET_INVITATIONS";
 export const DELETE_INVITATION = "DELETE_INVITATION";
 export const ADD_INVITATION = "ADD_INVITATION";
 
-export const SET_GUESTS = "SET_GUEST";
-export const ADD_GUEST = "ADD_GUEST";
-export const UPDATE_GUEST = "UPDATE_GUEST";
-export const DELETE_GUEST = "DELETE_GUEST";
+export const SET_USERS = "SET_USERS";
+export const ADD_USER = "ADD_USER";
+export const UPDATE_USER = "UPDATE_USER";
+export const DELETE_USER = "DELETE_USER";
 
 export const SET_COLUMNS = "SET_COLUMNS";
 export const ADD_COLUMN = "ADD_COLUMN";
@@ -23,5 +23,5 @@ export const ADD_BOARD = "ADD_BOARD";
 export const UPDATE_BOARD = "UPDATE_BOARD";
 export const DELETE_BOARD = "DELETE_BOARD";
 
-export const SET_USER = "SET_USER";
+export const SET_ACCOUNT = "SET_ACCOUNT";
 export const LOGOUT = "LOGOUT";

@@ -18,8 +18,10 @@ import UserDetails from '../../../models/types/UserDetails';
 
 import SendButton from '../../../widgets/FormModal/FormActions/SendButton';
 
+import User from '../../../models/types/User';
+
 interface IPublicInfoProps {
-    user: any,
+    account: User,
     updateUserDetails: (arg1: UserDetails) => Promise<any>
 };
 
@@ -29,14 +31,14 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!props.user) return;
+        if (!props.account) return;
 
         setUserDetails({
-            id: props.user.id,
-            firstName: props.user.firstName,
-            lastName: props.user.lastName
+            id: props.account.id,
+            firstName: props.account.firstName,
+            lastName: props.account.lastName
         });
-    }, [ props.user ]);
+    }, [ props.account ]);
 
     const handleUserDetailsChange = (ud: UserDetails) => {
         setUserDetails(ud);
@@ -72,7 +74,7 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
                         userDetails={userDetails}
                         handleUserDetailsChange={handleUserDetailsChange}
                     />
-                    <ProfilePicture user={props.user} />
+                    <ProfilePicture account={props.account} />
                 </Grid>
                 {/*<Button
                     variant="contained"

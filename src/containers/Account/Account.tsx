@@ -11,15 +11,15 @@ import PublicInfo from './PublicInfo';
 import ContactDetails from './ContactDetails';
 
 const Account: React.FC = props => {
-    const user: any = useSelector((state: any) => state.app.user);
+    const account: any = useSelector((state: any) => state.app.account);
 
     return (
         <Auxi>
             <ApplicationBar title="Account" />
 
             <Page title="Account">
-                <PublicInfo user={user} />
-                <ContactDetails email={user.email} />
+                <PublicInfo account={account} />
+                <ContactDetails email={account.email} />
             </Page>
         </Auxi>
     );

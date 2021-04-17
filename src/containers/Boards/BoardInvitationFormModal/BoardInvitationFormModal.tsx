@@ -15,12 +15,12 @@ import FormModal from '../../../widgets/FormModal';
 import Avatar from '../../../widgets/Avatar';
 
 import Board from '../../../models/types/Board';
-import Guest from '../../../models/types/Guest';
+import User from '../../../models/types/User';
 import Invitation from '../../../models/types/Invitation';
 import InvitationDTO from '../../../models/dto/InvitationDTO';
 
 interface IFormInputs {
-    guestID: string
+    userID: string
 };
 
 interface IBoardInvitationFormModalProps {
@@ -42,19 +42,19 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
     }, [ props.board ]);
 
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
-    const guests: Guest[] = useSelector((state: any) => {
-        const filteredGuests = state.guest.guests.filter((g: Guest) => {
-            const inv = invitations.find(i => i.guestID === g.id && i.boardID === props.board?.id);
+    const users: User[] = useSelector((state: any) => {
+        const filteredUsers = state.user.users.filter((g: User) => {
+            const inv = invitations.find(i => i.userID === g.id && i.boardID === props.board?.id);
             return inv ? false : true;
         });
 
-        return _.orderBy(filteredGuests, ["firstName"]);
+        return _.orderBy(filteredUsers, ["firstName"]);
     });
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit({
             boardID: (board || {}).id || "",
-            guestID: data.guestID,
+            userID: data.userID,
             accountID: (board || {}).accountID || "",
         } as InvitationDTO);
     }
@@ -89,24 +89,24 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
             <FormControl fullWidth>
                 <InputLabel
                     required
-                    error={errors.guestID !== undefined}
+                    error={errors.userID !== undefined}
                 >
-                    Guest
+                    User
                 </InputLabel>
                 <Select
-                    label="Guest"
+                    label="User"
                     defaultValue=""
                     fullWidth
-                    error={errors.guestID !== undefined}
+                    error={errors.userID !== undefined}
                     inputProps={{
                         required: true,
-                        ...register('guestID', { required: true })
+                        ...register('userID', { required: true })
                     }}
                 >
                     {
-                        guests
-                        .map(guest =>
-                            <MenuItem key={guest.id} value={guest.id}>{guest.firstName + " " + guest.lastName}</MenuItem>
+                        users
+                        .map(user =>
+                            <MenuItem key={user.id} value={user.id}>{user.firstName + " " + user.lastName}</MenuItem>
                         )
                     }
                 </Select>

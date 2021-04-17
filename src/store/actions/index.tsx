@@ -10,11 +10,11 @@ export {
 } from './invitation';
 
 export {
-    getGuests,
-    createGuest,
-    updateGuest,
-    deleteGuest
-} from './guest';
+    getUsers,
+    createUser,
+    updateUser,
+    deleteUser
+} from './user';
 
 export {
     getColumns,

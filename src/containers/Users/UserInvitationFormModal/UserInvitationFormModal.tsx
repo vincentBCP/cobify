@@ -15,7 +15,7 @@ import FormModal from '../../../widgets/FormModal';
 import Avatar from '../../../widgets/Avatar';
 
 import Board from '../../../models/types/Board';
-import Guest from '../../../models/types/Guest';
+import User from '../../../models/types/User';
 import Invitation from '../../../models/types/Invitation';
 import InvitationDTO from '../../../models/dto/InvitationDTO';
 
@@ -23,28 +23,28 @@ interface IFormInputs {
     boardID: string
 };
 
-interface IGuestInvitationFormModalProps {
+interface IUserInvitationFormModalProps {
     open?: boolean,
-    guest: Guest | null,
+    user: User | null,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
 }
 
-const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props => {
+const UserInvitationFormModal: React.FC<IUserInvitationFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
-    const [guest, setGuest] = useState<Guest | null>();
+    const [user, setUser] = useState<User | null>();
 
     useEffect(() => {
-        if (!props.guest) return;
+        if (!props.user) return;
 
-        setGuest(props.guest);
-    }, [ props.guest ]);
+        setUser(props.user);
+    }, [ props.user ]);
 
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => {
         const filteredBoards = state.board.boards.filter((b: Board) => {
-            const inv = invitations.find(i => i.boardID === b.id && i.guestID === props.guest?.id);
+            const inv = invitations.find(i => i.boardID === b.id && i.userID === props.user?.id);
             return inv ? false : true;
         });
 
@@ -53,9 +53,9 @@ const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit({
-            guestID: (guest || {}).id || "",
+            userID: (user || {}).id || "",
             boardID: data.boardID,
-            accountID: (guest || {}).accountID || "",
+            accountID: (user || {}).accountID || "",
         } as InvitationDTO);
     }
 
@@ -73,20 +73,20 @@ const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props
                 alignItems="center" spacing={2}
                 style={{marginBottom: 30}}
             >
-                {guest ? <Avatar
-                    color={guest.color}
+                {user ? <Avatar
+                    color={user.color}
                     size={50}
-                    initials={guest.initials}
+                    initials={user.initials}
                 /> : null}
                 
                 <Grid item>
-                    {guest ?
+                    {user ?
                     <Typography>
-                        {guest.firstName + " " + guest.lastName}
+                        {user.firstName + " " + user.lastName}
                     </Typography> : null}
-                    {guest ? 
+                    {user ? 
                     <Typography style={{fontStyle: 'italic', lineHeight: 1, fontSize: 14}}>
-                        {guest.email}
+                        {user.email}
                     </Typography> : null}
                 </Grid> 
             </Grid>
@@ -120,4 +120,4 @@ const GuestInvitationFormModal: React.FC<IGuestInvitationFormModalProps> = props
     );
 };
 
-export default GuestInvitationFormModal;
+export default UserInvitationFormModal;

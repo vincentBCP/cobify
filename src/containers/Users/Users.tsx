@@ -9,7 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 
-import './Guests.scss';
+import './Users.scss';
 
 import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
@@ -17,54 +17,54 @@ import Page from '../../components/Page';
 
 import Table, { HeadCell } from '../../components/Table/Table';
 
-import Guest from '../../models/types/Guest';
+import User from '../../models/types/User';
 import Invitation from '../../models/types/Invitation';
 import Board from '../../models/types/Board';
 import InvitationDTO from '../../models/dto/InvitationDTO';
-import GuestDTO from '../../models/dto/GuestDTO';
+import UserDTO from '../../models/dto/UserDTO';
 
 import Chip from '../../widgets/Chip';
 
-import GuestInvitationFormModal from './GuestInvitationFormModal';
-import GuestFormModal from './GuestFormModal';
+import UserInvitationFormModal from './UserInvitationFormModal';
+import UserFormModal from './UserFormModal';
 
 import * as actions from '../../store/actions';
 
-interface IGuestsProps {
+interface IUsersProps {
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
-    createGuest: (arg1: GuestDTO) => Promise<any>,
-    updateGuest: (arg21: Guest) => Promise<any>,
-    deleteGuest: (arg1: string, arg2: string[]) => Promise<any>
+    createUser: (arg1: UserDTO) => Promise<any>,
+    updateUser: (arg21: User) => Promise<any>,
+    deleteUser: (arg1: string, arg2: string, arg3: string[]) => Promise<any>
 }
 
-const Guests: React.FC<IGuestsProps> = props => {
+const Users: React.FC<IUsersProps> = props => {
     const [openInvitation, setOpenInvitation] = useState(false);
-    const [guest, setGuest] = useState<Guest | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [open, setOpen] = useState(false);
 
-    const guests: Guest[] = useSelector((state: any) => 
-        state.guest.guests.map((guest: Guest) => ({
-            ...guest,
-            displayName: (guest.firstName + " " + guest.lastName)
+    const users: User[] = useSelector((state: any) => 
+        state.user.users.map((user: User) => ({
+            ...user,
+            displayName: (user.firstName + " " + user.lastName)
         })
     ));
 
-    const user: any = useSelector((state: any) => state.app.user);
+    const account: any = useSelector((state: any) => state.app.account);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => state.board.boards);
 
-    const handleGuestSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
-        const request = guest
-            ? props.updateGuest({
-                ...guest,
+    const handleUserSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
+        const request = user
+            ? props.updateUser({
+                ...user,
                 ...data
             })
-            : props.createGuest({
+            : props.createUser({
                 ...data,
                 color: randomcolor(),
-                accountID: user.id
-            } as GuestDTO);
+                accountID: account.id
+            } as UserDTO);
 
         return [
             request,
@@ -77,7 +77,7 @@ const Guests: React.FC<IGuestsProps> = props => {
         ];
     }
 
-    const handleGuestCancel = () => {
+    const handleUserCancel = () => {
         setOpen(false);
     }
 
@@ -87,24 +87,28 @@ const Guests: React.FC<IGuestsProps> = props => {
         ids.forEach(id => {
             const invitationIDs: string[] = [];
 
+            const user = users.find(u => u.id === id);
+
+            if (!user) return;
+
             invitations.forEach(inv => {
-                if(inv.guestID !== id) return;
+                if(inv.userID !== id) return;
 
                 invitationIDs.push(inv.id);
             });
 
-            promises.push(props.deleteGuest(id, invitationIDs));
+            promises.push(props.deleteUser(id, user.email, invitationIDs));
         });
 
         return [Promise.all(promises), () => {}, () => {}];
     }
 
-    const handleGuestInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
+    const handleUserInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
         return [
             props.sendInvitation(dto),
             () => { // succes callback
                 setOpenInvitation(false);
-                setGuest(null);
+                setUser(null);
             },
             () => { // fail callback
 
@@ -112,9 +116,9 @@ const Guests: React.FC<IGuestsProps> = props => {
         ];
     }
 
-    const handleGuestInvitationCancel = () => {
+    const handleUserInvitationCancel = () => {
         setOpenInvitation(false);
-        setGuest(null);
+        setUser(null);
     }
 
     const handleRemoveInvitation = (id: string): [Promise<any>, () => void, () => void] => {
@@ -125,12 +129,12 @@ const Guests: React.FC<IGuestsProps> = props => {
         ];
     };
 
-    const renderInvitations = (guest: Guest): JSX.Element => {
+    const renderInvitations = (user: User): JSX.Element => {
         return (
             <div>
                 {
                     invitations
-                    .filter(i => i.guestID === guest.id)
+                    .filter(i => i.userID === user.id)
                     .map(i => 
                         {
                             const board = boards.find(b => b.id === i.boardID);
@@ -151,14 +155,14 @@ const Guests: React.FC<IGuestsProps> = props => {
         );
     };
 
-    const renderActions = (guest: Guest) => {
+    const renderActions = (user: User) => {
         return (
             <div>
                 <IconButton
                     size="medium"
                     onClick={(ev: React.MouseEvent) => {
                         ev.stopPropagation();
-                        setGuest(guest);
+                        setUser(user);
                         setOpen(true);
                     }}
                 >
@@ -168,7 +172,7 @@ const Guests: React.FC<IGuestsProps> = props => {
                     size="medium"
                     onClick={(ev: React.MouseEvent) => {
                         ev.stopPropagation();
-                        setGuest(guest);
+                        setUser(user);
                         setOpenInvitation(true);
                     }}
                 >
@@ -186,11 +190,11 @@ const Guests: React.FC<IGuestsProps> = props => {
     ];
 
     const tableActions = (
-        <Tooltip title="Add Guest">
+        <Tooltip title="Add User">
             <IconButton
-                aria-label="Add Guest"
+                aria-label="Add User"
                 onClick={() => {
-                    setGuest(null);
+                    setUser(null);
                     setOpen(true);
                 }}
             >
@@ -201,26 +205,26 @@ const Guests: React.FC<IGuestsProps> = props => {
 
     return (
         <Auxi>
-            <ApplicationBar title="Guests" />
+            <ApplicationBar title="Users" />
 
-            <GuestInvitationFormModal
+            <UserInvitationFormModal
                 open={openInvitation}
-                guest={guest}
-                handleSubmit={handleGuestInvitationSubmit}
-                handleCancel={handleGuestInvitationCancel}
+                user={user}
+                handleSubmit={handleUserInvitationSubmit}
+                handleCancel={handleUserInvitationCancel}
             />
 
-            <GuestFormModal
+            <UserFormModal
                 open={open}
-                guest={guest}
-                handleSubmit={handleGuestSubmit}
-                handleCancel={handleGuestCancel}
+                user={user}
+                handleSubmit={handleUserSubmit}
+                handleCancel={handleUserCancel}
             />
 
-            <Page title="Guests">
+            <Page title="Users">
                 <Table
                     actions={tableActions}
-                    dataList={guests}
+                    dataList={users}
                     headCells={headCells}
                     defaultOrderBy="displayName"
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
@@ -234,10 +238,11 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
-        createGuest: (dto: GuestDTO) => dispatch(actions.createGuest(dto)),
-        updateGuest: (guest: Guest) => dispatch(actions.updateGuest(guest)),
-        deleteGuest: (id: string, invitationIDs: string[]) => dispatch(actions.deleteGuest(id, invitationIDs))
+        createUser: (dto: UserDTO) => dispatch(actions.createUser(dto)),
+        updateUser: (user: User) => dispatch(actions.updateUser(user)),
+        deleteUser: (id: string, email: string, invitationIDs: string[]) => 
+            dispatch(actions.deleteUser(id, email, invitationIDs))
     }
 };
 
-export default connect(null, mapDispatchToProps)(Guests);
+export default connect(null, mapDispatchToProps)(Users);

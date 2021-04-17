@@ -10,49 +10,49 @@ const initialState: IState = {
     invitations: [
         /*{
             id: "1",
-            guestID: "1",
+            userID: "1",
             accountID: "1",
             boardID: "1",
             link: ""
         },
         {
             id: "2",
-            guestID: "1",
+            userID: "1",
             accountID: "1",
             boardID: "2",
             link: ""
         },
         {
             id: "3",
-            guestID: "2",
+            userID: "2",
             accountID: "1",
             boardID: "3",
             link: ""
         },
         {
             id: "4",
-            guestID: "3",
+            userID: "3",
             accountID: "1",
             boardID: "4",
             link: ""
         },
         {
             id: "5",
-            guestID: "4",
+            userID: "4",
             accountID: "1",
             boardID: "2",
             link: ""
         },
         {
             id: "6",
-            guestID: "5",
+            userID: "5",
             accountID: "1",
             boardID: "3",
             link: ""
         },
         {
             id: "7",
-            guestID: "6",
+            userID: "6",
             accountID: "1",
             boardID: "4",
             link: ""

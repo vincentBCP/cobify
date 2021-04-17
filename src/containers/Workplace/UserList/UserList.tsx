@@ -14,13 +14,13 @@ import Typography from '@material-ui/core/Typography';
 
 import Avatar from '../../../widgets/Avatar';
 
-import Guest from '../../../models/types/Guest';
+import User from '../../../models/types/User';
 import Invitation from '../../../models/types/Invitation';
 import InvitationDTO from '../../../models/dto/InvitationDTO';
 
 import * as actions from '../../../store/actions';
 
-interface IGuestListProps {
+interface IUserListProps {
     boardID?: string,
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>
@@ -49,14 +49,14 @@ const useStyles = makeStyles((theme: Theme) =>
         popover: {
             marginTop: 7
         },
-        guestList: {
+        userList: {
             minWidth: 100
         },
-        guestListItem : {
+        userListItem : {
             paddingTop: 10,
             paddingBottom: 10
         },
-        guestName: {
+        userName: {
             marginRight: 15, 
             flexGrow: 1, 
             textAlign: 'right', 
@@ -66,28 +66,28 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const GuestList: React.FC<IGuestListProps> = props => {
+const UserList: React.FC<IUserListProps> = props => {
     const classes = useStyles();
 
-    const [selectedGuest, setSelectedGuest] = React.useState<Guest>();
+    const [selectedUser, setSelectedUser] = React.useState<User>();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const [add, setAdd] = React.useState(false);
 
-    const guests: Guest[] = useSelector((state: any) => state.guest.guests);
+    const users: User[] = useSelector((state: any) => state.user.users);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
 
-    const filterGuests = (): Guest[] => {
-        const gs = guests.filter(g => {
-            const inv = invitations.find(i => i.guestID === g.id && i.boardID === props.boardID);
+    const filterUsers = (): User[] => {
+        const gs = users.filter(g => {
+            const inv = invitations.find(i => i.userID === g.id && i.boardID === props.boardID);
             return inv ? true : false;
         });
 
         return _.orderBy(gs, ["firstName"]);
     }
 
-    const getAvailableGuests = (): Guest[] => {
-        const gs = guests.filter(g => {
-            const inv = invitations.find(i => i.guestID === g.id && i.boardID === props.boardID);
+    const getAvailableUsers = (): User[] => {
+        const gs = users.filter(g => {
+            const inv = invitations.find(i => i.userID === g.id && i.boardID === props.boardID);
             return inv ? false : true;
         })
 
@@ -97,18 +97,18 @@ const GuestList: React.FC<IGuestListProps> = props => {
     const handleRemove = () => {
         setAnchorEl(null);
 
-        const invitation = invitations.find(i => i.guestID === selectedGuest?.id && i.boardID === props.boardID);
+        const invitation = invitations.find(i => i.userID === selectedUser?.id && i.boardID === props.boardID);
 
         if (!invitation) return;
 
         props.deleteInvitation(invitation.id);
     };
 
-    const handleAdd = (guestID: string) => {
+    const handleAdd = (userID: string) => {
         setAnchorEl(null);
 
         props.sendInvitation({
-            guestID: guestID,
+            userID: userID,
             boardID: props.boardID
         } as InvitationDTO);
     }
@@ -118,7 +118,7 @@ const GuestList: React.FC<IGuestListProps> = props => {
     return (
         <div className={classes.root}>
             <Popover
-                id="guest-list-popup"
+                id="user-list-popup"
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 onClose={() => setAnchorEl(null)}
@@ -139,19 +139,19 @@ const GuestList: React.FC<IGuestListProps> = props => {
                     Remove
                 </ListItem> : null}
 
-                {add ? <List className={classes.guestList}>
-                    {getAvailableGuests().map(guest =>
+                {add ? <List className={classes.userList}>
+                    {getAvailableUsers().map(user =>
                         <ListItem
-                            key={"add-guest-" + guest.id}
+                            key={"add-user-" + user.id}
                             button
-                            onClick={() => handleAdd(guest.id)}
-                            className={classes.guestListItem}
+                            onClick={() => handleAdd(user.id)}
+                            className={classes.userListItem}
                         >
-                            <Typography className={classes.guestName}>{guest.firstName + " " + guest.lastName}</Typography>
+                            <Typography className={classes.userName}>{user.firstName + " " + user.lastName}</Typography>
                             <ListItemSecondaryAction>
                                 <Avatar
-                                    initials={guest.initials}
-                                    color={guest.color}
+                                    initials={user.initials}
+                                    color={user.color}
                                     size={32}
                                 />
                             </ListItemSecondaryAction>
@@ -161,21 +161,21 @@ const GuestList: React.FC<IGuestListProps> = props => {
             </Popover>
 
             {
-                filterGuests().map(guest =>
+                filterUsers().map(user =>
                     <Button
-                        key={"guest-list-" + guest.id}
+                        key={"user-list-" + user.id}
                         className={classes.button}
                         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                             setAdd(false);
                             setAnchorEl(event.currentTarget);
-                            setSelectedGuest(guest);
+                            setSelectedUser(user);
                         }}
                     >
                         <Avatar
                             size={32}
-                            initials={guest.initials}
+                            initials={user.initials}
                             
-                            color={guest.color}
+                            color={user.color}
                         />
                     </Button>
                 )
@@ -202,4 +202,4 @@ const mapDispatchToProps = (dispatch: any) => {
     }
 };
 
-export default connect(null, mapDispatchToProps)(GuestList);
+export default connect(null, mapDispatchToProps)(UserList);

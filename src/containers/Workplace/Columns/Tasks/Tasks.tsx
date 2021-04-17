@@ -11,7 +11,7 @@ import Avatar from '../../../../widgets/Avatar';
 import Task from '../../../../models/types/Task';
 import Column from '../../../../models/types/Column';
 import Board from '../../../../models/types/Board';
-import Guest from '../../../../models/types/Guest';
+import User from '../../../../models/types/User';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -82,7 +82,7 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
     const classes = useStyles();
 
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
-    const guests: Guest[] = useSelector((state: any) => state.guest.guests);
+    const users: User[] = useSelector((state: any) => state.user.users);
 
     return (
         <div className={classes.root}>
@@ -93,7 +93,7 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
 
                     if (!task) return null;
 
-                    const asignee = guests.find(g => g.id === task.asigneeID);
+                    const asignee = users.find(g => g.id === task.asigneeID);
 
                     return <NavLink
                             key={"tasks-" + task.id}

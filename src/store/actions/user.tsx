@@ -1,20 +1,20 @@
-import GuestAPI from '../../api/GuestAPI';
+import UserAPI from '../../api/UserAPI';
 import InvitationAPI from '../../api/InvitationAPI';
 
-import GuestDTO from '../../models/dto/GuestDTO';
-import Guest from '../../models/types/Guest';
+import UserDTO from '../../models/dto/UserDTO';
+import User from '../../models/types/User';
 
 import * as actionTypes from './actionTypes';
 
-export const getGuests = () => {
+export const getUsers = () => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            GuestAPI
-            .getGuests()
-            .then(guests => {
+            UserAPI
+            .getUsers()
+            .then(users => {
                 dispatch({
-                    type: actionTypes.SET_GUESTS,
-                    payload: guests
+                    type: actionTypes.SET_USERS,
+                    payload: users
                 });
 
                 resolve(true);
@@ -27,20 +27,20 @@ export const getGuests = () => {
     }
 };
 
-export const createGuest = (dto: GuestDTO) => {
+export const createUser = (dto: UserDTO) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            GuestAPI
-            .createGuest(dto)
-            .then(guest => {
+            UserAPI
+            .createUser(dto)
+            .then(user => {
                 const g = {
-                    ...guest,
-                    displayName: guest.firstName + " " + guest.lastName,
-                    initials: ((guest.firstName).charAt(0).toUpperCase() + (guest.lastName).charAt(0)).toUpperCase()
+                    ...user,
+                    displayName: user.firstName + " " + user.lastName,
+                    initials: ((user.firstName).charAt(0).toUpperCase() + (user.lastName).charAt(0)).toUpperCase()
                 };
 
                 dispatch({
-                    type: actionTypes.ADD_GUEST,
+                    type: actionTypes.ADD_USER,
                     payload: g
                 });
 
@@ -54,18 +54,18 @@ export const createGuest = (dto: GuestDTO) => {
     };
 };
 
-export const updateGuest = (guest: Guest) => {
+export const updateUser = (user: User) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            GuestAPI
-            .updateGuest(guest)
-            .then(guest => {
+            UserAPI
+            .updateUser(user)
+            .then(user => {
                 dispatch({
-                    type: actionTypes.UPDATE_GUEST,
-                    payload: guest
+                    type: actionTypes.UPDATE_USER,
+                    payload: user
                 });
 
-                resolve(guest);
+                resolve(user);
             })
             .catch(error => {
                 console.log(error);
@@ -75,20 +75,20 @@ export const updateGuest = (guest: Guest) => {
     };
 };
 
-export const deleteGuest = (id: string, invitationIDs: string[]) => {
+export const deleteUser = (uID: string, email: string, invitationIDs: string[]) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             const promises = [];
 
-            promises.push(GuestAPI.deleteGuest(id));
+            promises.push(UserAPI.deleteUser(email));
 
             invitationIDs.forEach(id => promises.push(InvitationAPI.deleteInvitation(id)));
 
             Promise.all(promises)
-            .then(id => {
+            .then(email => {
                 dispatch({
-                    type: actionTypes.DELETE_GUEST,
-                    payload: id
+                    type: actionTypes.DELETE_USER,
+                    payload: uID // user id
                 });
 
                 invitationIDs.forEach(id => {
@@ -98,7 +98,7 @@ export const deleteGuest = (id: string, invitationIDs: string[]) => {
                     })
                 });
 
-                resolve(id);
+                resolve(uID);
             })
             .catch(error => {
                 console.log(error);

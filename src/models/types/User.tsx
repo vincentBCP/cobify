@@ -1,4 +1,4 @@
-type Guest = {
+type User = {
     id: string,
     firstName: string,
     lastName: string,
@@ -10,4 +10,4 @@ type Guest = {
     initials?: string
 };
 
-export default Guest;
+export default User;

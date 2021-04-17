@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 
 import FormModal from '../../../widgets/FormModal';
 
-import Guest from '../../../models/types/Guest';
+import User from '../../../models/types/User';
 
 import { nameRegExp, emailRegExp } from '../../../constants';
 
@@ -16,14 +16,14 @@ interface IFormInputs {
     email: string
 };
 
-interface IGuestFormModalProps {
+interface IUserFormModalProps {
     open?: boolean,
-    guest: Guest | null,
+    user: User | null,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
 }
 
-const GuestFormModal: React.FC<IGuestFormModalProps> = props => {
+const UserFormModal: React.FC<IUserFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
     const handleFormSubmit = (data: IFormInputs): [Promise<any>, () => void, () => void] => {
@@ -32,7 +32,7 @@ const GuestFormModal: React.FC<IGuestFormModalProps> = props => {
 
     return (
         <FormModal
-            title={props.guest ? "Update guest" : "Add guest"}
+            title={props.user ? "Update user" : "Add user"}
             open={Boolean(props.open)}
             reset={reset}
             useFormHandleSubmit={handleSubmit}
@@ -42,7 +42,7 @@ const GuestFormModal: React.FC<IGuestFormModalProps> = props => {
             <div style={{width: "300px"}}>
                 <TextField
                     label="First name"
-                    defaultValue={props.guest ? props.guest.firstName : ""}
+                    defaultValue={props.user ? props.user.firstName : ""}
                     fullWidth
                     required
                     error={errors.firstName !== undefined}
@@ -61,7 +61,7 @@ const GuestFormModal: React.FC<IGuestFormModalProps> = props => {
 
                 <TextField
                     label="Last name"
-                    defaultValue={props.guest ? props.guest.lastName : ""}
+                    defaultValue={props.user ? props.user.lastName : ""}
                     fullWidth
                     required
                     error={errors.lastName !== undefined}
@@ -80,7 +80,7 @@ const GuestFormModal: React.FC<IGuestFormModalProps> = props => {
 
                 <TextField
                     label="Email"
-                    defaultValue={props.guest ? props.guest.email : ""}
+                    defaultValue={props.user ? props.user.email : ""}
                     fullWidth
                     required
                     error={errors.email !== undefined}
@@ -100,4 +100,4 @@ const GuestFormModal: React.FC<IGuestFormModalProps> = props => {
     );
 };
 
-export default GuestFormModal;
+export default UserFormModal;

@@ -53,9 +53,9 @@ interface IHeaderProps {
 const ApplicationBar: React.FC<IHeaderProps> = props => {
     const classes = useStyles();
 
-    const user = useSelector((state: any) => state.app.user);
+    const account = useSelector((state: any) => state.app.account);
 
-    if (!user) return null;
+    if (!account) return null;
 
     return (
         <AppBar id="Header" position="fixed" className={classes.appBar}>
@@ -74,11 +74,8 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
                     <IconButton>
                         <Avatar
                             size={30}
-                            color={user.color}
-                            initials={
-                                ((user.firstName || '').charAt(0).toUpperCase() + 
-                                (user.lastName || '').charAt(0)).toUpperCase()
-                            }
+                            color={account.color}
+                            initials={account.initials}
                         />
                     </IconButton>
                 </Tooltip>

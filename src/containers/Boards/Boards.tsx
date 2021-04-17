@@ -19,7 +19,7 @@ import Table, { HeadCell } from '../../components/Table/Table';
 
 import Board from '../../models/types/Board';
 import Invitation from '../../models/types/Invitation';
-import Guest from '../../models/types/Guest';
+import User from '../../models/types/User';
 import Column from '../../models/types/Column';
 import Task from '../../models/types/Task';
 import InvitationDTO from '../../models/dto/InvitationDTO';
@@ -45,7 +45,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     const [open, setOpen] = useState(false);
     const [openInvitation, setOpenInvitation] = useState(false);
 
-    const user: any = useSelector((state: any) => state.app.user);
+    const account: any = useSelector((state: any) => state.app.account);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
     const boards: Board[] = useSelector((state: any) =>
@@ -56,7 +56,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         }))
     );
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
-    const guests: Guest[] = useSelector((state: any) => state.guest.guests);
+    const users: User[] = useSelector((state: any) => state.user.users);
 
     const handleRemoveInvitation = (id: string): [Promise<any>, () => void, () => void] => {
         return [
@@ -75,7 +75,7 @@ const Boards: React.FC<IBoardsProps> = props => {
             : props.createBoard({
                 ...data,
                 color: randomcolor(),
-                accountID: user.id
+                accountID: account.id
             } as BoardDTO);
 
         return [
@@ -143,7 +143,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         setBoard(null);
     }
 
-    const renderGuests = (board: Board) => {
+    const renderUsers = (board: Board) => {
         return (
             <div>
                 {
@@ -151,14 +151,14 @@ const Boards: React.FC<IBoardsProps> = props => {
                     .filter(i => i.boardID === board.id)
                     .map(i => 
                         {
-                            const guest = guests.find(g => g.id === i.guestID);
+                            const user = users.find(g => g.id === i.userID);
 
-                            if (!guest) return null;
+                            if (!user) return null;
 
                             return <Chip
                                 key={i.id}
-                                label={guest.firstName + " " + guest.lastName}
-                                color={guest.color}
+                                label={user.firstName + " " + user.lastName}
+                                color={user.color}
                                 handleDelete={(): [Promise<any>, () => void, () => void] => 
                                     handleRemoveInvitation(i.id)}
                             />;
@@ -200,7 +200,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         { id: "name", label: "Name", property: "name" },
         { id: "columnCount", label: "Columns", property: "columnCount" },
         { id: "taskCount", label: "Tasks", property: "taskCount" },
-        { id: "guestCount", label: "Guests", render: renderGuests },
+        { id: "userCount", label: "Users", render: renderUsers },
         { id: "actions", label: "Actions", align: "center", render: renderActions }
     ];
 

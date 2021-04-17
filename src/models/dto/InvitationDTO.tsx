@@ -1,5 +1,5 @@
 type InvitationDTO = {
-    guestID: string,
+    userID: string,
     boardID: string,
     accountID: string
 }

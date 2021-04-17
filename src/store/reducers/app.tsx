@@ -1,16 +1,10 @@
 import * as actionTypes from '../actions/actionTypes';
 
 import UserDetails from '../../models/types/UserDetails';
-import Guest from '../../models/types/Guest';
+import User from '../../models/types/User';
 
 const initialState: any = {
-    user: {
-        id: '1234567890',
-        firstName: "Vincent",
-        lastName: "Patoc",
-        color: "#673ab7",
-        email: "vincentbenjaminpatoc@gmail.com"
-    }
+    account: { }
 };
 
 interface IAction {
@@ -40,17 +34,17 @@ const updateEmail = (state: any, email: string) => {
     };
 };
 
-const setUser = (state: any, account: Guest) => {
+const setAccount = (state: any, account: User) => {
     return {
         ...state,
-        user: { ...account } 
+        account: { ...account } 
     }
 }
 
 const actions: any = [];
 actions[actionTypes.UPDATE_USER_DETAILS] = updateUserDetails;
 actions[actionTypes.UPDATE_EMAIL] = updateEmail;
-actions[actionTypes.SET_USER] = setUser; 
+actions[actionTypes.SET_ACCOUNT] = setAccount; 
 
 const appReducer = (state = initialState, action: IAction) => {
     if (!actions[action.type]) return state;

@@ -1,4 +1,4 @@
-type GuestDTO = {
+type UserDTO = {
     firstName: string,
     lastName: string,
     email: string,
@@ -6,4 +6,4 @@ type GuestDTO = {
     accountID: string
 }
 
-export default GuestDTO;
+export default UserDTO;

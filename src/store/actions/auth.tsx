@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
 
 import AuthAPI from '../../api/AuthAPI';
-import GuestAPI from '../../api/GuestAPI';
+import UserAPI from '../../api/UserAPI';
 
 export const login = (email: string, password: string) => {
     return (dispatch: any) => {
@@ -12,14 +12,14 @@ export const login = (email: string, password: string) => {
                 localStorage.setItem("token", response.data.idToken);
                 localStorage.setItem("refreshToken", response.data.refreshToken);
                 
-                return GuestAPI.getGuest(email.split('@')[0]);
+                return UserAPI.getUser(email.split('@')[0]);
             })
-            .then(guest => {
-                localStorage.setItem("email", guest.email);
+            .then(user => {
+                localStorage.setItem("email", user.email);
 
                 dispatch({
-                    type: actionTypes.SET_USER,
-                    payload: guest
+                    type: actionTypes.SET_ACCOUNT,
+                    payload: user
                 });
 
                 resolve(true);
@@ -54,12 +54,12 @@ export const checkAuth = () => {
                 localStorage.setItem("token", response.data.id_token);
                 localStorage.setItem("refreshToken", response.data.refresh_token);
 
-                return GuestAPI.getGuest((storedEmail || "").split('@')[0]);
+                return UserAPI.getUser((storedEmail || "").split('@')[0]);
             })
-            .then(guest => {
+            .then(user => {
                 dispatch({
-                    type: actionTypes.SET_USER,
-                    payload: guest
+                    type: actionTypes.SET_ACCOUNT,
+                    payload: user
                 });
 
                 resolve(true);
@@ -69,7 +69,7 @@ export const checkAuth = () => {
                 localStorage.removeItem("refreshToken");
                 localStorage.removeItem("email");
                 
-                console.log(error.response);
+                console.log(error);
                 reject(error);
             });
         });

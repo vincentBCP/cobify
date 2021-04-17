@@ -12,7 +12,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 
 import appReducer from './store/reducers/app';
-import guestReducer from './store/reducers/guest';
+import userReducer from './store/reducers/user';
 import boardReducer from './store/reducers/board';
 import invitationReducer from './store/reducers/invitation';
 import columnReducer from './store/reducers/column';
@@ -20,7 +20,7 @@ import taskReducer from './store/reducers/task';
 
 const rootRecuder = combineReducers({
     app: appReducer,
-    guest: guestReducer,
+    user: userReducer,
     board: boardReducer,
     invitation: invitationReducer,
     column: columnReducer,
