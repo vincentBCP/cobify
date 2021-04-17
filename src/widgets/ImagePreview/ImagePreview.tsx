@@ -2,15 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import CloseIcon from '@material-ui/icons/Close';
 
-import StorageAPI from '../../api/StorageAPI';
-
-import IAttachment from '../../models/interfaces/IAttachment';
-
 import './ImagePreview.scss';
 
 interface IImagePreviewProps {
-    file?: File,
-    attachment?: IAttachment,
+    file?: File | string,
     handleRemove?: () => void
 }
 
@@ -20,20 +15,17 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
     useEffect(() => {
         if (!props.file) return;
         
-        const reader = new FileReader();
-        reader.readAsDataURL(props.file);
-        reader.onload = () => {
-            setUrl(reader.result as string);
-        };
-        reader.onerror = error => { };
+        if (props.file instanceof File) {
+            const reader = new FileReader();
+            reader.readAsDataURL(props.file);
+            reader.onload = () => {
+                setUrl(reader.result as string);
+            };
+            reader.onerror = error => { };
+        } else { // props.file is an URL
+            setUrl(props.file);
+        }
     }, [ props.file ]);
-
-    useEffect(() => {
-        if (!props.attachment) return;
-
-        const url = StorageAPI.getAttachmentPublicUrl(props.attachment);
-        setUrl(url);
-    }, [ props.attachment ]);
 
     if (!url) return null;
 

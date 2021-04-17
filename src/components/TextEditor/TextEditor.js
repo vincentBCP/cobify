@@ -9,8 +9,23 @@ import './TextEditor.scss';
 import ImagePreview from '../../widgets/ImagePreview';
 
 const TextEditor = props => {
-    const [attachments, setAttachments] = useState(); // array of files
+    const [attachments, setAttachments] = useState(props.value?.attachments || []); // array of files or array of url
     const [editor, setEditor] = useState();
+
+    /*useEffect(() => {
+        if (attachments) return;
+
+        if (!props.attachments) {
+            setAttachments([]);
+            return;
+        }
+
+        const arrayOfURL = [];
+
+        props.attachments.forEach(attachment => arrayOfURL.push(StorageAPI.getAttachmentPublicUrl(attachment)));
+
+        setAttachments(arrayOfURL);
+    }, [ attachments, props.attachments ]);*/
 
     const handleDragOver = ev => {
         ev.preventDefault();
@@ -34,7 +49,7 @@ const TextEditor = props => {
         setAttachments(updatedAttachments);
 
         props.handleChange({
-            text: editor.getData(),
+            content: editor.getData(),
             attachments: updatedAttachments
         });
     }
@@ -47,7 +62,7 @@ const TextEditor = props => {
         setAttachments(updatedAttachments);
 
         props.handleChange({
-            text: editor.getData(),
+            content: editor.getData(),
             attachments: updatedAttachments
         });
     }
@@ -57,7 +72,7 @@ const TextEditor = props => {
             <p id="text-editor-title">{props.title || "Editor"}</p>
             <CKEditor
                 editor={ ClassicEditor }
-                data=""
+                data={props.value?.content || ""}
                 config={{
                     // extraPlugins: [ MyUploadAdapterPlugin ],
                     toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote' ]
@@ -76,7 +91,7 @@ const TextEditor = props => {
                 onBlur={ ( event, editor ) => {
                     //console.log( 'Blur.', editor );
                     props.handleChange({
-                        text: editor.getData(),
+                        content: editor.getData(),
                         attachments: attachments || []
                     });
                 } }

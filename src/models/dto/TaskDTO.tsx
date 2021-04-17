@@ -7,7 +7,7 @@ type TaskDTO = {
     columnID: string,
     boardID: string,
     accountID: string,
-    attachments?: File[] | IAttachment[]
+    attachments?: any// [file, file] [IAttachment, IAttachment] [string, file]
 }
 
 export default TaskDTO;

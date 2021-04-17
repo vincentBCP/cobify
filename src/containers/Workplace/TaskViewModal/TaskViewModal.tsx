@@ -11,15 +11,21 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import EditIcon from '@material-ui/icons/EditOutlined';
 
 import TextEditor from '../../../components/TextEditor';
 import ImagePreview from '../../../widgets/ImagePreview';
 import Avatar from '../../../widgets/Avatar';
 
+import TaskFormModal from '../TaskFormModal';
+
+import Aux from '../../../hoc/Auxi';
+
 import AsigneeSelector from './AsigneeSelector';
 import ColumnSelector from './ColumnSelector';
 
 import Task from '../../../models/types/Task';
+import TaskDTO from '../../../models/dto/TaskDTO';
 import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
 import User from '../../../models/types/User';
@@ -32,6 +38,7 @@ interface ITaskViewModalProps {
     board?: Board,
     task?: Task,
     updateTask: (arg1: Task) => Promise<Task>,
+    updateTaskAndAttachments: (arg1: Task, arg2: TaskDTO) => Promise<Task>,
     updateColumn: (arg1: Column) => Promise<Column>,
     deleteTask: (arg1: string) => Promise<string>
 }
@@ -78,10 +85,19 @@ const useStyles = makeStyles((theme: Theme) =>
             overflowY: 'auto'
         },
         title: {
-            fontSize: '2em',
-            fontWeight: 500,
+            display: 'flex',
             marginBottom: 20,
-            color: 'rgb(23, 43, 77)'
+
+            '& p': {
+                flexGrow: 1,
+                fontSize: '2em',
+                fontWeight: 500,
+                color: 'rgb(23, 43, 77)'
+            },
+            '& svg': {
+                cursor: 'pointer',
+                color: '#ccc'
+            }
         },
         description: {
             fontWeight: 500,
@@ -157,6 +173,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     const classes = useStyles();
     const [task, setTask] = useState<Task>();
     const [loading, setLoading] = useState(false);
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         if (!props.task) return;
@@ -247,108 +264,141 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         .catch(error => console.log(error));
     };
 
+    const handleUpdateTask = (data: any): [Promise<any>, () => void, () => void] => {
+        const dto: TaskDTO = {
+            ...data,
+            code: props.task?.code,
+            columnID: props.task?.columnID,
+            boardID: props.task?.boardID,
+            accountID: props.task?.accountID,
+        };
+
+        return [
+            props.task ? props.updateTaskAndAttachments({...props.task}, dto) : Promise.reject(),
+            () => {
+                setEditMode(false)
+            },
+            () => {}
+        ];
+    };
+
     return (
-        <Dialog
-            open={Boolean(props.task)}
-            className={classes.dialog}
-            onClose={handleClose}
-        >
-            <DialogContent>
-                <Paper elevation={0} className={classes.root}>
-                    <div className={classes.header}>
-                        <Typography className={classes.code}>{props.board?.name} / {task?.code}</Typography>
-                        <CloseIcon className={classes.close} onClick={handleClose}/>
-                    </div>
-                    <div className={classes.content}>
-                        <div className={classes.main}>
-                            <Typography className={classes.title}>{task?.title}</Typography>
-                            {
-                                task?.description
-                                ? <Typography className={classes.description}>Description</Typography>
-                                : null
-                            }
-                            {
-                                task?.description
-                                ? <div dangerouslySetInnerHTML={{__html: (task?.description || "")}} />
-                                : null
-                            }
-                            {
-                                task?.attachments
-                                ? <div className={classes.attachments}>
-                                    {
-                                        task.attachments.map(attachment =>
-                                            <div key={"attachment-" + attachment.name} className={classes.attachment}>
-                                                <ImagePreview attachment={attachment} />
-                                            </div>)
-                                    }
-                                </div>
-                                : null
-                            }
-                            <div className={classes.comments}>
+        <Aux>
+            <TaskFormModal
+                open={editMode}
+                task={props.task}
+                handleSubmit={handleUpdateTask}
+                handleCancel={() => {
+                    setEditMode(false)
+                }}
+            />
 
-                            </div>
-                            <div className={classes.comment}>
-                                <TextEditor
-                                    title="Comment"
-                                    handleBlur={(data: any) => {
-                                        //setTextEditorValue(data);
-                                    }}
-                                />
-                            </div>
+            <Dialog
+                open={Boolean(props.task)}
+                className={classes.dialog}
+                onClose={handleClose}
+            >
+                <DialogContent>
+                    <Paper elevation={0} className={classes.root}>
+                        <div className={classes.header}>
+                            <Typography className={classes.code}>{props.board?.name} / {task?.code}</Typography>
+                            <CloseIcon className={classes.close} onClick={handleClose}/>
                         </div>
-                        <div className={classes.side}>
-                            {
-                                task && props.board
-                                ? <ColumnSelector
-                                    task={task}
-                                    board={props.board}
-                                    handleChange={handleColumnChange}
-                                />
-                                : <span>ha?</span>
-                            }
-
-                            <div className={classes.row}>
-                                <Typography>Assignee</Typography>
+                        <div className={classes.content}>
+                            <div className={classes.main}>
+                                <div className={classes.title}>
+                                    <Typography>{task?.title}</Typography>
+                                    <EditIcon onClick={() => setEditMode(true)} />
+                                </div>
                                 {
-                                    task
-                                    ? <AsigneeSelector
-                                        task={task}
-                                        handleChange={handleAsigneeChange}
-                                    />
+                                    task?.description
+                                    ? <Typography className={classes.description}>Description</Typography>
                                     : null
                                 }
-                            </div>
-                                
-                            <div className={classes.row}>
-                                <Typography>Reporter</Typography>
-                                <div className={classes.reporter}>
-                                    <Avatar
-                                        color="#ccc"
-                                        initials="U"
-                                        size={30}
+                                {
+                                    task?.description
+                                    ? <div dangerouslySetInnerHTML={{__html: (task?.description || "")}} />
+                                    : null
+                                }
+                                {
+                                    task?.attachments
+                                    ? <div className={classes.attachments}>
+                                        {
+                                            task.attachments.map(attachment =>
+                                                <div key={"attachment-" + attachment.name} className={classes.attachment}>
+                                                    <ImagePreview file={StorageAPI.getAttachmentPublicUrl(attachment)} />
+                                                </div>)
+                                        }
+                                    </div>
+                                    : null
+                                }
+                                <div className={classes.comments}>
+
+                                </div>
+                                <div className={classes.comment}>
+                                    <TextEditor
+                                        title="Comment"
+                                        handleBlur={(data: any) => {
+                                            //setTextEditorValue(data);
+                                        }}
                                     />
-                                    <Typography>Kick Butowski</Typography>
                                 </div>
                             </div>
-                            <span style={{flexGrow: 1}}></span>
-                            <div className={classes.sideFooter}>
+                            <div className={classes.side}>
                                 {
-                                    loading
-                                    ? <CircularProgress size={25} style={{color: "#ccc"}} />
-                                    : <Button onClick={handleDelete} className={classes.deleteButton}>DELETE</Button>
+                                    task && props.board
+                                    ? <ColumnSelector
+                                        task={task}
+                                        board={props.board}
+                                        handleChange={handleColumnChange}
+                                    />
+                                    : <span>ha?</span>
                                 }
+
+                                <div className={classes.row}>
+                                    <Typography>Assignee</Typography>
+                                    {
+                                        task
+                                        ? <AsigneeSelector
+                                            task={task}
+                                            handleChange={handleAsigneeChange}
+                                        />
+                                        : null
+                                    }
+                                </div>
+                                    
+                                <div className={classes.row}>
+                                    <Typography>Reporter</Typography>
+                                    <div className={classes.reporter}>
+                                        <Avatar
+                                            color="#ccc"
+                                            initials="U"
+                                            size={30}
+                                        />
+                                        <Typography>Kick Butowski</Typography>
+                                    </div>
+                                </div>
+                                <span style={{flexGrow: 1}}></span>
+                                <div className={classes.sideFooter}>
+                                    {
+                                        loading
+                                        ? <CircularProgress size={25} style={{color: "#ccc"}} />
+                                        : <Button onClick={handleDelete} className={classes.deleteButton}>DELETE</Button>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Paper>
-            </DialogContent>
-        </Dialog>
+                    </Paper>
+                </DialogContent>
+            </Dialog>
+        </Aux>
     )
 };
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
         updateTask: (task: Task) => dispatch(actions.updateTask(task)),
+        updateTaskAndAttachments: (task: Task, dto: TaskDTO) => dispatch(actions.updateTaskAndAttachments(task, dto)),
         deleteTask: (id: string) => dispatch(actions.deleteTask(id)),
         updateColumn: (column: Column) => dispatch(actions.updateColumn(column))
     }

@@ -19,7 +19,7 @@ import BoardSelector from './BoardSelector';
 import UserList from './UserList';
 import Columns from './Columns';
 import CreateColumnFormModal from './CreateColumnFormModal';
-import CreateTaskFormModal from './CreateTaskFormModal';
+import TaskFormModal from './TaskFormModal';
 import TaskViewModal from './TaskViewModal';
 
 import Board from '../../models/types/Board';
@@ -226,7 +226,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 handleCancel={handleCancelCreateColumn}
             />
 
-            <CreateTaskFormModal
+            <TaskFormModal
                 open={addTask}
                 handleSubmit={handleSumbitTask}
                 handleCancel={handleCancelCreateTask}

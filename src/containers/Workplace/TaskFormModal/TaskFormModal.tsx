@@ -7,37 +7,61 @@ import TextField from '@material-ui/core/TextField';
 import TextEditor from '../../../components/TextEditor';
 import FormModal from '../../../widgets/FormModal';
 
+import Task from '../../../models/types/Task';
+
+import StorageAPI from '../../../api/StorageAPI';
+
 interface IFormInputs {
     title: string
 };
 
-interface ICreateTaskFormModalProps {
+interface ITextEditorValue {
+    content: string,
+    attachments: any
+}
+interface ITaskFormModalProps {
     open?: boolean,
+    task?: Task,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
 }
 
-const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
+const TaskFormModal: React.FC<ITaskFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
-    const [textEditorValue, setTextEditorValue] = useState<any | null>();
+    const [textEditorValue, setTextEditorValue] = useState<ITextEditorValue | null>();
 
     useEffect(() => {
         if (!props.open) return;
 
-        setTextEditorValue(null);
-    }, [ props.open ]);
+        if (!props.task) {
+            setTextEditorValue(null);
+            return;
+        }
+
+        const arrayOfURL: any = [];
+
+        props.task?.attachments?.forEach(attachment => 
+            arrayOfURL.push(StorageAPI.getAttachmentPublicUrl(attachment)));
+        
+        setTextEditorValue({
+            content: props.task?.description || "",
+            attachments: arrayOfURL
+        });
+    }, [ props.open, props.task ]);
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
-        return props.handleSubmit({
+        const obj = {
             ...data,
-            description: textEditorValue?.text || "",
+            description: textEditorValue?.content || "",
             attachments: textEditorValue?.attachments || []
-        });
+        };
+
+        return props.handleSubmit({...obj});
     }
 
     return (
         <FormModal
-            title="Add task"
+            title={props.task ? "Update task" : "Add task"}
             open={props.open}
             reset={reset}
             useFormHandleSubmit={handleSubmit}
@@ -47,6 +71,7 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
             <div style={{width: 650}}>
                 <TextField
                     label="Title"
+                    defaultValue={props.task?.title || ""}
                     fullWidth
                     required
                     multiline
@@ -62,6 +87,7 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
 
                 <TextEditor
                     title="Description"
+                    value={props.task ? textEditorValue : null}
                     handleChange={(data: any) => {
                         setTextEditorValue(data);
                     }}
@@ -71,4 +97,4 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
     );
 };
 
-export default CreateTaskFormModal;
+export default TaskFormModal;
