@@ -24,6 +24,8 @@ import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
 import User from '../../../models/types/User';
 
+import StorageAPI from '../../../api/StorageAPI';
+
 import * as actions from '../../../store/actions';
 
 interface ITaskViewModalProps {
@@ -231,13 +233,18 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
         setLoading(true);
 
-        Promise.all([
+        const promises: any = [
             props.deleteTask(props.task.id),
             props.updateColumn({...column})
-        ])
+        ];
+
+        props.task.attachments?.forEach(a => promises.push(StorageAPI.delete(a)));
+
+        Promise.all(promises)
         .then(() => {
             props.history.replace("/workplace/" + board.code);
-        });
+        })
+        .catch(error => console.log(error));
     };
 
     return (

@@ -25,6 +25,15 @@ class StorageAPI {
             }));
     };
 
+    public static delete(attachment: IAttachment): Promise<boolean> {
+        const url = path + attachment.name;
+
+        return axios.delete(url)
+            .then(response => {
+                return true;
+            });
+    }
+
     public static getAttachmentPublicUrl(attachment: IAttachment): string {
         return path + attachment.name + "?alt=media&token=" + attachment.downloadTokens;
     }
