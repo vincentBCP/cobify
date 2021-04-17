@@ -43,6 +43,7 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
                     label="Title"
                     fullWidth
                     required
+                    multiline
                     error={errors.title !== undefined}
                     helperText={errors.title ? errors.title.message : ''}
                     inputProps={{
