@@ -4,16 +4,23 @@ const instance = axios.create({
     baseURL: 'https://cobify-59a63-default-rtdb.firebaseio.com/'
 });
 
-/*instance.interceptors.request.use(
+instance.interceptors.request.use(
     config => {
-        return config
+        
+        if (config.url?.endsWith('.json')) { // add auth to realtime database request
+            const token = localStorage.getItem("token");
+
+            config.url = config.url + "?auth=" + token;
+        }
+
+        return config;
     },
     error => {
-        return Promise.resolve();
+        return Promise.reject(error);
     }
 );
 
-instance.interceptors.response.use(
+/*instance.interceptors.response.use(
     response => {
         return response;
     },

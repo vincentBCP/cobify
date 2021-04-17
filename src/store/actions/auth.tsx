@@ -1,7 +1,5 @@
 import * as actionTypes from './actionTypes';
 
-import axios from '../../axios';
-
 import AuthAPI from '../../api/AuthAPI';
 import GuestAPI from '../../api/GuestAPI';
 
@@ -27,6 +25,10 @@ export const login = (email: string, password: string) => {
                 resolve(true);
             })
             .catch(error => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("email");
+
                 console.log(error.response);
                 reject(error);
             });
@@ -63,6 +65,10 @@ export const checkAuth = () => {
                 resolve(true);
             })
             .catch(error => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("email");
+                
                 console.log(error.response);
                 reject(error);
             });
