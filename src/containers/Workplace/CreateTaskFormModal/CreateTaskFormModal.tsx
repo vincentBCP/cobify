@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -19,7 +19,13 @@ interface ICreateTaskFormModalProps {
 
 const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
-    const [textEditorValue, setTextEditorValue] = useState<any>();
+    const [textEditorValue, setTextEditorValue] = useState<any | null>();
+
+    useEffect(() => {
+        if (!props.open) return;
+
+        setTextEditorValue(null);
+    }, [ props.open ]);
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit({

@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import TextEditor from '../../../components/TextEditor';
 import ImagePreview from '../../../widgets/ImagePreview';
@@ -137,7 +138,11 @@ const useStyles = makeStyles((theme: Theme) =>
             }
         },
         sideFooter: {
-            width: '100%'
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
         },
         deleteButton: {
             width: '100%',
@@ -149,9 +154,12 @@ const useStyles = makeStyles((theme: Theme) =>
 const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props => {
     const classes = useStyles();
     const [task, setTask] = useState<Task>();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!props.task) return;
+        
+        setLoading(false);
         setTask(props.task);
     }, [ props.task ]);
 
@@ -220,6 +228,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         const ind = taskIDs.findIndex(tID => tID === props.task?.id);
         taskIDs.splice(ind, 1); // remove task from the source column
         column.taskIDs = [...taskIDs];
+
+        setLoading(true);
 
         Promise.all([
             props.deleteTask(props.task.id),
@@ -315,7 +325,11 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                             </div>
                             <span style={{flexGrow: 1}}></span>
                             <div className={classes.sideFooter}>
-                                <Button onClick={handleDelete} className={classes.deleteButton}>DELETE</Button>
+                                {
+                                    loading
+                                    ? <CircularProgress size={25} style={{color: "#ccc"}} />
+                                    : <Button onClick={handleDelete} className={classes.deleteButton}>DELETE</Button>
+                                }
                             </div>
                         </div>
                     </div>

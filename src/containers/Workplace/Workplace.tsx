@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
 
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -76,7 +77,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         const boardCode = params.boardCode;
         const taskCode = params.taskCode;
 
-        const task = tasks.find(t => t.code === taskCode);
+        const task = tasks.find(t => taskCode && t.code === taskCode);
 
         if (board && board.code === boardCode) {
             if (!loading) setViewingTask(task);
@@ -143,10 +144,20 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         setAddColumn(false);
     }
 
+    const createTaskCode = (): string => {
+        const bTasks = _.orderBy(tasks.filter(t => t.boardID === board?.id), ["code"], ["desc"]);
+
+        const num = bTasks[0] ? Number(bTasks[0].code.split("-")[1]) + 1 : 1;
+
+        if (num < 10) return board?.code + "-00" + num;
+        if (num < 100) return board?.code + "-0" + num;
+        return board?.code + "-" + num;
+    }
+
     const handleSumbitTask = (data: any): [Promise<any>, () => void, () => void] => {
         const t: TaskDTO = {
             ...data,
-            code: (board?.code || "") + "-" + (tasks.filter(t => t.boardID === board?.id).length + 1),
+            code: createTaskCode(),
             columnID: board?.columnIDs[0],
             boardID: board?.id,
             accountID: board?.accountID,
