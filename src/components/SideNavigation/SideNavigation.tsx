@@ -14,7 +14,7 @@ import BoardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/PeopleAlt';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import PowerIcon from '@material-ui/icons/PowerSettingsNew';
-import { Typography } from '@material-ui/core';
+import Logo from '../../widgets/Logo';
 
 import './SideNavigation.scss';
 
@@ -35,12 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawerItemText: {
             color: '#c5c8cc'
-        },
-        logoText: {
-            fontSize: 24,
-            fontWeight: 'bold',
-            color: '#c5c8cc',
-            fontStyle: 'italic'
         }
     }),
 );
@@ -60,7 +54,7 @@ const SideNavigation: React.FC = props => {
             }}
         >
             <div id="SideNavigation_Header">
-                <Typography className={classes.logoText}>Cobify</Typography>
+                <Logo />
             </div>
 
             <div id="SideNavigation_Items">

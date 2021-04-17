@@ -10,6 +10,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import Logo from '../../widgets/Logo';
+
 import { emailRegExp } from '../../constants';
 
 import * as actions from '../../store/actions';
@@ -39,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
             border: '1px solid #c72e2e',
             borderRadius: 5,
             padding: 15,
+            marginBottom: 20
+        },
+        header: {
+            display: 'flex',
+            justifyContent: 'center',
             marginBottom: 20
         }
     })
@@ -92,6 +99,9 @@ const Login: React.FC<ILoginProps> = props => {
     return (
         <div className={classes.root}>
             <form onSubmit={handleSubmit(login)} className={classes.form}>
+                <div className={classes.header}>
+                    <Logo />
+                </div>
                 {
                     Boolean(errorMessage)
                     ? <Typography className={classes.error}>{errorMessage}</Typography>
