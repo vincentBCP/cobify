@@ -249,7 +249,9 @@ const Columns: React.FC<IColumnsProps> = props => {
                         onDrop={handleDrop}
                     >
                         <div className={classes.header}>
-                            <Typography>{column.name}</Typography>
+                            <Typography>
+                                {column.name} {column.taskIDs?.length ? "(" + column.taskIDs?.length + ")" : ''}
+                            </Typography>
                             {
                                 (column.taskIDs || []).length < 1
                                 ? <Tooltip title="Remove">
