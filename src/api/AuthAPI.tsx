@@ -17,6 +17,11 @@ class AuthAPI {
             { grant_type: "refresh_token", refresh_token: refreshToken }
         );
     }
+
+    public static sendResetPassword(email: string): Promise<AxiosResponse> {
+        return axios.post("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + API_KEY,
+            { requestType: "PASSWORD_RESET", email: email });
+    }
 };
 
 export default AuthAPI;

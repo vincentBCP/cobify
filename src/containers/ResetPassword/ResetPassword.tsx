@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
-import { useForm } from 'react-hook-form';
-
-import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+
+import { useForm } from 'react-hook-form';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -13,9 +12,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Logo from '../../widgets/Logo';
 
-import { emailRegExp } from '../../constants';
+import AuthAPI from '../../api/AuthAPI';
 
-import * as actions from '../../store/actions';
+import { emailRegExp } from '../../constants';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
         input: {
             marginBottom: 20
         },
-        login: {
+        button: {
             width: '100%'
         },
         error: {
@@ -40,6 +39,15 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: '0.9em',
             backgroundColor: '#fff7f7',
             border: '1px solid #c72e2e',
+            borderRadius: 5,
+            padding: 15,
+            marginBottom: 20
+        },
+        success: {
+            textAlign: 'center',
+            fontSize: '0.9em',
+            backgroundColor: '#f7ffff',
+            border: '1px solid #2ec7c7',
             borderRadius: 5,
             padding: 15,
             marginBottom: 20
@@ -62,59 +70,55 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IFormInputs {
-    email: string,
-    password: string
+    email: string
 }
 
-interface ILoginProps {
-    login: (arg1: string, arg2: string) => Promise<string>
-}
-
-const Login: React.FC<ILoginProps> = props => {
+const ResetPassword: React.FC = props => {
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>();
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const classes = useStyles();
 
-    const login = (creds: IFormInputs) => {
-        if (loading) return;
-
+    const sendResetPassword = (data: IFormInputs) => {
         setLoading(true);
 
-        props
-        .login(creds.email, creds.password)
-        .then(b => {
-            window.location.reload();
+        setSuccessMessage("");
+
+        AuthAPI
+        .sendResetPassword(data.email)
+        .then(response => {
+            setErrorMessage("");
+            setSuccessMessage('Reset password link has been successfully sent to your email.');
         })
         .catch(error => {
-            // https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
+            setSuccessMessage('');
             const errMsg = error.response.data.error.message;
 
             switch (errMsg) {
                 case 'EMAIL_NOT_FOUND':
-                case 'INVALID_PASSWORD':
-                case 'USER_DISABLED':
-                    setErrorMessage("Invalid email or password.");
-                    break;
-                case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-                    setErrorMessage("Too many invalid attempts. Try again later.");
+                    setErrorMessage("Email not found.")
                     break;
                 default: setErrorMessage("Error occured.")
             }
-            
-            setLoading(false)
-        });
+        })
+        .finally(() => setLoading(false));
     }
 
     return (
         <div className={classes.root}>
-            <form onSubmit={handleSubmit(login)} className={classes.form}>
+            <form onSubmit={handleSubmit(sendResetPassword)} className={classes.form}>
                 <div className={classes.header}>
                     <Logo />
                 </div>
                 {
                     Boolean(errorMessage)
                     ? <Typography className={classes.error}>{errorMessage}</Typography>
+                    : null
+                }
+                {
+                    Boolean(successMessage)
+                    ? <Typography className={classes.success}>{successMessage}</Typography>
                     : null
                 }
                 <TextField
@@ -134,40 +138,20 @@ const Login: React.FC<ILoginProps> = props => {
                         })
                     }}
                 />
-                <TextField
-                    fullWidth
-                    label="Password"
-                    type="password"
-                    className={classes.input}
-                    error={errors.password !== undefined}
-                    required
-                    helperText={errors.password ? errors.password.message : ''}
-                    inputProps={{
-                        ...register('password', { 
-                            required: 'Required'
-                        })
-                    }}
-                />
                 <Button
                     type="submit"
-                    className={classes.login}
+                    className={classes.button}
                     color="primary"
                     variant="contained"
                 >
-                    { loading ? <CircularProgress color="inherit" size={22} /> : 'LOGIN' }
+                    { loading ? <CircularProgress color="inherit" size={22} /> : 'SEND RESET PASSWORD' }
                 </Button>
                 <div className={classes.footer}>
-                    <NavLink to="/resetPassword">Forgot password?</NavLink>
+                    <NavLink to="/login">Back to login</NavLink>
                 </div>
             </form>
         </div>
     );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        login: (email: string, password: string) => dispatch(actions.login(email, password))
-    }
-};
-
-export default connect(null, mapDispatchToProps)(Login);
+export default ResetPassword;

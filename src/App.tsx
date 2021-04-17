@@ -12,6 +12,7 @@ import Boards from './containers/Boards';
 import Guests from './containers/Guests';
 import ContactSupport from './containers/ContactSupport';
 import Login from './containers/Login';
+import ResetPassword from './containers/ResetPassword';
 import Logout from './containers/Logout';
 import PreLoader from './components/PreLoader';
 
@@ -83,6 +84,7 @@ const App: React.FC<IAppProps> = props => {
         return (
             <Switch>
                 <Route path="/login" component={Login} exact={true} />
+                <Route path="/resetPassword" component={ResetPassword} exact={true} />
                 <Redirect to="/login" />
             </Switch>
         );
