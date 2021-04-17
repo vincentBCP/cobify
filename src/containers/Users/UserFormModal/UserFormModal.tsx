@@ -2,6 +2,8 @@ import React from 'react';
 
 import { useForm } from 'react-hook-form';
 
+import { useSelector } from 'react-redux';
+
 import TextField from '@material-ui/core/TextField';
 
 import FormModal from '../../../widgets/FormModal';
@@ -25,6 +27,8 @@ interface IUserFormModalProps {
 
 const UserFormModal: React.FC<IUserFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
+
+    const users: User[] = useSelector((state: any) => state.user.users);
 
     const handleFormSubmit = (data: IFormInputs): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit(data);
@@ -78,23 +82,34 @@ const UserFormModal: React.FC<IUserFormModalProps> = props => {
                     style={{marginBottom: 20}}
                 />
 
-                <TextField
-                    label="Email"
-                    defaultValue={props.user ? props.user.email : ""}
-                    fullWidth
-                    required
-                    error={errors.email !== undefined}
-                    helperText={errors.email ? errors.email.message : ''}
-                    inputProps={{
-                        ...register('email', { 
-                            required: 'Required', 
-                            pattern: {
-                                value: emailRegExp,
-                                message: 'Invalid email format'
-                            }
-                        })
-                    }}
-                />
+                {
+                    !props.user
+                    ? <TextField
+                        label="Email"
+                        defaultValue={""}
+                        fullWidth
+                        required
+                        error={errors.email !== undefined}
+                        helperText={errors.email ? errors.email.message : ''}
+                        inputProps={{
+                            ...register('email', { 
+                                required: 'Required', 
+                                pattern: {
+                                    value: emailRegExp,
+                                    message: 'Invalid email format'
+                                },
+                                validate: (email: string) => {
+                                    const user = users.find(u => u.email === email);
+
+                                    if (user) return "Email already in use";
+
+                                    return true;
+                                }
+                            })
+                        }}
+                    />
+                    : null
+                }
             </div>
         </FormModal>
     );
