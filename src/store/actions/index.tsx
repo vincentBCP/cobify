@@ -34,3 +34,8 @@ export {
     createTask,
     updateTask
 } from './task';
+
+export {
+    login,
+    checkAuth
+} from './auth';

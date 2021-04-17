@@ -11,45 +11,59 @@ import Account from './containers/Account';
 import Boards from './containers/Boards';
 import Guests from './containers/Guests';
 import ContactSupport from './containers/ContactSupport';
+import Login from './containers/Login';
 import Logout from './containers/Logout';
 import PreLoader from './components/PreLoader';
 
 import * as actions from './store/actions';
 
 interface IAppProps {
+    checkAuth: () => Promise<boolean>,
     getBoards: () => Promise<any>,
     getColumns: () => Promise<any>,
     getGuests: () => Promise<any>,
     getTasks: () => Promise<any>,
-    getInvitations: () => Promise<any>
+    getInvitations: () => Promise<any>,
 }
 
 const App: React.FC<IAppProps> = props => {
-    const { getBoards, getColumns, getGuests, getTasks, getInvitations } = props;
+    const { checkAuth, getBoards, getColumns, getGuests, getTasks, getInvitations } = props;
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const dispatch = useDispatch();
     
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const promises = [];
+        checkAuth()
+        .then(b => {
+            setIsLoggedIn(b);
+            return b;
+        })
+        .then(b => {
+            if (!b) {
+                return;
+            }
 
-        promises.push(
-            getBoards(),
-            getColumns(),
-            getGuests(),
-            getTasks(),
-            getInvitations()
-        );
+            const promises = [];
 
-        Promise.all(promises)
-        .then(responses => {
+            promises.push(
+                getBoards(),
+                getColumns(),
+                getGuests(),
+                getTasks(),
+                getInvitations()
+            );
+
+            return Promise.all(promises);
+        })
+        .then(() => {
             setTimeout(() => {
                 setLoading(false);
             }, 2000);
         })
-        .catch(error => { });
-    }, [ dispatch, getBoards, getColumns, getGuests, getTasks, getInvitations ]);
+        .catch(error => {});
+    }, [ checkAuth, dispatch, getBoards, getColumns, getGuests, getTasks, getInvitations ]);
 
     let routes = (
         <Switch>
@@ -65,6 +79,15 @@ const App: React.FC<IAppProps> = props => {
 
     if(loading) return <PreLoader />;
 
+    if (!isLoggedIn) {
+        return (
+            <Switch>
+                <Route path="/login" component={Login} exact={true} />
+                <Redirect to="/login" />
+            </Switch>
+        );
+    }
+
     return (
         <div id="App">
             <SideNavigation />
@@ -77,6 +100,7 @@ const App: React.FC<IAppProps> = props => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
+        checkAuth: () => dispatch(actions.checkAuth()),
         getBoards: () => dispatch(actions.getBoards()),
         getColumns: () => dispatch(actions.getColumns()),
         getGuests: () => dispatch(actions.getGuests()),

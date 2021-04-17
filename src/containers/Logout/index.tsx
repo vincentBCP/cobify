@@ -1,10 +1,14 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
 const Logout: React.FC = props => {
-    return (
-        <Redirect to="/" />
-    );
+    useEffect(() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("email");
+        window.location.reload();
+    }, []);
+
+    return null;
 };
 
 export default Logout;

@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 
 import UserDetails from '../../models/types/UserDetails';
+import Guest from '../../models/types/Guest';
 
 const initialState: any = {
     user: {
@@ -39,9 +40,17 @@ const updateEmail = (state: any, email: string) => {
     };
 };
 
+const setUser = (state: any, account: Guest) => {
+    return {
+        ...state,
+        user: { ...account } 
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.UPDATE_USER_DETAILS] = updateUserDetails;
 actions[actionTypes.UPDATE_EMAIL] = updateEmail;
+actions[actionTypes.SET_USER] = setUser; 
 
 const appReducer = (state = initialState, action: IAction) => {
     if (!actions[action.type]) return state;
