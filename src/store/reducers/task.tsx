@@ -61,10 +61,23 @@ const setTasks = (state: IState, tasks: Task[]) => {
     }
 }
 
+const deleteTask = (state: IState, id: string) => {
+    const ind = state.tasks.findIndex(t => t.id === id);
+
+    const updatedTasks = [...state.tasks];
+    updatedTasks.splice(ind, 1);
+
+    return {
+        ...state,
+        tasks: [...updatedTasks]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.UPDATE_TASK] = updateTask;
 actions[actionTypes.ADD_TASK] = addTask;
 actions[actionTypes.SET_TASKS] = setTasks;
+actions[actionTypes.DELETE_TASK] = deleteTask;
 
 const taskReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;

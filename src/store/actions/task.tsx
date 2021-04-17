@@ -83,3 +83,25 @@ export const updateTask = (task: Task) => {
         });
     };
 };
+
+export const deleteTask = (id: string) => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            TaskAPI
+            .deleteTask(id)
+            .then(id => {
+                dispatch({
+                    type: actionTypes.DELETE_TASK,
+                    payload: id
+                });
+
+                resolve(id);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+        });
+    };
+};
+

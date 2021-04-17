@@ -32,7 +32,8 @@ export {
 export {
     getTasks,
     createTask,
-    updateTask
+    updateTask,
+    deleteTask
 } from './task';
 
 export {

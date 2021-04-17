@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import Button from '@material-ui/core/Button';
 
 import TextEditor from '../../../components/TextEditor';
 import ImagePreview from '../../../widgets/ImagePreview';
@@ -28,7 +29,8 @@ interface ITaskViewModalProps {
     board?: Board,
     task?: Task,
     updateTask: (arg1: Task) => Promise<Task>,
-    updateColumn: (arg1: Column) => Promise<Column>
+    updateColumn: (arg1: Column) => Promise<Column>,
+    deleteTask: (arg1: string) => Promise<string>
 }
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -133,6 +135,13 @@ const useStyles = makeStyles((theme: Theme) =>
                 textOverflow: 'ellipsis',
                 marginLeft: 10
             }
+        },
+        sideFooter: {
+            width: '100%'
+        },
+        deleteButton: {
+            width: '100%',
+            color: '#ccc'
         }
     })
 );
@@ -197,6 +206,28 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
         props.updateTask(updatedTask)
         .then(newTask => setTask({...newTask}));
+    };
+
+    const handleDelete = () => {
+        if (!props.board || !props.task) return;
+
+        const board: any = props.board || {};
+        const column = columns.find(c => c.id === props.task?.columnID);
+
+        if (!column) return;
+
+        const taskIDs = [...(column.taskIDs || [])];
+        const ind = taskIDs.findIndex(tID => tID === props.task?.id);
+        taskIDs.splice(ind, 1); // remove task from the source column
+        column.taskIDs = [...taskIDs];
+
+        Promise.all([
+            props.deleteTask(props.task.id),
+            props.updateColumn({...column})
+        ])
+        .then(() => {
+            props.history.replace("/workplace/" + board.code);
+        });
     };
 
     return (
@@ -282,7 +313,10 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     <Typography>Kick Butowski</Typography>
                                 </div>
                             </div>
-                            
+                            <span style={{flexGrow: 1}}></span>
+                            <div className={classes.sideFooter}>
+                                <Button onClick={handleDelete} className={classes.deleteButton}>DELETE</Button>
+                            </div>
                         </div>
                     </div>
                 </Paper>
@@ -294,6 +328,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 const mapDispatchToProps = (dispatch: any) => {
     return {
         updateTask: (task: Task) => dispatch(actions.updateTask(task)),
+        deleteTask: (id: string) => dispatch(actions.deleteTask(id)),
         updateColumn: (column: Column) => dispatch(actions.updateColumn(column))
     }
 }
