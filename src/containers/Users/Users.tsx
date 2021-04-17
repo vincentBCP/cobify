@@ -43,14 +43,9 @@ const Users: React.FC<IUsersProps> = props => {
     const [user, setUser] = useState<User | null>(null);
     const [open, setOpen] = useState(false);
 
-    const users: User[] = useSelector((state: any) => 
-        state.user.users.map((user: User) => ({
-            ...user,
-            displayName: (user.firstName + " " + user.lastName)
-        })
-    ));
-
-    const account: any = useSelector((state: any) => state.app.account);
+    const account: User = useSelector((state: any) => state.app.account);
+    const users: User[] = useSelector((state: any) =>
+        state.user.users.filter((u: User) => u.id !== account.id));
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => state.board.boards);
 
