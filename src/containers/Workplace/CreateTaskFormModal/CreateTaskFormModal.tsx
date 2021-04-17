@@ -55,7 +55,7 @@ const CreateTaskFormModal: React.FC<ICreateTaskFormModalProps> = props => {
 
                 <TextEditor
                     title="Description"
-                    handleBlur={(data: any) => {
+                    handleChange={(data: any) => {
                         setTextEditorValue(data);
                     }}
                 />

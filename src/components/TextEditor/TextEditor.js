@@ -10,6 +10,7 @@ import ImagePreview from '../../widgets/ImagePreview';
 
 const TextEditor = props => {
     const [attachments, setAttachments] = useState(); // array of files
+    const [editor, setEditor] = useState();
 
     const handleDragOver = ev => {
         ev.preventDefault();
@@ -31,6 +32,11 @@ const TextEditor = props => {
         });
         
         setAttachments(updatedAttachments);
+
+        props.handleChange({
+            text: editor.getData(),
+            attachments: updatedAttachments
+        });
     }
 
     const handleRemoveAttachment = index => {
@@ -39,6 +45,11 @@ const TextEditor = props => {
         ];
         updatedAttachments.splice(index, 1);
         setAttachments(updatedAttachments);
+
+        props.handleChange({
+            text: editor.getData(),
+            attachments: updatedAttachments
+        });
     }
 
     return (
@@ -56,6 +67,7 @@ const TextEditor = props => {
                     //console.log( 'Editor is ready to use!', editor );
                     // console.log(Array.from( editor.ui.componentFactory.names() ));
                     //console.log(editor.plugins);
+                    setEditor(editor);
                 } }
                 onChange={ ( event, editor ) => {
                     //const data = editor.getData();
@@ -63,7 +75,7 @@ const TextEditor = props => {
                 } }
                 onBlur={ ( event, editor ) => {
                     //console.log( 'Blur.', editor );
-                    props.handleBlur({
+                    props.handleChange({
                         text: editor.getData(),
                         attachments: attachments || []
                     });
