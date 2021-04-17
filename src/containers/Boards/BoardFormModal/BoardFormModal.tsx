@@ -2,6 +2,8 @@ import React from 'react';
 
 import { useForm } from 'react-hook-form';
 
+import { useSelector } from 'react-redux';
+
 import TextField from '@material-ui/core/TextField';
 
 import FormModal from '../../../widgets/FormModal';
@@ -24,6 +26,8 @@ interface IBoardFormModalModalProps {
 
 const BoardFormModal: React.FC<IBoardFormModalModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
+
+    const boards: Board[] = useSelector((state: any) => state.board.boards);
 
     const handleFormSubmit = (data: IFormInputs): [Promise<any>, () => void, () => void] => {
         return props.handleSubmit(data);
@@ -57,27 +61,38 @@ const BoardFormModal: React.FC<IBoardFormModalModalProps> = props => {
                 style={{marginBottom: 20}}
             />
 
-            <TextField
-                label="Code"
-                defaultValue={props.board ? props.board.code : ""}
-                fullWidth
-                required
-                error={errors.code !== undefined}
-                helperText={errors.code ? errors.code.message : ''}
-                inputProps={{
-                    ...register('code', { 
-                        required: 'Required', 
-                        pattern: {
-                            value: nameRegExp,
-                            message: 'Invalid code format'
-                        },
-                        maxLength: {
-                            value: 2,
-                            message: "Code must be up to two(2) characters only."
-                        }
-                    })
-                }}
-            />
+            {
+                !props.board
+                ? <TextField
+                    label="Code"
+                    defaultValue={""}
+                    fullWidth
+                    required
+                    error={errors.code !== undefined}
+                    helperText={errors.code ? errors.code.message : ''}
+                    inputProps={{
+                        ...register('code', { 
+                            required: 'Required', 
+                            pattern: {
+                                value: nameRegExp,
+                                message: 'Invalid code format'
+                            },
+                            maxLength: {
+                                value: 2,
+                                message: "Code must be up to two(2) characters only."
+                            },
+                            validate: code => {
+                                const board = boards.find(b => b.code === code);
+
+                                if (board) return "Code is already in use.";
+
+                                return true;
+                            }
+                        })
+                    }}
+                />
+                : null
+            }
         </FormModal>
     );
 };
