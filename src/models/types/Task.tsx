@@ -7,6 +7,7 @@ type Task = {
     description?: string,
     columnID: string,
     boardID: string,
+    creatorID: string,
     accountID: string,
     attachments?: IAttachment[],
     asigneeID?: string

@@ -4,6 +4,7 @@ type TaskDTO = {
     description?: string,
     columnID: string,
     boardID: string,
+    creatorID: string,
     accountID: string,
     attachments?: any// [file, file] [IAttachment, IAttachment] [string, file]
 }

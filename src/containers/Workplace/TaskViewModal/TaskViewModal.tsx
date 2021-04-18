@@ -29,6 +29,7 @@ import TaskDTO from '../../../models/dto/TaskDTO';
 import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
 import User from '../../../models/types/User';
+import Comment from '../../../models/types/Comment';
 
 import StorageAPI from '../../../api/StorageAPI';
 
@@ -40,7 +41,8 @@ interface ITaskViewModalProps {
     updateTask: (arg1: Task) => Promise<Task>,
     updateTaskAndAttachments: (arg1: Task, arg2: TaskDTO) => Promise<Task>,
     updateColumn: (arg1: Column) => Promise<Column>,
-    deleteTask: (arg1: string) => Promise<string>
+    deleteTask: (arg1: string) => Promise<string>,
+    deleteComment: (arg1: Comment) => Promise<string>
 }
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -166,6 +168,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     }, [ props.task ]);
 
     const columns: Column[] = useSelector((state: any) => state.column.columns);
+    const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
     const handleClose = () => {
         props.history.push("/workplace/" + props.board?.code);
@@ -240,6 +243,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         ];
 
         props.task.attachments?.forEach(a => promises.push(StorageAPI.delete(a)));
+        comments.filter(c => c.taskID === props.task?.id)
+        .forEach(comment => promises.push(props.deleteComment(comment)));
 
         Promise.all(promises)
         .then(() => {
@@ -250,11 +255,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
     const handleUpdateTask = (data: any): [Promise<any>, () => void, () => void] => {
         const dto: TaskDTO = {
+            ...props.task,
             ...data,
-            code: props.task?.code,
-            columnID: props.task?.columnID,
-            boardID: props.task?.boardID,
-            accountID: props.task?.accountID,
         };
 
         return [
@@ -367,7 +369,8 @@ const mapDispatchToProps = (dispatch: any) => {
         updateTask: (task: Task) => dispatch(actions.updateTask(task)),
         updateTaskAndAttachments: (task: Task, dto: TaskDTO) => dispatch(actions.updateTaskAndAttachments(task, dto)),
         deleteTask: (id: string) => dispatch(actions.deleteTask(id)),
-        updateColumn: (column: Column) => dispatch(actions.updateColumn(column))
+        updateColumn: (column: Column) => dispatch(actions.updateColumn(column)),
+        deleteComment: (comment: Comment) => dispatch(actions.deleteComment(comment))
     }
 }
 

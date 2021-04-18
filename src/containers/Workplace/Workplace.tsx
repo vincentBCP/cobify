@@ -27,6 +27,7 @@ import ColumnDTO from '../../models/dto/ColumnDTO';
 import TaskDTO from '../../models/dto/TaskDTO';
 import Column from '../../models/types/Column';
 import Task from '../../models/types/Task';
+import User from '../../models/types/User';
 
 import * as actions from '../../store/actions';
 import * as actionTypes from '../../store/actions/actionTypes';
@@ -71,6 +72,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const boards: Board[] = useSelector((state: any) => state.board.boards);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
+    const account: User = useSelector((state: any) => state.app.account);
 
     useEffect(() => {
         const params: any = props.match.params || {};
@@ -160,7 +162,8 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
             code: createTaskCode(),
             columnID: board?.columnIDs[0],
             boardID: board?.id,
-            accountID: board?.accountID,
+            creatorID: account.id,
+            accountID: board?.accountID
         };
 
         return [
