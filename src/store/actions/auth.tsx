@@ -12,7 +12,7 @@ export const login = (email: string, password: string) => {
                 localStorage.setItem("token", response.data.idToken);
                 localStorage.setItem("refreshToken", response.data.refreshToken);
                 
-                return UserAPI.getUser(email.split('@')[0]);
+                return UserAPI.getUser(email);
             })
             .then(user => {
                 localStorage.setItem("email", user.email);
@@ -54,7 +54,7 @@ export const checkAuth = () => {
                 localStorage.setItem("token", response.data.id_token);
                 localStorage.setItem("refreshToken", response.data.refresh_token);
 
-                return UserAPI.getUser((storedEmail || "").split('@')[0]);
+                return UserAPI.getUser(storedEmail || "");
             })
             .then(user => {
                 dispatch({

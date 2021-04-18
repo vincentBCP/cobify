@@ -21,17 +21,17 @@ class UserAPI {
             });
     };
 
-    public static getUser(recordPath: string): Promise<User> {
-        return axios.get(path + recordPath + extension)
+    private static getRecordPath(email: string): string {
+        return (email.split("@")[0]).split(".").join("");
+    }
+
+    public static getUser(email: string): Promise<User> {
+        return axios.get(path + UserAPI.getRecordPath(email) + extension)
         .then(response => {
             const user: User = {...response.data}
             return user;
         });
     };
-
-    private static getRecordPath(email: string): string {
-        return (email.split("@")[0]).split(".").join("");
-    }
 
     public static createUser(dto: UserDTO): Promise<User> {
         return new Promise((resolve, reject) => {
