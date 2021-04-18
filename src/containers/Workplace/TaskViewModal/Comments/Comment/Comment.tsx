@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { formatDistance } from 'date-fns';
 
 import { connect, useSelector } from 'react-redux'; 
 
@@ -52,6 +53,10 @@ const useStyles = makeStyles((theme: Theme) =>
         actions: {
             display: 'flex',
             alignItems: 'center'
+        },
+        date: {
+            color: "#ccc",
+            fontSize: "0.9em"
         },
         edit: {
             flexGrow: 1,
@@ -127,6 +132,12 @@ const CommentComp: React.FC<ICommentProps> = props => {
         .finally(() => setLoading(false));
     }
 
+    const getFormattedDate = () => {
+        if (!props.comment.date) return "";
+        
+        return formatDistance(new Date(props.comment.date), new Date(), { addSuffix: true });
+    }
+
     if (textEditorValue) {
         return (
             <div className={classes.root}>
@@ -178,6 +189,7 @@ const CommentComp: React.FC<ICommentProps> = props => {
                         : null
                     }
                 </div>
+                <Typography className={classes.date}>{getFormattedDate()}</Typography>
                 <div dangerouslySetInnerHTML={{__html: (props.comment.content)}} />
                 {
                     props.comment.attachments

@@ -5,7 +5,8 @@ type CommentDTO = {
     columnID: string,
     boardID: string,
     userID: string,
-    accountID: string
+    accountID: string,
+    date: string
 }
 
 export default CommentDTO;
