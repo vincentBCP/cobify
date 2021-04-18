@@ -125,9 +125,15 @@ export const updateComment = (comment: Comment, dto: CommentDTO) => {
 export const deleteComment = (comment: Comment) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            // TO DO: delete attachments
-            CommentAPI
-            .deleteComment(comment.id)
+            const promises: any = [];
+
+            comment.attachments.forEach((attachment: IAttachment) =>
+                StorageAPI.delete(attachment));
+
+            Promise.all(promises)
+            .then(() => {
+                return CommentAPI.deleteComment(comment.id)
+            })
             .then(id => {
                 dispatch({
                     type: actionTypes.DELETE_COMMENT,
