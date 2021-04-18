@@ -103,7 +103,8 @@ const CommentComp: React.FC<ICommentProps> = props => {
         .then(comment => {
             setTextEditorValue(null);
         })
-        .catch(error => {});
+        .catch(error => {})
+        .finally(() => setLoading(false));
     }
 
     const handleCancel = () => {
