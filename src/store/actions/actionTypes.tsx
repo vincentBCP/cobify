@@ -26,3 +26,8 @@ export const DELETE_BOARD = "DELETE_BOARD";
 
 export const SET_ACCOUNT = "SET_ACCOUNT";
 export const LOGOUT = "LOGOUT";
+
+export const SET_COMMENTS = "SET_COMMENTS";
+export const ADD_COMMENT = "ADD_COMMENT";
+export const UPDATE_COMMENT = "UPDATE_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";

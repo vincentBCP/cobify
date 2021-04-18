@@ -41,3 +41,10 @@ export {
     login,
     checkAuth
 } from './auth';
+
+export {
+    getComments,
+    createComment,
+    updateComment,
+    deleteComment
+} from './comment';

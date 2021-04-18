@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/EditOutlined';
 
-import TextEditor from '../../../components/TextEditor';
 import ImagePreview from '../../../widgets/ImagePreview';
 import Avatar from '../../../widgets/Avatar';
 
@@ -23,6 +22,8 @@ import Aux from '../../../hoc/Auxi';
 
 import AsigneeSelector from './AsigneeSelector';
 import ColumnSelector from './ColumnSelector';
+import Comments from './Comments';
+import Attachments from './Attachments';
 
 import Task from '../../../models/types/Task';
 import TaskDTO from '../../../models/dto/TaskDTO';
@@ -102,23 +103,6 @@ const useStyles = makeStyles((theme: Theme) =>
         description: {
             fontWeight: 500,
             color: 'rgb(23, 43, 77)'
-        },
-        attachments: {
-            marginTop: 20,
-            display: 'flex',
-            flexWrap: 'wrap',
-            //justifyContent: 'space-between',
-        },
-        attachment: {
-            marginBottom: 10,
-            marginRight: 10
-        },
-        comments: {
-            width: '100%',
-            marginBottom: 30
-        },
-        comment:{
-            
         },
         side: {
             width: '30%',
@@ -322,27 +306,10 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                 }
                                 {
                                     task?.attachments
-                                    ? <div className={classes.attachments}>
-                                        {
-                                            task.attachments.map(attachment =>
-                                                <div key={"attachment-" + attachment.name} className={classes.attachment}>
-                                                    <ImagePreview file={StorageAPI.getAttachmentPublicUrl(attachment)} />
-                                                </div>)
-                                        }
-                                    </div>
+                                    ? <Attachments attachments={task.attachments} />
                                     : null
                                 }
-                                <div className={classes.comments}>
-
-                                </div>
-                                <div className={classes.comment}>
-                                    <TextEditor
-                                        title="Comment"
-                                        handleBlur={(data: any) => {
-                                            //setTextEditorValue(data);
-                                        }}
-                                    />
-                                </div>
+                                <Comments task={props.task} />
                             </div>
                             <div className={classes.side}>
                                 {

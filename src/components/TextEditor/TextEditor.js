@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -12,20 +12,9 @@ const TextEditor = props => {
     const [attachments, setAttachments] = useState(props.value?.attachments || []); // array of files or array of url
     const [editor, setEditor] = useState();
 
-    /*useEffect(() => {
-        if (attachments) return;
-
-        if (!props.attachments) {
-            setAttachments([]);
-            return;
-        }
-
-        const arrayOfURL = [];
-
-        props.attachments.forEach(attachment => arrayOfURL.push(StorageAPI.getAttachmentPublicUrl(attachment)));
-
-        setAttachments(arrayOfURL);
-    }, [ attachments, props.attachments ]);*/
+    useEffect(() => {
+        setAttachments(props.value ? props.value.attachments || [] : []);
+    }, [ props.value ]);
 
     const handleDragOver = ev => {
         ev.preventDefault();

@@ -17,6 +17,7 @@ import boardReducer from './store/reducers/board';
 import invitationReducer from './store/reducers/invitation';
 import columnReducer from './store/reducers/column';
 import taskReducer from './store/reducers/task';
+import commentReducer from './store/reducers/comment';
 
 const rootRecuder = combineReducers({
     app: appReducer,
@@ -24,7 +25,8 @@ const rootRecuder = combineReducers({
     board: boardReducer,
     invitation: invitationReducer,
     column: columnReducer,
-    task: taskReducer
+    task: taskReducer,
+    comment: commentReducer
 });
 
 const store = createStore(rootRecuder, compose(applyMiddleware(thunk)))

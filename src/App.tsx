@@ -25,10 +25,11 @@ interface IAppProps {
     getUsers: () => Promise<any>,
     getTasks: () => Promise<any>,
     getInvitations: () => Promise<any>,
+    getComments: () => Promise<any>
 }
 
 const App: React.FC<IAppProps> = props => {
-    const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations } = props;
+    const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments } = props;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const dispatch = useDispatch();
@@ -53,7 +54,8 @@ const App: React.FC<IAppProps> = props => {
                 getColumns(),
                 getUsers(),
                 getTasks(),
-                getInvitations()
+                getInvitations(),
+                getComments()
             );
 
             return Promise.all(promises);
@@ -64,7 +66,7 @@ const App: React.FC<IAppProps> = props => {
             }, 2000);
         })
         .catch(error => {});
-    }, [ checkAuth, dispatch, getBoards, getColumns, getUsers, getTasks, getInvitations ]);
+    }, [ checkAuth, dispatch, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments ]);
 
     let routes = (
         <Switch>
@@ -107,7 +109,8 @@ const mapDispatchToProps = (dispatch: any) => {
         getColumns: () => dispatch(actions.getColumns()),
         getUsers: () => dispatch(actions.getUsers()),
         getTasks: () => dispatch(actions.getTasks()),
-        getInvitations: () => dispatch(actions.getInvitations())
+        getInvitations: () => dispatch(actions.getInvitations()),
+        getComments: () => dispatch(actions.getComments())
     }
 };
 
