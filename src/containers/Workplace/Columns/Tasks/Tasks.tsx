@@ -123,7 +123,11 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                                     : null
                                 }
                                 <div className={classes.commentsCount}>
-                                    <span>{comments.filter(c => c.taskID === taskID).length}</span>
+                                    {
+                                        comments.filter(c => c.taskID === taskID).length > 0
+                                        ? <span>{comments.filter(c => c.taskID === taskID).length}</span>
+                                        : null
+                                    }
                                     <ChatBubbleOutlineOutlinedIcon />
                                 </div>
                             </div>
