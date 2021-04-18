@@ -22,6 +22,7 @@ import Invitation from '../../models/types/Invitation';
 import Board from '../../models/types/Board';
 import InvitationDTO from '../../models/dto/InvitationDTO';
 import UserDTO from '../../models/dto/UserDTO';
+import UserRole from '../../models/enums/UserRole';
 
 import Chip from '../../widgets/Chip';
 
@@ -177,9 +178,18 @@ const Users: React.FC<IUsersProps> = props => {
         );
     };
 
+    const renderRole = (user: User) => {
+        switch (user.role) {
+            case UserRole.COADMIN: return <span>Co-admin</span>
+            case UserRole.GUEST: return <span>Guest</span>
+            default: return <span></span>
+        }
+    }
+
     const headCells: HeadCell[] = [
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
+        { id: 'role', property: 'role', label: 'Role', render: renderRole},
         { id: 'boards', label: 'Boards', render: renderInvitations },
         { id: 'actions', label: 'Actions', align: 'center', render: renderActions }
     ];

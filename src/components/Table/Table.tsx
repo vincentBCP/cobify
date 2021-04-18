@@ -213,7 +213,7 @@ const CustomTable: React.FC<ITableProps> = props => {
                                                 padding={headCell.disablePadding ? "none" : "default"}
                                                 align={headCell.align}
                                             >
-                                                { headCell.property ? row[headCell.property] : null}
+                                                { headCell.property && !headCell.render ? row[headCell.property] : null}
                                                 { headCell.render ? headCell.render(row) : null }
                                             </TableCell>
                                         )}
