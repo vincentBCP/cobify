@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { connect, useSelector } from 'react-redux'; 
 
 import { makeStyles, createStyles,Theme, Typography } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
@@ -13,7 +12,6 @@ import FormActions from '../../../../../widgets/FormModal/FormActions';
 
 import CommentDTO from '../../../../../models/dto/CommentDTO';
 import Comment from '../../../../../models/types/Comment';
-import Task from '../../../../../models/types/Task';
 import User from '../../../../../models/types/User'
 import IAttachment from '../../../../../models/interfaces/IAttachment';
 

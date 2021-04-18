@@ -12,6 +12,7 @@ import Task from '../../../../models/types/Task';
 import Column from '../../../../models/types/Column';
 import Board from '../../../../models/types/Board';
 import User from '../../../../models/types/User';
+import Comment from '../../../../models/types/Comment';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -83,6 +84,7 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
 
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
     const users: User[] = useSelector((state: any) => state.user.users);
+    const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
     return (
         <div className={classes.root}>
@@ -121,7 +123,7 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                                     : null
                                 }
                                 <div className={classes.commentsCount}>
-                                    <span>2</span>
+                                    <span>{comments.filter(c => c.taskID === taskID).length}</span>
                                     <ChatBubbleOutlineOutlinedIcon />
                                 </div>
                             </div>
