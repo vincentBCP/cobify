@@ -131,7 +131,7 @@ export const deleteComment = (comment: Comment) => {
         return new Promise((resolve, reject) => {
             const promises: any = [];
 
-            comment.attachments.forEach((attachment: IAttachment) =>
+            comment.attachments?.forEach((attachment: IAttachment) =>
                 StorageAPI.delete(attachment));
 
             Promise.all(promises)

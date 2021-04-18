@@ -6,6 +6,7 @@ import { makeStyles, createStyles,Theme, Typography } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import IconButton from '@material-ui/core/IconButton';
 
 import TextEditor from '../../../../../components/TextEditor';
 import FormActions from '../../../../../widgets/FormModal/FormActions';
@@ -47,6 +48,10 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: 20,
                 cursor: 'pointer'
             }
+        },
+        actions: {
+            display: 'flex',
+            alignItems: 'center'
         },
         edit: {
             flexGrow: 1,
@@ -116,7 +121,9 @@ const CommentComp: React.FC<ICommentProps> = props => {
 
         props.deleteComment(props.comment)
         .then(() => {})
-        .catch(error => {})
+        .catch(error => {
+            console.log(error);
+        })
         .finally(() => setLoading(false));
     }
 
@@ -154,12 +161,18 @@ const CommentComp: React.FC<ICommentProps> = props => {
                     <Typography>{user.displayName}</Typography>
                     {
                         account.id === user.id
-                        ? <div>
-                            <EditIcon onClick={handleEdit} />
+                        ? <div className={classes.actions}>
+                            <IconButton style={{width: 27, height: 27}} onClick={handleEdit}>
+                                <EditIcon />
+                            </IconButton>
                             {
                                 !loading
-                                ? <DeleteIcon onClick={handleDelete} />
-                                : <CircularProgress size={20} />
+                                ? <IconButton style={{width: 27, height: 27}} onClick={handleDelete}>
+                                    <DeleteIcon />
+                                </IconButton>
+                                : <div style={{display: 'flex', alignItems: 'center', marginLeft: 7}}>
+                                    <CircularProgress size={20} />
+                                </div>
                             }
                         </div>
                         : null

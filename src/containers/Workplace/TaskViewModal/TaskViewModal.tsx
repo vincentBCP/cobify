@@ -12,6 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/EditOutlined';
+import IconButton from '@material-ui/core/IconButton';
 
 import Avatar from '../../../widgets/Avatar';
 
@@ -89,6 +90,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             display: 'flex',
+            alignItems: 'center',
             marginBottom: 20,
 
             '& p': {
@@ -300,7 +302,9 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     <Typography>{task?.title}</Typography>
                                     {
                                         account.role === UserRole.ADMIN || account.role === UserRole.COADMIN
-                                        ? <EditIcon onClick={() => setEditMode(true)} />
+                                        ? <IconButton onClick={() => setEditMode(true)}>
+                                            <EditIcon />
+                                        </IconButton>
                                         : null
                                     }
                                 </div>
