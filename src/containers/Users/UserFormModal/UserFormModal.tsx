@@ -5,6 +5,11 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import FormModal from '../../../widgets/FormModal';
 
@@ -15,7 +20,8 @@ import { nameRegExp, emailRegExp } from '../../../constants';
 interface IFormInputs {
     firstName: string,
     lastName: string,
-    email: string
+    email: string,
+    role: string
 };
 
 interface IUserFormModalProps {
@@ -107,9 +113,36 @@ const UserFormModal: React.FC<IUserFormModalProps> = props => {
                                 }
                             })
                         }}
+                        style={{marginBottom: 20}}
                     />
                     : null
                 }
+
+                <FormControl fullWidth>
+                    <InputLabel
+                        required
+                        error={errors.role !== undefined}
+                    >
+                        Role
+                    </InputLabel>
+                    <Select
+                        defaultValue=""
+                        fullWidth
+                        required
+                        inputProps={{
+                            required: true,
+                            ...register('role', { required: true })
+                        }}
+                    >
+                        <MenuItem value="admin">Admin</MenuItem>
+                        <MenuItem value="guest">Guest</MenuItem>
+                    </Select>
+                    {
+                        errors.role !== undefined
+                        ? <FormHelperText error={errors.role !== undefined}>{errors.role.message}</FormHelperText>
+                        : null
+                    }
+                </FormControl>
             </div>
         </FormModal>
     );
