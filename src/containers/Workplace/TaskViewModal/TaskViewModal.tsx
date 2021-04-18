@@ -169,6 +169,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
+    const creator: User = useSelector((state: any) =>
+        state.user.users.find((u: User) => u.id === props.task?.creatorID));
 
     const handleClose = () => {
         props.history.push("/workplace/" + props.board?.code);
@@ -338,14 +340,18 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     
                                 <div className={classes.row}>
                                     <Typography>Reporter</Typography>
-                                    <div className={classes.reporter}>
-                                        <Avatar
-                                            color="#ccc"
-                                            initials="U"
-                                            size={30}
-                                        />
-                                        <Typography>Kick Butowski</Typography>
-                                    </div>
+                                    {
+                                        creator
+                                        ? <div className={classes.reporter}>
+                                            <Avatar
+                                                color={creator.color}
+                                                initials={creator.initials}
+                                                size={30}
+                                            />
+                                            <Typography>{creator.displayName}</Typography>
+                                        </div>
+                                        : null
+                                    }
                                 </div>
                                 <span style={{flexGrow: 1}}></span>
                                 <div className={classes.sideFooter}>
