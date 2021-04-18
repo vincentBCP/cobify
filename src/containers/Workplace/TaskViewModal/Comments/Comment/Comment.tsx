@@ -4,8 +4,8 @@ import { connect, useSelector } from 'react-redux';
 
 import { makeStyles, createStyles,Theme, Typography } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 
 import TextEditor from '../../../../../components/TextEditor';
