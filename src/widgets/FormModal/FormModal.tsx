@@ -62,6 +62,7 @@ const FormModal: React.FC<IFormModalProps> = props => {
     const handleSubmit = (data: any) => {
         const [request, successCallback, failCallback] = props.handleSubmit(data);
 
+        if (loading) return;
         setLoading(true);
 
         request

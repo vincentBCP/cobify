@@ -91,15 +91,16 @@ export const updateTaskAndAttachments = (task: Task, dto: TaskDTO) => {
             const attachmentsToDelete: any = [];
             const updatedTask = {...task};
 
-            const currentAttachments = [...(updatedTask.attachments || [])];
+            const newAttachments: IAttachment[] = [];
 
-            currentAttachments.forEach((attachment: IAttachment, index) => {
+            updatedTask.attachments?.forEach((attachment: IAttachment) => {
                 const publicURL = StorageAPI.getAttachmentPublicUrl(attachment);
 
                 if (!(dto.attachments || []).includes(publicURL)) {
                     // remove/delete attachment if it is not in the dto
-                    updatedTask.attachments?.splice(index, 1);
                     attachmentsToDelete.push(StorageAPI.delete(attachment));
+                } else {
+                    newAttachments.push(attachment);
                 }
             });
 
@@ -120,7 +121,7 @@ export const updateTaskAndAttachments = (task: Task, dto: TaskDTO) => {
                 return addRequest;
             })
             .then((addedAttachments: IAttachment[]) => {
-                const atts = [...(updatedTask.attachments || [])];
+                const atts = [...newAttachments];
 
                 updatedTask.title = dto.title;
                 updatedTask.description = dto.description;

@@ -81,6 +81,7 @@ const ResetPassword: React.FC = props => {
     const classes = useStyles();
 
     const sendResetPassword = (data: IFormInputs) => {
+        if (loading) return;
         setLoading(true);
 
         setSuccessMessage("");

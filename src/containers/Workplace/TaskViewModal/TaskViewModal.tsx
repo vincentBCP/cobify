@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/EditOutlined';
 
-import ImagePreview from '../../../widgets/ImagePreview';
 import Avatar from '../../../widgets/Avatar';
 
 import TaskFormModal from '../TaskFormModal';
@@ -227,12 +226,13 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
         if (!column) return;
 
+        if (loading) return;
+        setLoading(true);
+
         const taskIDs = [...(column.taskIDs || [])];
         const ind = taskIDs.findIndex(tID => tID === props.task?.id);
         taskIDs.splice(ind, 1); // remove task from the source column
         column.taskIDs = [...taskIDs];
-
-        setLoading(true);
 
         const promises: any = [
             props.deleteTask(props.task.id),

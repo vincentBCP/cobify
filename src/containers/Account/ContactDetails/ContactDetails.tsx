@@ -54,6 +54,7 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
         if (!hasChange || !email) return;
         if (!emailRegExp.test(email)) return;
 
+        if (loading) return;
         setLoading(true);
 
         AppAPI
@@ -81,6 +82,7 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
     const handleCodeAuthSuccess = () => {
         if (!email) return;
 
+        if (loading) return;
         setLoading(true);
         setSuccess(false);
         setAuthenticate(false);

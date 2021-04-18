@@ -148,7 +148,8 @@ const CustomTable: React.FC<ITableProps> = props => {
 
     const handleDelete = () => {
         const [request, successCallback, failCallback] = props.handleDeleteSelectedRows(selected);
-
+        
+        if (loading) return;
         setLoading(true);
 
         request

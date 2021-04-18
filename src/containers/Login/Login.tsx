@@ -78,7 +78,6 @@ const Login: React.FC<ILoginProps> = props => {
 
     const login = (creds: IFormInputs) => {
         if (loading) return;
-
         setLoading(true);
 
         props

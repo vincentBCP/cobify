@@ -53,6 +53,7 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
     const handleSaveChanges = () => {
         if (!hasChange || !userDetails || !isUserDetailsValid()) return;
         
+        if (loading) return;
         setLoading(true);
 
         props.updateUserDetails({...userDetails})

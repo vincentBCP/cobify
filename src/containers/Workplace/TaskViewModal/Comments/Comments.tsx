@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { connect, useSelector } from 'react-redux'; 
 
-import { makeStyles, createStyles,Theme } from '@material-ui/core';
+import { makeStyles, createStyles,Theme, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -18,7 +18,12 @@ import * as actions from '../../../../store/actions';
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
-            marginTop: 20
+            marginTop: 40
+        },
+        comments: {
+            fontWeight: 500,
+            marginBottom: 20,
+            color: 'rgb(23, 43, 77)'
         },
         newComment: {
             display: 'flex',
@@ -58,6 +63,9 @@ const Comments: React.FC<ICommentsProps> = props => {
 
         if (!props.task) return;
 
+        if (loading) return;
+        setLoading(true);
+
         const dto: CommentDTO = {
             content: textEditorValue.content,
             attachments: textEditorValue.attachments || [],
@@ -67,8 +75,6 @@ const Comments: React.FC<ICommentsProps> = props => {
             accountID: props.task?.id,
             userID: account.id
         }
-
-        setLoading(true);
 
         props.createComment(dto)
         .then(comment => {
@@ -80,6 +86,11 @@ const Comments: React.FC<ICommentsProps> = props => {
 
     return (
         <div className={classes.root}>
+            {
+                comments.length > 0
+                ? <Typography className={classes.comments}>Comments ({comments.length})</Typography>
+                : null
+            }
             {
                 comments.map(c => <CommentComp key={"comment" + c.id} comment={c} />)
             }

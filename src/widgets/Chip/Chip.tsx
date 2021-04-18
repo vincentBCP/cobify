@@ -20,9 +20,10 @@ const CustomChip: React.FC<IChipProps> = props => {
     const handleDelete = () => {
         if (!props.handleDelete) return;
 
-        const [request, successCallback, failCallback] = props.handleDelete();
-
+        if (loading) return;
         setLoading(true);
+
+        const [request, successCallback, failCallback] = props.handleDelete();
 
         request
         .then(() => {

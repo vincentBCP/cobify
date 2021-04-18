@@ -38,7 +38,8 @@ const CodeAuthenticator: React.FC<ICodeAuthenticatorProps> = props => {
 
     const handleSend = () => {
         if (!code) return;
-
+        
+        if (loading) return;
         setLoading(true);
 
         AppAPI
