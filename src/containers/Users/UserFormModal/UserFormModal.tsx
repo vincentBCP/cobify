@@ -126,7 +126,7 @@ const UserFormModal: React.FC<IUserFormModalProps> = props => {
                         Role
                     </InputLabel>
                     <Select
-                        defaultValue=""
+                        defaultValue={props.user ? props.user.role : ""}
                         fullWidth
                         required
                         inputProps={{
