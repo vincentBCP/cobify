@@ -3,8 +3,9 @@ import InvitationAPI from '../../api/InvitationAPI';
 import * as actionTypes from './actionTypes';
 
 import InvitationDTO from '../../models/dto/InvitationDTO';
+import User from '../../models/types/User';
 
-export const getInvitations = () => {
+export const getInvitations = (account: User) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             InvitationAPI
@@ -12,7 +13,10 @@ export const getInvitations = () => {
             .then(invitations => {
                 dispatch({
                     type: actionTypes.SET_INVITATIONS,
-                    payload: invitations
+                    payload: invitations.filter(i => {
+                        return i.accountID === account.id ||
+                                i.accountID === account.accountID;
+                    })
                 });
 
                 resolve(true);

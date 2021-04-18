@@ -6,10 +6,11 @@ import InvitationAPI from '../../api/InvitationAPI';
 import BoardDTO from '../../models/dto/BoardDTO';
 import Board from '../../models/types/Board';
 import Column from '../../models/types/Column';
+import User from '../../models/types/User';
 
 import * as actionTypes from './actionTypes';
 
-export const getBoards = () => {
+export const getBoards = (account: User) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             BoardAPI
@@ -17,7 +18,10 @@ export const getBoards = () => {
             .then(boards => {
                 dispatch({
                     type: actionTypes.SET_BOARDS,
-                    payload: boards
+                    payload: boards.filter(b => {
+                        return b.accountID === account.id ||
+                                b.accountID === account.accountID;
+                    })
                 });
 
                 resolve(true);

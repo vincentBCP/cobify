@@ -72,7 +72,7 @@ const Comments: React.FC<ICommentsProps> = props => {
             taskID: props.task?.id,
             columnID: props.task?.columnID,
             boardID: props.task?.boardID,
-            accountID: props.task?.id,
+            accountID: props.task?.accountID,
             userID: account.id
         }
 

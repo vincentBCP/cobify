@@ -3,11 +3,12 @@ import StorageAPI from '../../api/StorageAPI';
 
 import TaskDTO from '../../models/dto/TaskDTO';
 import Task from '../../models/types/Task';
+import User from '../../models/types/User';
 
 import * as actionTypes from './actionTypes';
 import IAttachment from '../../models/interfaces/IAttachment';
 
-export const getTasks = () => {
+export const getTasks = (account: User) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             TaskAPI
@@ -15,7 +16,10 @@ export const getTasks = () => {
             .then(tasks => {
                 dispatch({
                     type: actionTypes.SET_TASKS,
-                    payload: tasks
+                    payload: tasks.filter(t => {
+                        return t.accountID === account.id ||
+                                t.accountID === account.accountID;
+                    })
                 });
 
                 resolve(true);

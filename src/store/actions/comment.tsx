@@ -3,11 +3,12 @@ import StorageAPI from '../../api/StorageAPI';
 
 import CommentDTO from '../../models/dto/CommentDTO';
 import Comment from '../../models/types/Comment';
+import User from '../../models/types/User';
 
 import * as actionTypes from './actionTypes';
 import IAttachment from '../../models/interfaces/IAttachment';
 
-export const getComments = () => {
+export const getComments = (account: User) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             CommentAPI
@@ -15,7 +16,10 @@ export const getComments = () => {
             .then(comments => {
                 dispatch({
                     type: actionTypes.SET_COMMENTS,
-                    payload: comments
+                    payload: comments.filter(c => {
+                        return c.accountID === account.id ||
+                                c.accountID === account.accountID;
+                    })
                 });
 
                 resolve(true);

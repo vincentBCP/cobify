@@ -18,16 +18,17 @@ import PreLoader from './components/PreLoader';
 
 import * as actions from './store/actions';
 
+import User from './models/types/User';
 import UserRole from './models/enums/UserRole';
 
 interface IAppProps {
     checkAuth: () => Promise<boolean>,
-    getBoards: () => Promise<any>,
-    getColumns: () => Promise<any>,
-    getUsers: () => Promise<any>,
-    getTasks: () => Promise<any>,
-    getInvitations: () => Promise<any>,
-    getComments: () => Promise<any>
+    getBoards: (arg1: User) => Promise<any>,
+    getColumns: (arg1: User) => Promise<any>,
+    getUsers: (arg1: User) => Promise<any>,
+    getTasks: (arg1: User) => Promise<any>,
+    getInvitations: (arg1: User) => Promise<any>,
+    getComments: (arg1: User) => Promise<any>
 }
 
 const App: React.FC<IAppProps> = props => {
@@ -52,12 +53,12 @@ const App: React.FC<IAppProps> = props => {
         const promises = [];
 
         promises.push(
-            getBoards(),
-            getColumns(),
-            getUsers(),
-            getTasks(),
-            getInvitations(),
-            getComments()
+            getBoards(account),
+            getColumns(account),
+            getUsers(account),
+            getTasks(account),
+            getInvitations(account),
+            getComments(account)
         );
 
         setLoading(true);
@@ -112,12 +113,12 @@ const App: React.FC<IAppProps> = props => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         checkAuth: () => dispatch(actions.checkAuth()),
-        getBoards: () => dispatch(actions.getBoards()),
-        getColumns: () => dispatch(actions.getColumns()),
-        getUsers: () => dispatch(actions.getUsers()),
-        getTasks: () => dispatch(actions.getTasks()),
-        getInvitations: () => dispatch(actions.getInvitations()),
-        getComments: () => dispatch(actions.getComments())
+        getBoards: (account: User) => dispatch(actions.getBoards(account)),
+        getColumns: (account: User) => dispatch(actions.getColumns(account)),
+        getUsers: (account: User) => dispatch(actions.getUsers(account)),
+        getTasks: (account: User) => dispatch(actions.getTasks(account)),
+        getInvitations: (account: User) => dispatch(actions.getInvitations(account)),
+        getComments: (account: User) => dispatch(actions.getComments(account))
     }
 };
 
