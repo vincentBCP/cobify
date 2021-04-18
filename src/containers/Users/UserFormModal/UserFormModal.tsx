@@ -17,6 +17,8 @@ import User from '../../../models/types/User';
 
 import { nameRegExp, emailRegExp } from '../../../constants';
 
+import UserRole from '../../../models/enums/UserRole';
+
 interface IFormInputs {
     firstName: string,
     lastName: string,
@@ -134,8 +136,8 @@ const UserFormModal: React.FC<IUserFormModalProps> = props => {
                             ...register('role', { required: true })
                         }}
                     >
-                        <MenuItem value="admin">Admin</MenuItem>
-                        <MenuItem value="guest">Guest</MenuItem>
+                        <MenuItem value={UserRole.COADMIN}>Co-admin</MenuItem>
+                        <MenuItem value={UserRole.GUEST}>Guest</MenuItem>
                     </Select>
                     {
                         errors.role !== undefined

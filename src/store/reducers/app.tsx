@@ -4,7 +4,7 @@ import UserDetails from '../../models/types/UserDetails';
 import User from '../../models/types/User';
 
 const initialState: any = {
-    account: { }
+    account: null
 };
 
 interface IAction {

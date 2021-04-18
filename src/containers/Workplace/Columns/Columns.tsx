@@ -12,6 +12,8 @@ import Tasks from './Tasks';
 import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
 import Task from '../../../models/types/Task';
+import User from '../../../models/types/User';
+import UserRole from '../../../models/enums/UserRole';
 
 import { SIDE_NAVIGATION_WIDTH } from '../../../components/SideNavigation/SideNavigation';
 
@@ -75,6 +77,7 @@ const Columns: React.FC<IColumnsProps> = props => {
     const [sourceColumn, setSourceColumn] = useState<Column | null>(null);
     const [targetColumn, setTargetColumn] = useState<Column | null>(null);
 
+    const account: User = useSelector((state: any) => state.app.account);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
 
     useEffect(() => {
@@ -253,7 +256,8 @@ const Columns: React.FC<IColumnsProps> = props => {
                                 {column.name} {column.taskIDs?.length ? "(" + column.taskIDs?.length + ")" : ''}
                             </Typography>
                             {
-                                (column.taskIDs || []).length < 1
+                                ((account.role === UserRole.ADMIN || account.role === UserRole.COADMIN) && 
+                                (column.taskIDs || []).length < 1)
                                 ? <Tooltip title="Remove">
                                     <RemoveOutlinedIcon
                                         onClick={() => props.handleColumnDelete(column)}

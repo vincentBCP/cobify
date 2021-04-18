@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useDispatch, connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import './App.scss';
 
@@ -18,6 +18,8 @@ import PreLoader from './components/PreLoader';
 
 import * as actions from './store/actions';
 
+import UserRole from './models/enums/UserRole';
+
 interface IAppProps {
     checkAuth: () => Promise<boolean>,
     getBoards: () => Promise<any>,
@@ -31,49 +33,50 @@ interface IAppProps {
 const App: React.FC<IAppProps> = props => {
     const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments } = props;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    const dispatch = useDispatch();
-    
     const [loading, setLoading] = useState(true);
+
+    const account = useSelector((state: any) => state.app.account);
 
     useEffect(() => {
         checkAuth()
         .then(b => {
             setIsLoggedIn(b);
-            return b;
+            setLoading(b);
         })
-        .then(b => {
-            if (!b) {
-                return;
-            }
+        .catch(error => {});
+    }, [ checkAuth ]);
 
-            const promises = [];
+    useEffect(() => {
+        if (!account) return;
 
-            promises.push(
-                getBoards(),
-                getColumns(),
-                getUsers(),
-                getTasks(),
-                getInvitations(),
-                getComments()
-            );
+        const promises = [];
 
-            return Promise.all(promises);
-        })
+        promises.push(
+            getBoards(),
+            getColumns(),
+            getUsers(),
+            getTasks(),
+            getInvitations(),
+            getComments()
+        );
+
+        setLoading(true);
+
+        Promise.all(promises)
         .then(() => {
             setTimeout(() => {
                 setLoading(false);
             }, 2000);
         })
         .catch(error => {});
-    }, [ checkAuth, dispatch, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments ]);
+    }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments ]);
 
     let routes = (
         <Switch>
             <Route path="/workplace/:boardCode?/:taskCode?" component={Workplace} />
             <Route path="/account" component={Account} exact={true} />
-            <Route path="/boards" component={Boards} exact={true} />
-            <Route path="/users" component={Users} exact={true} />
+            {account?.role === UserRole.ADMIN ? <Route path="/boards" component={Boards} exact={true} /> : null}
+            {account?.role === UserRole.ADMIN ? <Route path="/users" component={Users} exact={true} /> : null}
             <Route path="/contactSupport" component={ContactSupport} exact={true} />
             <Route path="/logout" component={Logout} exact={true} />
             <Redirect to="/workplace" />
@@ -90,6 +93,10 @@ const App: React.FC<IAppProps> = props => {
                 <Redirect to="/login" />
             </Switch>
         );
+    }
+
+    if (!account) {
+        return <PreLoader />;
     }
 
     return (

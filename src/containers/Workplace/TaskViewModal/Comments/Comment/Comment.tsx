@@ -69,6 +69,7 @@ const CommentComp: React.FC<ICommentProps> = props => {
     const [textEditorValue, setTextEditorValue] = useState<any | null>();
     const [loading, setLoading] = useState(false);
 
+    const account = useSelector((state: any) => state.app.account);
     const user = useSelector((state: any) => state.user.users.find((u: User) => u.id === props.comment.userID));
 
     const handleEdit = () => {
@@ -151,11 +152,17 @@ const CommentComp: React.FC<ICommentProps> = props => {
             <div className={classes.main}>
                 <div className={classes.header}>
                     <Typography>{user.displayName}</Typography>
-                    <EditIcon onClick={handleEdit} />
                     {
-                        !loading
-                        ? <DeleteIcon onClick={handleDelete} />
-                        : <CircularProgress size={20} />
+                        account.id === user.id
+                        ? <div>
+                            <EditIcon onClick={handleEdit} />
+                            {
+                                !loading
+                                ? <DeleteIcon onClick={handleDelete} />
+                                : <CircularProgress size={20} />
+                            }
+                        </div>
+                        : null
                     }
                 </div>
                 <div dangerouslySetInnerHTML={{__html: (props.comment.content)}} />

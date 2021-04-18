@@ -30,6 +30,7 @@ import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
 import User from '../../../models/types/User';
 import Comment from '../../../models/types/Comment';
+import UserRole from '../../../models/enums/UserRole';
 
 import StorageAPI from '../../../api/StorageAPI';
 
@@ -167,6 +168,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         setTask(props.task);
     }, [ props.task ]);
 
+    const account: User = useSelector((state: any) => state.app.account);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
     const creator: User = useSelector((state: any) =>
@@ -296,7 +298,11 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                             <div className={classes.main}>
                                 <div className={classes.title}>
                                     <Typography>{task?.title}</Typography>
-                                    <EditIcon onClick={() => setEditMode(true)} />
+                                    {
+                                        account.role === UserRole.ADMIN || account.role === UserRole.COADMIN
+                                        ? <EditIcon onClick={() => setEditMode(true)} />
+                                        : null
+                                    }
                                 </div>
                                 {
                                     task?.description
@@ -354,13 +360,19 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     }
                                 </div>
                                 <span style={{flexGrow: 1}}></span>
-                                <div className={classes.sideFooter}>
-                                    {
-                                        loading
-                                        ? <CircularProgress size={25} style={{color: "#ccc"}} />
-                                        : <Button onClick={handleDelete} className={classes.deleteButton}>DELETE</Button>
-                                    }
-                                </div>
+                                {
+                                    account.role === UserRole.ADMIN || account.role === UserRole.COADMIN
+                                    ? <div className={classes.sideFooter}>
+                                        {
+                                            loading
+                                            ? <CircularProgress size={25} style={{color: "#ccc"}} />
+                                            : <Button onClick={handleDelete} className={classes.deleteButton}>
+                                                DELETE
+                                            </Button>
+                                        }
+                                    </div>
+                                    : null
+                                }
                             </div>
                         </div>
                     </Paper>

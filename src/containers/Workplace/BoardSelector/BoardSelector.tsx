@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import _ from 'lodash';
 
-import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
@@ -40,7 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IBoardSelectorProps {
-    board?: Board
+    board?: Board,
+    boards: Board[]
 }
 
 const BoardSelector: React.FC<IBoardSelectorProps> = props => {
@@ -52,8 +52,6 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
     useEffect(() => {
         setAnchorEl(null);
     }, [ props.board ]);
-
-    const boards: Board[] = useSelector((state: any) => state.board.boards);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -107,7 +105,7 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
             >
                 <List className={classes.list}>
                     {
-                        _.orderBy(boards, ["name"]).map(board =>
+                        _.orderBy(props.boards, ["name"]).map(board =>
                             (props.board || {}).id === board.id
                             ? <ListItem
                                 key={"board-selector-" + board.id}

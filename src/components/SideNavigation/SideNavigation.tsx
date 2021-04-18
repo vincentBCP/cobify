@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -17,6 +18,8 @@ import PowerIcon from '@material-ui/icons/PowerSettingsNew';
 import Logo from '../../widgets/Logo';
 
 import './SideNavigation.scss';
+
+import UserRole from '../../models/enums/UserRole';
 
 export const SIDE_NAVIGATION_WIDTH = 240;
 
@@ -41,6 +44,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SideNavigation: React.FC = props => {
     const classes = useStyles();
+
+    const account = useSelector((state: any) => state.app.account);
 
     return (
         <Drawer
@@ -76,23 +81,31 @@ const SideNavigation: React.FC = props => {
                     </ListItem>
                 </NavLink>
 
-                <NavLink to="/boards" activeClassName="active">
-                    <ListItem key="Boards">
-                    <ListItemIcon>
-                        <BoardIcon className={classes.drawerItemIcon} />
-                    </ListItemIcon>
-                    <ListItemText className={classes.drawerItemText} primary="Boards" />
-                    </ListItem>
-                </NavLink>
+                {
+                    account.role === UserRole.ADMIN
+                    ? <NavLink to="/boards" activeClassName="active">
+                        <ListItem key="Boards">
+                        <ListItemIcon>
+                            <BoardIcon className={classes.drawerItemIcon} />
+                        </ListItemIcon>
+                        <ListItemText className={classes.drawerItemText} primary="Boards" />
+                        </ListItem>
+                    </NavLink>
+                    : null
+                }
 
-                <NavLink to="/users" activeClassName="active">
-                    <ListItem key="users">
-                    <ListItemIcon>
-                        <PeopleIcon className={classes.drawerItemIcon} />
-                    </ListItemIcon>
-                    <ListItemText className={classes.drawerItemText} primary="Users" />
-                    </ListItem>
-                </NavLink>
+                {
+                    account.role === UserRole.ADMIN
+                    ? <NavLink to="/users" activeClassName="active">
+                        <ListItem key="users">
+                        <ListItemIcon>
+                            <PeopleIcon className={classes.drawerItemIcon} />
+                        </ListItemIcon>
+                        <ListItemText className={classes.drawerItemText} primary="Users" />
+                        </ListItem>
+                    </NavLink>
+                    : null
+                }
             </div>
             
             <footer id="SideNavigation_Footer">

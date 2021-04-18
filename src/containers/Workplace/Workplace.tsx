@@ -28,6 +28,8 @@ import TaskDTO from '../../models/dto/TaskDTO';
 import Column from '../../models/types/Column';
 import Task from '../../models/types/Task';
 import User from '../../models/types/User';
+import UserRole from '../../models/enums/UserRole';
+import Invitation from '../../models/types/Invitation';
 
 import * as actions from '../../store/actions';
 import * as actionTypes from '../../store/actions/actionTypes';
@@ -69,10 +71,21 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const [viewingTask, setViewingTask] = useState<Task | undefined>();
     const [loading, setLoading] = useState(false);
 
-    const boards: Board[] = useSelector((state: any) => state.board.boards);
+    const account: User = useSelector((state: any) => state.app.account);
+    const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
+    const boards: Board[] = useSelector((state: any) =>
+        state.board.boards.filter((b: Board) => {
+            if (account.role === UserRole.ADMIN) {
+                return b?.accountID === account.id
+            }
+
+            const invitation = invitations.find((i: Invitation) => i.userID === account.id && i.boardID === b.id);
+
+            return Boolean(invitation);
+        })
+    );
     const columns: Column[] = useSelector((state: any) => state.column.columns);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
-    const account: User = useSelector((state: any) => state.app.account);
 
     useEffect(() => {
         const params: any = props.match.params || {};
@@ -220,7 +233,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         <Auxi>
             <ApplicationBar
                 title="Workplace"
-                component={<BoardSelector board={board} />}
+                component={<BoardSelector boards={boards} board={board} />}
             />
 
             <CreateColumnFormModal
@@ -254,21 +267,29 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                     board
                     ? <Auxi>
                         <Grid container direction="row" className={classes.header}>
-                            <Button
-                                variant="contained"
-                                className={classes.button}
-                                startIcon={<AddIcon />}
-                                color="primary"
-                                onClick={() => setAddColumn(true)}
-                            >Column</Button>
-                            <Button
-                                variant="contained" 
-                                className={classes.button}
-                                startIcon={<AddIcon />}
-                                color="primary"
-                                disabled={!board?.columnIDs || board?.columnIDs.length < 1}
-                                onClick={() => setAddTask(true)}
-                            >Task</Button>
+                            {
+                                (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
+                                ? <Button
+                                    variant="contained"
+                                    className={classes.button}
+                                    startIcon={<AddIcon />}
+                                    color="primary"
+                                    onClick={() => setAddColumn(true)}
+                                >Column</Button>
+                                : null
+                            }
+                            {
+                                (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
+                                ? <Button
+                                    variant="contained" 
+                                    className={classes.button}
+                                    startIcon={<AddIcon />}
+                                    color="primary"
+                                    disabled={!board?.columnIDs || board?.columnIDs.length < 1}
+                                    onClick={() => setAddTask(true)}
+                                >Task</Button>
+                                : null
+                            }
                             <span style={{flexGrow: 1}}></span>
                             <UserList
                                 boardID={board?.id}
