@@ -153,9 +153,10 @@ const useStyles = makeStyles((theme: Theme) =>
             flexGrow: 1,
             
             '& p': {
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: 300,
-                color: 'rgb(107, 119, 140)'
+                marginBottom: 5,
+                color: 'rgba(0,0,0,0.3)'//'rgb(107, 119, 140)'
             }
         },
         sideFooter: {
