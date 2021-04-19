@@ -109,6 +109,8 @@ const useStyles = makeStyles((theme: Theme) =>
             color: 'rgb(23, 43, 77)'
         },
         side: {
+            minWidth: '30%',
+            maxWidth: '30%',
             width: '30%',
             padding: '5px 0 5px 20px',
             display: 'flex',

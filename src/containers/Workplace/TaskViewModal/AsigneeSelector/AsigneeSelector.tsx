@@ -77,15 +77,18 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
         setListWidth(elem.offsetWidth);
     }, [ elemRef ]);
 
+    const account: User = useSelector((state: any) => state.app.account);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const users: User[] = useSelector((state: any) => {
         return state.user.users.filter((user: User) => {
+            if (user.id === account.id) return false;
             const invitation = invitations.find(i => i.boardID === props.task.boardID && i.userID === user.id);
 
             return Boolean(invitation);
         });
     });
-    const asignee = users.find(g => g.id === props.task.asigneeID);
+    const asignee = useSelector((state: any) =>
+        state.user.users.find((u: User) => u.id === props.task.asigneeID));
 
     const handlelistItemClick = (asignee: User) => {
         setAnchorEl(null);
@@ -139,7 +142,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                     }}
                 >
                     {
-                        (_.orderBy(users, ["firstName"])).map(user => {
+                        [account, ...(_.orderBy(users, ["firstName"]))].map(user => {
                             const isSelected = props.task.asigneeID === user.id;
 
                             return isSelected
