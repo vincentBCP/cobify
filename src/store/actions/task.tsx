@@ -98,9 +98,11 @@ export const updateTaskAndAttachments = (task: Task, dto: TaskDTO) => {
             const newAttachments: IAttachment[] = [];
 
             updatedTask.attachments?.forEach((attachment: IAttachment) => {
-                const publicURL = StorageAPI.getAttachmentPublicUrl(attachment);
+                const att = dto.attachments?.filter((a: any) => {
+                    return attachment.name === a.name;
+                })
 
-                if (!(dto.attachments || []).includes(publicURL)) {
+                if (!att || att.length < 1) {
                     // remove/delete attachment if it is not in the dto
                     attachmentsToDelete.push(StorageAPI.delete(attachment));
                 } else {

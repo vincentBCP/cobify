@@ -75,6 +75,7 @@ const FormModal: React.FC<IFormModalProps> = props => {
             }, SUCCESS_DELAY);
         })
         .catch(error => {
+            console.log(error);
             failCallback();
             setLoading(false);
         });

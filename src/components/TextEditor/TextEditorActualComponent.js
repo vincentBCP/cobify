@@ -9,7 +9,7 @@ import './TextEditor.scss';
 import ImagePreview from '../../widgets/ImagePreview';
 
 const TextEditor = props => {
-    const [attachments, setAttachments] = useState(props.value?.attachments || []); // array of files or array of url
+    const [attachments, setAttachments] = useState(props.value?.attachments || []); // array of File or array of IAttachment or arry of File and IAttachment
     const [editor, setEditor] = useState();
 
     useEffect(() => {
@@ -98,6 +98,7 @@ const TextEditor = props => {
                         <div key={"image-attachment-" + index}>
                             <ImagePreview
                                 file={file}
+                                tooltip={file.name}
                                 handleRemove={() => handleRemoveAttachment(index)}
                             />
                         </div>

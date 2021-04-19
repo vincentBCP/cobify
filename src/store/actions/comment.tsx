@@ -77,9 +77,11 @@ export const updateComment = (comment: Comment, dto: CommentDTO) => {
             const currentAttachments = [...(updatedComment.attachments || [])];
 
             currentAttachments.forEach((attachment: IAttachment, index) => {
-                const publicURL = StorageAPI.getAttachmentPublicUrl(attachment);
+                const att = dto.attachments?.filter((a: any) => {
+                    return attachment.name === a.name;
+                })
 
-                if (!(dto.attachments || []).includes(publicURL)) {
+                if (!att || att.length < 1) {
                     // remove/delete attachment if it is not in the dto
                     updatedComment.attachments?.splice(index, 1);
                     attachmentsToDelete.push(StorageAPI.delete(attachment));

@@ -1,4 +1,5 @@
 import axios from '../axios';
+import { format } from 'date-fns';
 
 import IAttachment from '../models/interfaces/IAttachment';
 
@@ -10,7 +11,11 @@ const path = "https://firebasestorage.googleapis.com/v0/b/" + myBucket + "/o/att
 
 class StorageAPI {
     public static upload(file: File): Promise<IAttachment> {
-        const url = path + file.name;
+        const tokens = file.name.split(".");
+        const extension = tokens[tokens.length - 1];
+        const filename = "attachment-" + format(new Date(), "yyyy-MM-dd-HH-mm-ss-T") + "." + extension;
+
+        const url = path + filename;
         const config = {
             headers: {
                 "Content-Type": file.type
@@ -19,7 +24,7 @@ class StorageAPI {
 
         return axios.post(url, file, config)
             .then(response => ({
-                name: file.name,
+                name: filename,
                 downloadTokens: response.data.downloadTokens,
                 timeCreated: response.data.timeCreated
             }));

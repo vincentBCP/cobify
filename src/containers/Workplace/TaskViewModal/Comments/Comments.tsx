@@ -6,7 +6,7 @@ import { makeStyles, createStyles,Theme, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import TextEditor from '../../../../components/TextEditor';
+import TextEditor, { ITextEditorValue } from '../../../../components/TextEditor/TextEditor';
 import CommentComp from './Comment';
 
 import CommentDTO from '../../../../models/dto/CommentDTO';
@@ -51,7 +51,7 @@ interface ICommentsProps {
 
 const Comments: React.FC<ICommentsProps> = props => {
     const classes = useStyles();
-    const [textEditorValue, setTextEditorValue] = useState<any | null>();
+    const [textEditorValue, setTextEditorValue] = useState<ITextEditorValue | null>();
     const [loading, setLoading] = useState(false);
 
     const account = useSelector((state: any) => state.app.account);
@@ -59,7 +59,7 @@ const Comments: React.FC<ICommentsProps> = props => {
         state.comment.comments.filter((c: Comment) => c.taskID === props.task?.id));
 
     const handleAddComment = () => {
-        if (!Boolean(textEditorValue?.content)) return;
+        if (!textEditorValue) return;
 
         if (!props.task) return;
 
@@ -67,8 +67,8 @@ const Comments: React.FC<ICommentsProps> = props => {
         setLoading(true);
 
         const dto: CommentDTO = {
-            content: textEditorValue.content,
-            attachments: textEditorValue.attachments || [],
+            content: textEditorValue?.content,
+            attachments: textEditorValue?.attachments || [],
             taskID: props.task?.id,
             columnID: props.task?.columnID,
             boardID: props.task?.boardID,
@@ -99,7 +99,7 @@ const Comments: React.FC<ICommentsProps> = props => {
                 <TextEditor
                     title="Comment"
                     value={textEditorValue}
-                    handleChange={(data: any) => {
+                    handleChange={(data: ITextEditorValue) => {
                         setTextEditorValue(data);
                     }}
                 />

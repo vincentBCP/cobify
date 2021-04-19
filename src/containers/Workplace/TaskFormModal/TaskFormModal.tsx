@@ -4,21 +4,15 @@ import { useForm } from 'react-hook-form';
 
 import TextField from '@material-ui/core/TextField';
 
-import TextEditor from '../../../components/TextEditor';
+import TextEditor, { ITextEditorValue } from '../../../components/TextEditor/TextEditor';
 import FormModal from '../../../widgets/FormModal';
 
 import Task from '../../../models/types/Task';
-
-import StorageAPI from '../../../api/StorageAPI';
 
 interface IFormInputs {
     title: string
 };
 
-interface ITextEditorValue {
-    content: string,
-    attachments: any
-}
 interface ITaskFormModalProps {
     open?: boolean,
     task?: Task,
@@ -37,15 +31,10 @@ const TaskFormModal: React.FC<ITaskFormModalProps> = props => {
             setTextEditorValue(null);
             return;
         }
-
-        const arrayOfURL: any = [];
-
-        props.task?.attachments?.forEach(attachment => 
-            arrayOfURL.push(StorageAPI.getAttachmentPublicUrl(attachment)));
         
         setTextEditorValue({
             content: props.task?.description || "",
-            attachments: arrayOfURL
+            attachments: props.task.attachments || []
         });
     }, [ props.open, props.task ]);
 
@@ -88,7 +77,7 @@ const TaskFormModal: React.FC<ITaskFormModalProps> = props => {
                 <TextEditor
                     title="Description"
                     value={props.task ? textEditorValue : null}
-                    handleChange={(data: any) => {
+                    handleChange={(data: ITextEditorValue) => {
                         setTextEditorValue(data);
                     }}
                 />

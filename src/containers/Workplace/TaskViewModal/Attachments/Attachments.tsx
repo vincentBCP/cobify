@@ -6,8 +6,6 @@ import ImagePreview from '../../../../widgets/ImagePreview';
 
 import IAttachment from '../../../../models/interfaces/IAttachment';
 
-import StorageAPI from '../../../../api/StorageAPI';
-
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
@@ -33,7 +31,10 @@ const Attachments: React.FC<IAttachmentsProps> = props => {
             {
                 props.attachments.map(attachment =>
                     <div key={"attachment-" + attachment.name} className={classes.attachment}>
-                        <ImagePreview file={StorageAPI.getAttachmentPublicUrl(attachment)} />
+                        <ImagePreview
+                            file={attachment}
+                            tooltip={attachment.name}
+                        />
                     </div>
                 )
             }

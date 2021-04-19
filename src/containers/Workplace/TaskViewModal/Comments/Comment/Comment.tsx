@@ -9,18 +9,15 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 
-import TextEditor from '../../../../../components/TextEditor';
+import TextEditor, { ITextEditorValue } from '../../../../../components/TextEditor/TextEditor';
 import FormActions from '../../../../../widgets/FormModal/FormActions';
 
 import CommentDTO from '../../../../../models/dto/CommentDTO';
 import Comment from '../../../../../models/types/Comment';
 import User from '../../../../../models/types/User'
-import IAttachment from '../../../../../models/interfaces/IAttachment';
 
 import Attachments from '../../Attachments';
 import Avatar from '../../../../../widgets/Avatar';
-
-import StorageAPI from '../../../../../api/StorageAPI';
 
 import * as actions from '../../../../../store/actions';
 
@@ -76,22 +73,18 @@ interface ICommentProps {
 
 const CommentComp: React.FC<ICommentProps> = props => {
     const classes = useStyles();
-    const [textEditorValue, setTextEditorValue] = useState<any | null>();
+    const [textEditorValue, setTextEditorValue] = useState<ITextEditorValue | null>();
     const [loading, setLoading] = useState(false);
 
     const account = useSelector((state: any) => state.app.account);
     const user = useSelector((state: any) => state.user.users.find((u: User) => u.id === props.comment.userID));
 
     const handleEdit = () => {
-        const arrayOfURL: any = [];
-
-        props.comment.attachments?.forEach((attachment: IAttachment) => 
-            arrayOfURL.push(StorageAPI.getAttachmentPublicUrl(attachment)));
-
         setLoading(false);
+
         setTextEditorValue({
             content: props.comment.content,
-            attachments: arrayOfURL
+            attachments: props.comment.attachments || []
         });
     }
 
@@ -100,7 +93,7 @@ const CommentComp: React.FC<ICommentProps> = props => {
         setLoading(true);
 
         const dto: CommentDTO = {
-            ...textEditorValue,
+            ...(textEditorValue as any),
             taskID: props.comment.taskID,
             columnID: props.comment.columnID,
             boardID: props.comment.boardID,
