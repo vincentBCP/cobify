@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface ITasksProps {
     board: Board,
+    searchString?: string,
     column: Column,
     sourceTask: Task | null,
     targetTask: Task | null,
@@ -94,6 +95,11 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                     const task = tasks.find(t => t.id === taskID);
 
                     if (!task) return null;
+
+                    if (props.searchString &&
+                        task.code.toLowerCase().indexOf(props.searchString?.toLowerCase()) === -1 &&
+                        task.title.toLowerCase().indexOf(props.searchString?.toLowerCase()) === -1)
+                        return null;
 
                     const asignee = users.find(g => g.id === task.asigneeID);
 

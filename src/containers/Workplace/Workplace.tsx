@@ -31,6 +31,8 @@ import User from '../../models/types/User';
 import UserRole from '../../models/enums/UserRole';
 import Invitation from '../../models/types/Invitation';
 
+import SearchBar from '../../widgets/SearchBar';
+
 import * as actions from '../../store/actions';
 import * as actionTypes from '../../store/actions/actionTypes';
 
@@ -70,6 +72,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const [board, setBoard] = useState<Board | undefined>();
     const [viewingTask, setViewingTask] = useState<Task | undefined>();
     const [loading, setLoading] = useState(false);
+    const [searchString, setSearchString] = useState<string>();
 
     const account: User = useSelector((state: any) => state.app.account);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
@@ -290,6 +293,10 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                 >Task</Button>
                                 : null
                             }
+                            <SearchBar
+                                placeholder="Search task"
+                                handleChange={(searchString: string) => setSearchString(searchString)}
+                            />
                             <span style={{flexGrow: 1}}></span>
                             <UserList
                                 boardID={board?.id}
@@ -297,6 +304,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                         </Grid>
                         <Columns
                             board={board}
+                            searchString={searchString}
                             handleBoardUpdate={b => setBoard(b)}
                             handleColumnDelete={c => handleColumnDelete(c)}
                         />

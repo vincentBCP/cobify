@@ -25,6 +25,7 @@ import BoardAPI from '../../../api/BoardAPI';
 
 interface IColumnsProps {
     board: Board,
+    searchString?: string,
     handleBoardUpdate: (arg1: Board) => void,
     handleColumnDelete: (arg1: Column) => void
 };
@@ -268,6 +269,7 @@ const Columns: React.FC<IColumnsProps> = props => {
                         </div>
                         <Tasks
                             board={props.board}
+                            searchString={props.searchString}
                             column={column}
                             sourceTask={sourceTask}
                             targetTask={targetTask}
