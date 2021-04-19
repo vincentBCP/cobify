@@ -10,7 +10,9 @@ type Task = {
     creatorID: string,
     accountID: string,
     attachments?: IAttachment[],
-    asigneeID?: string
+    asigneeID?: string,
+    created: string,
+    updated: string
 }
 
 export default Task;

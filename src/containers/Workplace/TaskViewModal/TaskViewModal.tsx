@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatDistance } from 'date-fns';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect, useSelector } from 'react-redux';
@@ -145,6 +146,18 @@ const useStyles = makeStyles((theme: Theme) =>
                 marginLeft: 10
             }
         },
+        date: {
+            borderTop: "3px solid #eee",
+            marginTop: 10,
+            paddingTop: 15,
+            flexGrow: 1,
+            
+            '& p': {
+                fontSize: 14,
+                fontWeight: 300,
+                color: 'rgb(107, 119, 140)'
+            }
+        },
         sideFooter: {
             width: '100%',
             display: 'flex',
@@ -191,7 +204,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
         const updatedTask: Task = {
             ...task,
-            columnID: column.id
+            columnID: column.id,
+            updated: (new Date()).toUTCString()
         }
 
         props.updateTask(updatedTask)
@@ -222,7 +236,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         
         const updatedTask: Task = {
             ...task,
-            asigneeID: asignee.id
+            asigneeID: asignee.id,
+            updated: (new Date()).toUTCString()
         }
 
         props.updateTask(updatedTask)
@@ -264,11 +279,13 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     const handleUpdateTask = (data: any): [Promise<any>, () => void, () => void] => {
         const dto: TaskDTO = {
             ...props.task,
-            ...data,
+            ...data
         };
 
         return [
-            props.task ? props.updateTaskAndAttachments({...props.task}, dto) : Promise.reject(),
+            props.task
+            ? props.updateTaskAndAttachments({...props.task, updated: (new Date()).toUTCString()}, dto)
+            : Promise.reject(),
             () => {
                 setEditMode(false)
             },
@@ -365,7 +382,22 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                         : null
                                     }
                                 </div>
-                                <span style={{flexGrow: 1}}></span>
+                                <div className={classes.date}>
+                                    <Typography>Created&nbsp;
+                                        {
+                                            props.task?.created
+                                            ? formatDistance(new Date(props.task.created), new Date())
+                                            : null
+                                        }
+                                    </Typography>
+                                    <Typography>Updated&nbsp;
+                                        {
+                                            props.task?.updated
+                                            ? formatDistance(new Date(props.task.updated), new Date())
+                                            : null
+                                        }
+                                    </Typography>
+                                </div>
                                 {
                                     account.role === UserRole.ADMIN || account.role === UserRole.COADMIN
                                     ? <div className={classes.sideFooter}>

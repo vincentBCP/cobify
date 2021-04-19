@@ -179,7 +179,9 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
             columnID: board?.columnIDs[0],
             boardID: board?.id,
             creatorID: account.id,
-            accountID: board?.accountID
+            accountID: board?.accountID,
+            created: (new Date()).toUTCString(),
+            updated: (new Date()).toUTCString()
         };
 
         return [

@@ -211,7 +211,8 @@ const Columns: React.FC<IColumnsProps> = props => {
 
         const updatedSourceTask: Task = {
             ...sourceTask,
-            columnID: tColumn.id
+            columnID: tColumn.id,
+            updated: (new Date()).toUTCString()
         };
 
         dispatch({

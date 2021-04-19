@@ -7,6 +7,8 @@ type TaskDTO = {
     creatorID: string,
     accountID: string,
     attachments?: any// [file, file] [IAttachment, IAttachment] [string, file]
+    created: string,
+    updated: string
 }
 
 export default TaskDTO;
