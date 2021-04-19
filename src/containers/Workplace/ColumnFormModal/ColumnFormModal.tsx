@@ -8,17 +8,20 @@ import FormModal from '../../../widgets/FormModal';
 
 import { nameRegExp } from '../../../constants';
 
+import Column from '../../../models/types/Column';
+
 interface IFormInputs {
     name: string
 };
 
-interface ICreateColumnFormModalProps {
+interface IColumnFormModalProps {
     open?: boolean,
+    column?: Column | null,
     handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
     handleCancel: () => void
 }
 
-const CreateColumnFormModal: React.FC<ICreateColumnFormModalProps> = props => {
+const ColumnFormModal: React.FC<IColumnFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
     const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
@@ -27,7 +30,7 @@ const CreateColumnFormModal: React.FC<ICreateColumnFormModalProps> = props => {
 
     return (
         <FormModal
-            title="Add column"
+            title={props.column ? "Update column" : "Add column"}
             open={props.open}
             reset={reset}
             useFormHandleSubmit={handleSubmit}
@@ -36,6 +39,7 @@ const CreateColumnFormModal: React.FC<ICreateColumnFormModalProps> = props => {
         >
             <TextField
                 label="Name"
+                defaultValue={props.column?.name || ""}
                 fullWidth
                 required
                 error={errors.name !== undefined}
@@ -54,4 +58,4 @@ const CreateColumnFormModal: React.FC<ICreateColumnFormModalProps> = props => {
     );
 };
 
-export default CreateColumnFormModal;
+export default ColumnFormModal;

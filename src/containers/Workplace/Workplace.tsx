@@ -18,7 +18,7 @@ import ApplicationBar from '../../components/ApplicationBar';
 import BoardSelector from './BoardSelector';
 import UserList from './UserList';
 import Columns from './Columns';
-import CreateColumnFormModal from './CreateColumnFormModal';
+import ColumnFormModal from './ColumnFormModal';
 import TaskFormModal from './TaskFormModal';
 import TaskViewModal from './TaskViewModal';
 
@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IWorkplaceProps {
     createColumn: (arg1: ColumnDTO) => Promise<any>,
+    updateColumn: (arg1: Column) => Promise<any>,
     createTask: (arg1: TaskDTO) => Promise<any>
 }
 
@@ -67,7 +68,8 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [addColumn, setAddColumn] = useState(false);
+    const [showColumnForm, setShowColumnForm] = useState(false);
+    const [selectedColumn, setSelectedColumn] = useState<Column | null>();
     const [addTask, setAddTask] = useState(false);
     const [board, setBoard] = useState<Board | undefined>();
     const [viewingTask, setViewingTask] = useState<Task | undefined>();
@@ -124,42 +126,49 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     }, [props.match, boards, board, tasks, loading]);
 
     const handleSumbitColumn = (data: any): [Promise<any>, () => void, () => void] => {
+        const request = selectedColumn
+        ? props.updateColumn({
+            ...selectedColumn,
+            ...data
+        })
+        : props.createColumn({
+            ...data,
+            boardID: board?.id,
+            accountID: board?.accountID,
+        } as ColumnDTO)
+        .then(column => {
+            if (!board) return column;
+            
+            const updatedBoard: Board = {
+                ...board,
+                columnIDs: [
+                    ...(board?.columnIDs || []),
+                    column.id
+                ]
+            };
+
+            dispatch({
+                type: actionTypes.UPDATE_BOARD,
+                payload: updatedBoard
+            });
+            BoardAPI.updateBoard(updatedBoard);
+
+            setBoard(updatedBoard);
+
+            return column;
+        });
+        
         return [
-            props.createColumn({
-                name: data.name,
-                boardID: board?.id,
-                accountID: board?.accountID,
-            } as ColumnDTO)
-            .then(column => {
-                if (!board) return column;
-                
-                const updatedBoard: Board = {
-                    ...board,
-                    columnIDs: [
-                        ...(board?.columnIDs || []),
-                        column.id
-                    ]
-                };
-
-                dispatch({
-                    type: actionTypes.UPDATE_BOARD,
-                    payload: updatedBoard
-                });
-                BoardAPI.updateBoard(updatedBoard);
-
-                setBoard(updatedBoard);
-
-                return column;
-            }),
+            request,
             () => {
-                setAddColumn(false);
+                setShowColumnForm(false);
             },
             () => { }
         ];
     }
 
     const handleCancelCreateColumn = () => {
-        setAddColumn(false);
+        setShowColumnForm(false);
     }
 
     const createTaskCode = (): string => {
@@ -234,6 +243,11 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         ]);
     }
 
+    const handleColumnRename = (column: Column) => {
+        setSelectedColumn(column);
+        setShowColumnForm(true);
+    }
+
     return (
         <Auxi>
             <ApplicationBar
@@ -241,8 +255,9 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 component={<BoardSelector boards={boards} board={board} />}
             />
 
-            <CreateColumnFormModal
-                open={addColumn}
+            <ColumnFormModal
+                open={showColumnForm}
+                column={selectedColumn}
                 handleSubmit={handleSumbitColumn}
                 handleCancel={handleCancelCreateColumn}
             />
@@ -279,7 +294,10 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                     className={classes.button}
                                     startIcon={<AddIcon />}
                                     color="primary"
-                                    onClick={() => setAddColumn(true)}
+                                    onClick={() => {
+                                        setSelectedColumn(null);
+                                        setShowColumnForm(true);
+                                    }}
                                 >Column</Button>
                                 : null
                             }
@@ -309,6 +327,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                             searchString={searchString}
                             handleBoardUpdate={b => setBoard(b)}
                             handleColumnDelete={c => handleColumnDelete(c)}
+                            handleColumnRename={c => handleColumnRename(c)}
                         />
                     </Auxi>
                     : null
@@ -321,6 +340,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         createColumn: (dto: ColumnDTO) => dispatch(actions.createColumn(dto)),
+        updateColumn: (column: Column) => dispatch(actions.updateColumn(column)),
         createTask: (dto: TaskDTO) => dispatch(actions.createTask(dto))
     }
 }

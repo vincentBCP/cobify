@@ -4,10 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import Popover from '@material-ui/core/Popover';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 
 import Tasks from './Tasks';
+
+import Auxi from '../../../hoc/Auxi';
 
 import Board from '../../../models/types/Board';
 import Column from '../../../models/types/Column';
@@ -27,7 +31,8 @@ interface IColumnsProps {
     board: Board,
     searchString?: string,
     handleBoardUpdate: (arg1: Board) => void,
-    handleColumnDelete: (arg1: Column) => void
+    handleColumnDelete: (arg1: Column) => void,
+    handleColumnRename: (arg1: Column) => void
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -77,6 +82,9 @@ const Columns: React.FC<IColumnsProps> = props => {
     const [targetTask, setTargetTask] = useState<Task | null>(null);
     const [sourceColumn, setSourceColumn] = useState<Column | null>(null);
     const [targetColumn, setTargetColumn] = useState<Column | null>(null);
+
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const [selectedColumn, setSelectedColumn] = useState<Column | null>();
 
     const account: User = useSelector((state: any) => state.app.account);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
@@ -238,50 +246,92 @@ const Columns: React.FC<IColumnsProps> = props => {
     }
 
     return (
-        <div className={classes.root}>
-            {
-                (board?.columnIDs || []).map(colID => {
-                    const column = columns.find(c => c.id === colID);
-
-                    if (!column) return null;
-
-                    return <div
-                        key={"columns-" + column.id}
-                        className={classes.column}
-                        draggable
-                        onDragStart={(ev: React.DragEvent) => handleColumnDragStart(ev, column)}
-                        onDragOver={(ev: React.DragEvent) => handleColumnDragOver(ev, column)}
-                        onDrop={handleDrop}
+        <Auxi>
+            <Popover
+                id="column-actions-popup"
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={() => {
+                    setAnchorEl(null);
+                    setSelectedColumn(null);
+                }}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+            >
+                <List>
+                    <ListItem
+                        button
+                        onClick={() => {
+                            if (selectedColumn) props.handleColumnRename(selectedColumn);
+                            setAnchorEl(null);
+                        }}
                     >
-                        <div className={classes.header}>
-                            <Typography>
-                                {column.name} {column.taskIDs?.length ? "(" + column.taskIDs?.length + ")" : ''}
-                            </Typography>
-                            {
-                                ((account.role === UserRole.ADMIN || account.role === UserRole.COADMIN) && 
-                                (column.taskIDs || []).length < 1)
-                                ? <Tooltip title="Remove">
-                                    <RemoveOutlinedIcon
-                                        onClick={() => props.handleColumnDelete(column)}
+                        Rename
+                    </ListItem>
+                    <ListItem
+                        button
+                        disabled={selectedColumn ? Boolean(selectedColumn.taskIDs?.length) : true }
+                        onClick={() => {
+                            if (selectedColumn) props.handleColumnDelete(selectedColumn);
+                            setAnchorEl(null);
+                        }}
+                    >
+                        Delete
+                    </ListItem>
+                </List>
+            </Popover>
+
+            <div className={classes.root}>
+                {
+                    (board?.columnIDs || []).map(colID => {
+                        const column = columns.find(c => c.id === colID);
+
+                        if (!column) return null;
+
+                        return <div
+                            key={"columns-" + column.id}
+                            className={classes.column}
+                            draggable
+                            onDragStart={(ev: React.DragEvent) => handleColumnDragStart(ev, column)}
+                            onDragOver={(ev: React.DragEvent) => handleColumnDragOver(ev, column)}
+                            onDrop={handleDrop}
+                        >
+                            <div className={classes.header}>
+                                <Typography>
+                                    {column.name} {column.taskIDs?.length ? "(" + column.taskIDs?.length + ")" : ''}
+                                </Typography>
+                                {
+                                    ((account.role === UserRole.ADMIN || account.role === UserRole.COADMIN))
+                                    ? <MoreHorizIcon
+                                        onClick={(ev: React.MouseEvent) => {
+                                            setAnchorEl(ev.currentTarget as HTMLElement);
+                                            setSelectedColumn(column);
+                                        }}  
                                     />
-                                </Tooltip>
-                                : null
-                            }
+                                    : null
+                                }
+                            </div>
+                            <Tasks
+                                board={props.board}
+                                searchString={props.searchString}
+                                column={column}
+                                sourceTask={sourceTask}
+                                targetTask={targetTask}
+                                handleDragStart={handleTaskDragStart}
+                                handleDragOver={handleTaskDragOver}
+                                handleDrop={handleDrop}
+                            />
                         </div>
-                        <Tasks
-                            board={props.board}
-                            searchString={props.searchString}
-                            column={column}
-                            sourceTask={sourceTask}
-                            targetTask={targetTask}
-                            handleDragStart={handleTaskDragStart}
-                            handleDragOver={handleTaskDragOver}
-                            handleDrop={handleDrop}
-                        />
-                    </div>
-                })
-            }
-        </div>
+                    })
+                }
+            </div>
+        </Auxi>
     );
 };
 
