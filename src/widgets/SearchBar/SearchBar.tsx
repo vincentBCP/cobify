@@ -24,12 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
             flex: 1,
         },
         iconButton: {
-            padding: 10,
-        },
-        divider: {
-            height: 28,
-            margin: 4,
-        },
+            height: 30,
+            width: 30
+        }
     })
 );
 
