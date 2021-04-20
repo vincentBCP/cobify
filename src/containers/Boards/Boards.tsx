@@ -24,6 +24,7 @@ import Column from '../../models/types/Column';
 import Task from '../../models/types/Task';
 import InvitationDTO from '../../models/dto/InvitationDTO';
 import BoardDTO from '../../models/dto/BoardDTO';
+import Comment from '../../models/types/Comment';
 
 import BoardInvitationFormModal from './BoardInvitationFormModal';
 import BoardFormModal from './BoardFormModal';
@@ -37,7 +38,10 @@ interface IBoardsProps {
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
     createBoard: (arg1: BoardDTO) => Promise<any>,
     updateBoard: (arg1: Board) => Promise<any>,
-    deleteBoard: (arg1: string, arg2: string[], agr3: string[], arg4: string[]) => Promise<any>
+    deleteBoard: (arg1: string) => Promise<any>,
+    deleteColumn: (arg1: string) => Promise<string>,
+    deleteComment: (arg1: Comment) => Promise<any>,
+    deleteTask: (arg1: Task) => Promise<any>
 }
 
 const Boards: React.FC<IBoardsProps> = props => {
@@ -57,6 +61,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     );
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const users: User[] = useSelector((state: any) => state.user.users);
+    const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
     const handleRemoveInvitation = (id: string): [Promise<any>, () => void, () => void] => {
         return [
@@ -97,29 +102,31 @@ const Boards: React.FC<IBoardsProps> = props => {
         const promises: any = [];
 
         ids.forEach(id => {
-            const columnIDs: string[] = [];
-            const taskIDs: string[] = [];
-            const invitationIDs: string[] = [];
-
             columns.forEach(col => {
                 if (col.boardID !== id) return;
 
-                columnIDs.push(col.id);
-            });
-
-            tasks.forEach(t => {
-                if (t.boardID !== id) return;
-
-                taskIDs.push(t.id);
+                promises.push(props.deleteColumn(col.id));
             });
 
             invitations.forEach(i => {
                 if (i.boardID !== id) return;
 
-                invitationIDs.push(i.id);
+                props.deleteInvitation(i.id);
+            });
+
+            comments.forEach(com => {
+                if (com.boardID !== id) return;
+
+                promises.push(props.deleteComment(com));
+            })
+
+            tasks.forEach(t => {
+                if (t.boardID !== id) return;
+
+                promises.push(props.deleteTask(t));
             });
         
-            promises.push(props.deleteBoard(id, columnIDs, taskIDs, invitationIDs));
+            promises.push(props.deleteBoard(id));
         });
 
         return [Promise.all(promises), () => {}, () => {}];
@@ -255,8 +262,10 @@ const mapDispatchToProps = (dispatch: any) => {
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
         createBoard: (dto: BoardDTO) => dispatch(actions.createBoard(dto)),
         updateBoard: (board: Board) => dispatch(actions.updateBoard(board)),
-        deleteBoard: (id: string, columnIDs: string[], taskIDs: string[], invitationIDs: string[]) => 
-            dispatch(actions.deleteBoard(id, columnIDs, taskIDs, invitationIDs))
+        deleteBoard: (id: string) => dispatch(actions.deleteBoard(id)),
+        deleteTask: (task: Task) => dispatch(actions.deleteTask(task)),
+        deleteComment: (comment: Comment) => dispatch(actions.deleteComment(comment)),
+        deleteColumn: (id: string) => dispatch(actions.deleteColumn(id))
     }
 };
 

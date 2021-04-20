@@ -151,11 +151,18 @@ export const updateTaskAndAttachments = (task: Task, dto: TaskDTO) => {
     };
 };
 
-export const deleteTask = (id: string) => {
+export const deleteTask = (task: Task) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            TaskAPI
-            .deleteTask(id)
+            const promises: any = [];
+
+            task.attachments?.forEach((attachment: IAttachment) =>
+                StorageAPI.delete(attachment));
+
+            Promise.all(promises)
+            .then(() => {
+                return TaskAPI.deleteTask(task.id)
+            })
             .then(id => {
                 dispatch({
                     type: actionTypes.DELETE_TASK,

@@ -19,7 +19,8 @@ export {
 export {
     getColumns,
     createColumn,
-    updateColumn
+    updateColumn,
+    deleteColumn
 } from './column';
 
 export {

@@ -36,7 +36,7 @@ interface IUsersProps {
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
     createUser: (arg1: UserDTO) => Promise<any>,
     updateUser: (arg21: User) => Promise<any>,
-    deleteUser: (arg1: string, arg2: string, arg3: string[]) => Promise<any>
+    deleteUser: (arg1: string, arg2: string) => Promise<any>
 }
 
 const Users: React.FC<IUsersProps> = props => {
@@ -81,8 +81,6 @@ const Users: React.FC<IUsersProps> = props => {
         const promises: any = [];
 
         ids.forEach(id => {
-            const invitationIDs: string[] = [];
-
             const user = users.find(u => u.id === id);
 
             if (!user) return;
@@ -90,10 +88,10 @@ const Users: React.FC<IUsersProps> = props => {
             invitations.forEach(inv => {
                 if(inv.userID !== id) return;
 
-                invitationIDs.push(inv.id);
+                promises.push(props.deleteInvitation(inv.id));
             });
 
-            promises.push(props.deleteUser(id, user.email, invitationIDs));
+            promises.push(props.deleteUser(id, user.email));
         });
 
         return [Promise.all(promises), () => {}, () => {}];
@@ -245,8 +243,8 @@ const mapDispatchToProps = (dispatch: any) => {
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
         createUser: (dto: UserDTO) => dispatch(actions.createUser(dto)),
         updateUser: (user: User) => dispatch(actions.updateUser(user)),
-        deleteUser: (id: string, email: string, invitationIDs: string[]) => 
-            dispatch(actions.deleteUser(id, email, invitationIDs))
+        deleteUser: (id: string, email: string) => 
+            dispatch(actions.deleteUser(id, email))
     }
 };
 

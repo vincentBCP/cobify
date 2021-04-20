@@ -1,5 +1,4 @@
 import UserAPI from '../../api/UserAPI';
-import InvitationAPI from '../../api/InvitationAPI';
 
 import UserDTO from '../../models/dto/UserDTO';
 import User from '../../models/types/User';
@@ -80,27 +79,14 @@ export const updateUser = (user: User) => {
     };
 };
 
-export const deleteUser = (uID: string, email: string, invitationIDs: string[]) => {
+export const deleteUser = (uID: string, email: string) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            const promises = [];
-
-            promises.push(UserAPI.deleteUser(email));
-
-            invitationIDs.forEach(id => promises.push(InvitationAPI.deleteInvitation(id)));
-
-            Promise.all(promises)
+            UserAPI.deleteUser(email)
             .then(email => {
                 dispatch({
                     type: actionTypes.DELETE_USER,
                     payload: uID // user id
-                });
-
-                invitationIDs.forEach(id => {
-                    dispatch({
-                        type: actionTypes.DELETE_INVITATION,
-                        payload: id
-                    })
                 });
 
                 resolve(uID);

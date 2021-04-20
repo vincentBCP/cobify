@@ -34,8 +34,6 @@ import User from '../../../models/types/User';
 import Comment from '../../../models/types/Comment';
 import UserRole from '../../../models/enums/UserRole';
 
-import StorageAPI from '../../../api/StorageAPI';
-
 import * as actions from '../../../store/actions';
 
 interface ITaskViewModalProps {
@@ -44,7 +42,7 @@ interface ITaskViewModalProps {
     updateTask: (arg1: Task) => Promise<Task>,
     updateTaskAndAttachments: (arg1: Task, arg2: TaskDTO) => Promise<Task>,
     updateColumn: (arg1: Column) => Promise<Column>,
-    deleteTask: (arg1: string) => Promise<string>,
+    deleteTask: (arg1: Task) => Promise<string>,
     deleteComment: (arg1: Comment) => Promise<string>
 }
 
@@ -261,14 +259,13 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         taskIDs.splice(ind, 1); // remove task from the source column
         column.taskIDs = [...taskIDs];
 
-        const promises: any = [
-            props.deleteTask(props.task.id),
-            props.updateColumn({...column})
-        ];
-
-        props.task.attachments?.forEach(a => promises.push(StorageAPI.delete(a)));
+        const promises: any = [];
         comments.filter(c => c.taskID === props.task?.id)
         .forEach(comment => promises.push(props.deleteComment(comment)));
+
+        promises.push(props.updateColumn({...column}));
+        promises.push(props.deleteTask(props.task));
+            
 
         Promise.all(promises)
         .then(() => {
@@ -425,7 +422,7 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         updateTask: (task: Task) => dispatch(actions.updateTask(task)),
         updateTaskAndAttachments: (task: Task, dto: TaskDTO) => dispatch(actions.updateTaskAndAttachments(task, dto)),
-        deleteTask: (id: string) => dispatch(actions.deleteTask(id)),
+        deleteTask: (task: Task) => dispatch(actions.deleteTask(task)),
         updateColumn: (column: Column) => dispatch(actions.updateColumn(column)),
         deleteComment: (comment: Comment) => dispatch(actions.deleteComment(comment))
     }

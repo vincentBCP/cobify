@@ -13,6 +13,7 @@ export const DELETE_USER = "DELETE_USER";
 export const SET_COLUMNS = "SET_COLUMNS";
 export const ADD_COLUMN = "ADD_COLUMN";
 export const UPDATE_COLUMN = "UPDATE_COLUMN";
+export const DELETE_COLUMN = "DELETE_COLUMN";
 
 export const SET_TASKS = "SET_TASKS";
 export const ADD_TASK = "ADD_TASK";

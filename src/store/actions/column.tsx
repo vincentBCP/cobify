@@ -71,3 +71,23 @@ export const updateColumn = (column: Column) => {
         });
     };
 };
+
+export const deleteColumn = (id: string) => {
+    return (dispatch: any) => {
+        return new Promise((resolve, reject) => {
+            ColumnAPI.deleteColumn(id)
+            .then(response => {
+                dispatch({
+                    type: actionTypes.DELETE_COLUMN,
+                    payload: id
+                });
+
+                resolve(id);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            })
+        });
+    };
+};
