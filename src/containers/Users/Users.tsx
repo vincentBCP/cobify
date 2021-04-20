@@ -25,6 +25,7 @@ import UserDTO from '../../models/dto/UserDTO';
 import UserRole from '../../models/enums/UserRole';
 
 import Chip from '../../widgets/Chip';
+import Avatar from '../../widgets/Avatar';
 
 import UserInvitationFormModal from './UserInvitationFormModal';
 import UserFormModal from './UserFormModal';
@@ -185,7 +186,17 @@ const Users: React.FC<IUsersProps> = props => {
         }
     }
 
+    const renderAvatar = (user: User) => {
+        return (
+            <Avatar
+                size={30}
+                account={user}
+            />
+        );
+    }
+
     const headCells: HeadCell[] = [
+        { id: 'avatar', label: '', render: renderAvatar },
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
         { id: 'role', property: 'role', label: 'Role', render: renderRole},

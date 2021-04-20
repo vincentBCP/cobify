@@ -30,6 +30,7 @@ import BoardInvitationFormModal from './BoardInvitationFormModal';
 import BoardFormModal from './BoardFormModal';
 
 import Chip from '../../widgets/Chip';
+import Avatar from '../../widgets/Avatar';
 
 import * as actions from '../../store/actions';
 
@@ -203,7 +204,20 @@ const Boards: React.FC<IBoardsProps> = props => {
         );
     };
 
+    const renderAvatar = (board: Board) => {
+        return (
+            <Avatar
+                size={30}
+                account={{
+                    color: board.color,
+                    initials: board.code
+                } as User}
+            />
+        )
+    }
+
     const headCells: HeadCell[] = [
+        { id: "avatar", label: '', render: renderAvatar },
         { id: "name", label: "Name", property: "name" },
         { id: "columnCount", label: "Columns", property: "columnCount" },
         { id: "taskCount", label: "Tasks", property: "taskCount" },

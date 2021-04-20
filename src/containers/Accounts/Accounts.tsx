@@ -26,6 +26,8 @@ import Invitation from '../../models/types/Invitation';
 
 import AccountFormModal from './AccountFormModal';
 
+import Avatar from '../../widgets/Avatar';
+
 import * as actions from '../../store/actions';
 
 interface IUsersProps {
@@ -137,7 +139,17 @@ const Users: React.FC<IUsersProps> = props => {
         return <span>{format(new Date(user.created), "MMM d, yyyy")}</span>
     }
 
+    const renderAvatar = (user: User) => {
+        return (
+            <Avatar
+                size={30}
+                account={user}
+            />
+        );
+    }
+
     const headCells: HeadCell[] = [
+        { id: 'avatar', label: '', render: renderAvatar },
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
         { id: 'created', property: 'created', label: 'Created', render: renderCreated },
