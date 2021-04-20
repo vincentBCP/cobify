@@ -25,11 +25,23 @@ class UserAPI {
         return (email.split("@")[0]).split(".").join("");
     }
 
-    public static getUser(email: string): Promise<User> {
+    public static getUser(email: string): Promise<any> {
         return axios.get(path + UserAPI.getRecordPath(email) + extension)
         .then(response => {
-            const user: User = {...response.data}
-            return user;
+            if (!Boolean(response.data)) {
+                return Promise.reject({
+                    response:{
+                        data: {
+                            error: {
+                                message: "EMAIL_NOT_FOUND"
+                            }
+                        }
+                    }
+                });
+            } else {
+                const user: User = {...response.data}
+                return user;
+            }
         });
     };
 

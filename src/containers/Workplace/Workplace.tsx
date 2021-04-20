@@ -189,8 +189,8 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
             boardID: board?.id,
             creatorID: account.id,
             accountID: board?.accountID,
-            created: (new Date()).toUTCString(),
-            updated: (new Date()).toUTCString()
+            created: (new Date()).toISOString(),
+            updated: (new Date()).toISOString()
         };
 
         return [

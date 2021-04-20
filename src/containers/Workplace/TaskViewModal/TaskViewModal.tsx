@@ -204,7 +204,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         const updatedTask: Task = {
             ...task,
             columnID: column.id,
-            updated: (new Date()).toUTCString()
+            updated: (new Date()).toISOString()
         }
 
         props.updateTask(updatedTask)
@@ -236,7 +236,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         const updatedTask: Task = {
             ...task,
             asigneeID: asignee.id,
-            updated: (new Date()).toUTCString()
+            updated: (new Date()).toISOString()
         }
 
         props.updateTask(updatedTask)
@@ -282,7 +282,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
         return [
             props.task
-            ? props.updateTaskAndAttachments({...props.task, updated: (new Date()).toUTCString()}, dto)
+            ? props.updateTaskAndAttachments({...props.task, updated: (new Date()).toISOString()}, dto)
             : Promise.reject(),
             () => {
                 setEditMode(false)

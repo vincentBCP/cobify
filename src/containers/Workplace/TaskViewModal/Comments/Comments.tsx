@@ -74,7 +74,7 @@ const Comments: React.FC<ICommentsProps> = props => {
             boardID: props.task?.boardID,
             accountID: props.task?.accountID,
             userID: account.id,
-            date: (new Date()).toUTCString()
+            date: (new Date()).toISOString()
         }
 
         props.createComment(dto)

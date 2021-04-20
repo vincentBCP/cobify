@@ -45,7 +45,10 @@ const App: React.FC<IAppProps> = props => {
             setIsLoggedIn(b);
             setLoading(b);
         })
-        .catch(error => {});
+        .catch(error => {
+            setLoading(false);
+            setIsLoggedIn(false);
+        });
     }, [ checkAuth ]);
 
     useEffect(() => {

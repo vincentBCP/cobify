@@ -59,7 +59,8 @@ const Users: React.FC<IUsersProps> = props => {
             : props.createUser({
                 ...data,
                 color: randomcolor(),
-                accountID: account.id
+                accountID: account.id,
+                created: (new Date()).toISOString()
             } as UserDTO);
 
         return [

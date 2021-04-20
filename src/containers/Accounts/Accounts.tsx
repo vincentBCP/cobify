@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import randomcolor from 'randomcolor';
+import { format } from 'date-fns';
 
 import { useSelector, connect } from 'react-redux';
 
@@ -53,7 +54,8 @@ const Users: React.FC<IUsersProps> = props => {
             ...data,
             role: UserRole.ADMIN,
             color: randomcolor(),
-            accountID: account.id
+            accountID: account.id,
+            created: (new Date()).toISOString()
         } as UserDTO)
 
         return [
@@ -131,9 +133,14 @@ const Users: React.FC<IUsersProps> = props => {
         );
     };
 
+    const renderCreated = (user: User) => {
+        return <span>{format(new Date(user.created), "MMM d, yyyy")}</span>
+    }
+
     const headCells: HeadCell[] = [
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
+        { id: 'created', property: 'created', label: 'Created', render: renderCreated },
         { id: 'actions', label: 'Actions', align: 'center', render: renderActions }
     ];
 

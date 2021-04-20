@@ -4,7 +4,8 @@ type UserDTO = {
     email: string,
     role: string,
     color: string,
-    accountID: string
+    accountID: string,
+    created: string
 }
 
 export default UserDTO;

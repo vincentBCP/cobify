@@ -220,7 +220,7 @@ const Columns: React.FC<IColumnsProps> = props => {
         const updatedSourceTask: Task = {
             ...sourceTask,
             columnID: tColumn.id,
-            updated: (new Date()).toUTCString()
+            updated: (new Date()).toISOString()
         };
 
         dispatch({

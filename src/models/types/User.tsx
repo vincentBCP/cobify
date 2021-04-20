@@ -6,6 +6,7 @@ type User = {
     role: string,
     color: string,
     accountID: string,
+    created: string,
     // computed
     displayName?: string,
     initials?: string

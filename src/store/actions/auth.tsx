@@ -29,7 +29,7 @@ export const login = (email: string, password: string) => {
                 localStorage.removeItem("refreshToken");
                 localStorage.removeItem("email");
 
-                console.log(error.response);
+                console.log(error);
                 reject(error);
             });
         });
