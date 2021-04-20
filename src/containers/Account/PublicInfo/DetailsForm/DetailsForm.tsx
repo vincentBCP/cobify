@@ -3,11 +3,11 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-import UserDetails from '../../../../models/types/UserDetails';
+import { PublicInfoDetails } from '../PublicInfo';
 
 interface IDetailsFormProps {
-    userDetails: UserDetails,
-    handleUserDetailsChange: (arg1: UserDetails) => void
+    publicInfo: PublicInfoDetails,
+    handleUserDetailsChange: (arg1: PublicInfoDetails) => void
 };
 
 const DetailsForm: React.FC<IDetailsFormProps> = props => {
@@ -19,10 +19,10 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={props.userDetails.firstName || ''}
+                value={props.publicInfo.firstName || ''}
                 onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
                     props.handleUserDetailsChange({
-                        ...props.userDetails,
+                        ...props.publicInfo,
                         firstName: ev.target.value
                     });
                 }}
@@ -34,10 +34,10 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={props.userDetails.lastName || ''}
+                value={props.publicInfo.lastName || ''}
                 onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
                     props.handleUserDetailsChange({
-                        ...props.userDetails,
+                        ...props.publicInfo,
                         lastName: ev.target.value
                     });
                 }}

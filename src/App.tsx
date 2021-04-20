@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import './App.scss';
 
@@ -23,7 +23,7 @@ import User from './models/types/User';
 import UserRole from './models/enums/UserRole';
 
 interface IAppProps {
-    checkAuth: () => Promise<boolean>,
+    checkAuth: () => Promise<User>,
     getBoards: (arg1: User) => Promise<any>,
     getColumns: (arg1: User) => Promise<any>,
     getUsers: (arg1: User) => Promise<any>,
@@ -36,16 +36,20 @@ const App: React.FC<IAppProps> = props => {
     const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments } = props;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    const account = useSelector((state: any) => state.app.account);
+    const [account, setAccount] = useState<User | null>();
 
     useEffect(() => {
         checkAuth()
-        .then(b => {
-            setIsLoggedIn(b);
-            setLoading(b);
+        .then(acct => {
+            if (Boolean(acct)) {
+                setAccount(acct);
+            }
+
+            setIsLoggedIn(Boolean(acct));
+            setLoading(Boolean(acct));
         })
         .catch(error => {
+            setAccount(null);
             setLoading(false);
             setIsLoggedIn(false);
         });

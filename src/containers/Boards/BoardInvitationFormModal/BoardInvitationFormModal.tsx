@@ -78,9 +78,11 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
                 style={{marginBottom: 30}}
             >
                 {board ? <Avatar
-                    initials={board.code}
-                    color={board.color}
                     size={50}
+                    account={{
+                        color: board.color,
+                        initials: board.code
+                    } as User}
                 /> : null}
                 
                 {board ? <Grid item>

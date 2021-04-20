@@ -62,7 +62,7 @@ export const checkAuth = () => {
                     payload: user
                 });
 
-                resolve(true);
+                resolve(user);
             })
             .catch(error => {
                 localStorage.removeItem("token");

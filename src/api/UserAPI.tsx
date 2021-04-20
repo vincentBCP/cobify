@@ -70,11 +70,13 @@ class UserAPI {
     };
 
     public static updateUser(user: User): Promise<User> {
-        return axios.put(path + UserAPI.getRecordPath(user.email) + extension, {
+        const u: User = {
             ...user,
             displayName: user.firstName + " " + user.lastName,
             initials: ((user.firstName).charAt(0).toUpperCase() + (user.lastName).charAt(0)).toUpperCase()
-        }).then(response => user);
+        }
+        return axios.put(path + UserAPI.getRecordPath(user.email) + extension, u)
+        .then(response => u);
     };
 
     public static deleteUser(email: string): Promise<string> {

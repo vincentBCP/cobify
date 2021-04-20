@@ -74,8 +74,7 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
                     <IconButton>
                         <Avatar
                             size={30}
-                            color={account.color}
-                            initials={account.initials}
+                            account={account}
                         />
                     </IconButton>
                 </Tooltip>

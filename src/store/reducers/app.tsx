@@ -1,6 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
 
-import UserDetails from '../../models/types/UserDetails';
 import User from '../../models/types/User';
 
 const initialState: any = {
@@ -12,15 +11,10 @@ interface IAction {
     payload: any
 };
 
-const updateUserDetails = (state: any, userDetails: UserDetails) => {
-    const updatedUser = {
-        ...state.user,
-        ...userDetails
-    };
-
+const updateUserDetails = (state: any, account: User) => {
     return {
         ...state,
-        user: { ...updatedUser }
+        account: { ...account }
     };
 };
 

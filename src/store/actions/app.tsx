@@ -1,20 +1,21 @@
 import * as actionTypes from './actionTypes';
-import UserDetails from '../../models/types/UserDetails';
+import User from '../../models/types/User';
 
-import AppAPI from '../../api/AppAPI';
+import UserAPI from '../../api/UserAPI';
 
-export const updateUserDetails = (userDetails: UserDetails) => {
+export const updateUserDetails = (account: User) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            AppAPI
-            .updateUserDetails(userDetails)
-            .then(response => {
+
+            UserAPI
+            .updateUser(account)
+            .then(account => {
                 dispatch({
                     type: actionTypes.UPDATE_USER_DETAILS,
-                    payload: userDetails
+                    payload: account
                 });
 
-                resolve(response);
+                resolve(account);
             })
             .catch(error => {
                 console.log(error);
@@ -24,7 +25,7 @@ export const updateUserDetails = (userDetails: UserDetails) => {
     };
 };
 
-export const updateEmail = (email: string) => {
+/*export const updateEmail = (email: string) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             AppAPI
@@ -43,4 +44,4 @@ export const updateEmail = (email: string) => {
             });
         });
     };
-};
+};*/

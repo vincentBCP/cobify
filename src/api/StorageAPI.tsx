@@ -5,18 +5,17 @@ import { BUCKET } from '../config';
 
 import IAttachment from '../models/interfaces/IAttachment';
 
-//https://stackoverflow.com/questions/37631158/uploading-files-to-firebase-storage-using-rest-api
-
-// const url = "https://storage.googleapis.com/storage/v1/b/" + myBucket + "/o/attachments/";
-const path = "https://firebasestorage.googleapis.com/v0/b/" + BUCKET + "/o/attachments%2F";
+const URL = "https://firebasestorage.googleapis.com/v0/b/" + BUCKET + "/o/";
+const attachmentURL = URL + "attachments%2F";
+const profilePicURL = URL + "profilePicture%2F";
 
 class StorageAPI {
-    public static upload(file: File): Promise<IAttachment> {
+    public static upload(file: File, isProfilePic?: boolean, fname?: string): Promise<IAttachment> {
         const tokens = file.name.split(".");
         const extension = tokens[tokens.length - 1];
-        const filename = "attachment-" + format(new Date(), "yyyy-MM-dd-HH-mm-ss-T") + "." + extension;
+        const filename = fname || "attachment-" + format(new Date(), "yyyy-MM-dd-HH-mm-ss-T") + "." + extension;
 
-        const url = path + filename;
+        const url = (isProfilePic ? profilePicURL : attachmentURL) + filename;
         const config = {
             headers: {
                 "Content-Type": file.type
@@ -31,8 +30,8 @@ class StorageAPI {
             }));
     };
 
-    public static delete(attachment: IAttachment): Promise<boolean> {
-        const url = path + attachment.name;
+    public static delete(attachment: IAttachment, isProfilePic?: boolean): Promise<boolean> {
+        const url = (isProfilePic ? profilePicURL : attachmentURL) + attachment.name;
 
         return axios.delete(url)
             .then(response => {
@@ -40,8 +39,8 @@ class StorageAPI {
             });
     }
 
-    public static getAttachmentPublicUrl(attachment: IAttachment): string {
-        return path + attachment.name + "?alt=media&token=" + attachment.downloadTokens;
+    public static getAttachmentPublicUrl(attachment: IAttachment, isProfilePic?: boolean): string {
+        return (isProfilePic ? profilePicURL : attachmentURL) + attachment.name + "?alt=media&token=" + attachment.downloadTokens;
     }
 };
 

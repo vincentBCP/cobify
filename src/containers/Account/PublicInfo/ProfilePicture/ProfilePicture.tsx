@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProfilePictureProps {
-    account: User
+    account: User,
+    uploading?: boolean,
+    handleChange: (arg1: File) => void
 }
 
 const ProfilePicture: React.FC<IProfilePictureProps> = props => {
@@ -39,15 +41,20 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
         <Grid item xs={4} className={classes.root}>
             <Avatar
                 size={130}
-                color={props.account.color}
-                initials={props.account.initials}
+                account={props.account}
             />
             <input
                 accept="image/*"
                 className={classes.inputFile}
                 id="contained-button-file"
-                multiple
                 type="file"
+                onChange={(ev: React.ChangeEvent) => {
+                    const fileList = (ev.target as HTMLInputElement).files || [];
+                    if (fileList[0]) {
+                        props.handleChange(fileList[0]);
+                        (ev.target as HTMLInputElement).value = "";
+                    }
+                }}
             />
             <label htmlFor="contained-button-file">
                 <Button
@@ -56,6 +63,7 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
                     component="span"
                     startIcon={<CloudUploadIcon />}
                     className={classes.upload}
+                    disabled={props.uploading}
                 >
                     Upload
                 </Button>

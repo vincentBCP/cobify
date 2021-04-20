@@ -66,9 +66,7 @@ const UserList: React.FC<IUserListProps> = props => {
                     >
                         <Avatar
                             size={32}
-                            initials={user.initials}
-                            
-                            color={user.color}
+                            account={user}
                         />
                     </Button>
                 )

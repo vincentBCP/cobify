@@ -1,6 +1,6 @@
 export {
-    updateUserDetails,
-    updateEmail
+    updateUserDetails
+    // updateEmail
 } from './app';
 
 export {

@@ -77,9 +77,8 @@ const UserInvitationFormModal: React.FC<IUserInvitationFormModalProps> = props =
                 style={{marginBottom: 30}}
             >
                 {user ? <Avatar
-                    color={user.color}
                     size={50}
-                    initials={user.initials}
+                    account={user}
                 /> : null}
                 
                 <Grid item>

@@ -4,11 +4,16 @@ import { useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import { deepPurple } from '@material-ui/core/colors';
 
+import User from '../../models/types/User';
+
+import StorageAPI from '../../api/StorageAPI';
+
 interface IAvatarProps {
     size: number,
-    src?: string,
+    account: User
+    /*src?: string,
     color?: string,
-    initials?: string
+    initials?: string*/
 };
 
 const ProfileAvatar: React.FC<IAvatarProps> = props => {
@@ -20,11 +25,14 @@ const ProfileAvatar: React.FC<IAvatarProps> = props => {
                 width: props.size,
                 height: props.size,
                 fontSize: props.size / 2,
-                backgroundColor: props.color ? props.color : deepPurple[500],
-                color: theme.palette.getContrastText(props.color ? props.color : deepPurple[500])
+                backgroundColor: props.account.color ? props.account.color : deepPurple[500],
+                color: theme.palette.getContrastText(props.account.color ? props.account.color : deepPurple[500])
             }}
+            src={props.account.profilePicture
+                ? StorageAPI.getAttachmentPublicUrl(props.account.profilePicture, true)
+                : ""}
         >
-            {props.initials}
+            {props.account.initials}
         </Avatar>
     );
 };

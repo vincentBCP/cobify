@@ -122,9 +122,8 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                                 {
                                     asignee
                                     ? <Avatar
-                                        color={asignee.color}
-                                        initials={asignee.initials}
                                         size={30}
+                                        account={asignee}
                                     />
                                     : null
                                 }

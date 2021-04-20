@@ -1,3 +1,5 @@
+import IAttachment from '../interfaces/IAttachment';
+
 type User = {
     id: string,
     firstName: string,
@@ -7,6 +9,7 @@ type User = {
     color: string,
     accountID: string,
     created: string,
+    profilePicture?: IAttachment,
     // computed
     displayName?: string,
     initials?: string

@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React/*, { useEffect, useState }*/ from 'react';
 
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
+// import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
-import AppAPI from '../../../api/AppAPI';
+// import AppAPI from '../../../api/AppAPI';
 
 import Aux from '../../../hoc/Auxi';
 
-import CodeAuthenticator from '../../../components/CodeAuthenticator';
-import FormActions from '../../../widgets/FormModal/FormActions';
+// import CodeAuthenticator from '../../../components/CodeAuthenticator';
+// import FormActions from '../../../widgets/FormModal/FormActions';
 
-import * as actions from '../../../store/actions';
+// import * as actions from '../../../store/actions';
 
-import { emailRegExp } from '../../../constants';
+// import { emailRegExp } from '../../../constants';
 
 interface IContactDetailsProps {
     email: string,
-    updateEmail: (arg1: string) => Promise<any>
+    // updateEmail: (arg1: string) => Promise<any>
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,18 +39,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ContactDetails: React.FC<IContactDetailsProps> = props => {
     const classes = useStyles();
-    const [email, setEmail] = useState<string>();
-    const [hasChange, setHasChange] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [authenticate, setAuthenticate] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+    // const [email, setEmail] = useState<string>();
+    // const [hasChange, setHasChange] = useState(false);
+    // const [editMode, setEditMode] = useState(false);
+    // const [authenticate, setAuthenticate] = useState(false);
+    // const [loading, setLoading] = useState(false);
+    // const [success, setSuccess] = useState(false);
 
-    useEffect(() => {
+    /*useEffect(() => {
         setEmail(props.email);
-    }, [ props.email ]);
+    }, [ props.email ]);*/
 
-    const handleSaveChanges = () => {
+    /*const handleSaveChanges = () => {
         if (!hasChange || !email) return;
         if (!emailRegExp.test(email)) return;
 
@@ -108,23 +108,23 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
 
     const handleCodeAuthFail = () => {
 
-    }
+    }*/
 
     return (
         <Aux>
-            <CodeAuthenticator
+            {/*<CodeAuthenticator
                 open={authenticate}
                 title="Email verification"
                 message="Please enter the 6 digit code sent to the email you provided."
                 handleCancel={handleCodeAuthCancel}
                 handleSuccess={handleCodeAuthSuccess}
                 handleFail={handleCodeAuthFail}
-            />
+            />*/}
 
             <Card>
                 <CardContent>
                     <Typography style={{marginBottom: 15}}>Contact details</Typography>
-                    <TextField
+                    {/*<TextField
                         id="contactDetails-email"
                         label="Email"
                         fullWidth
@@ -136,10 +136,23 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                             setEmail(ev.target.value);
                             setHasChange(true);
                         }}
+                    />*/}
+                    <TextField
+                        id="contactDetails-email"
+                        label="Email"
+                        fullWidth
+                        variant="outlined"
+                        className={classes.input}
+                        disabled={true}
+                        value={props.email}
+                        /*onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                            setEmail(ev.target.value);
+                            setHasChange(true);
+                        }}*/
                     />
 
                     {
-                        editMode
+                        /*editMode
                         ? <FormActions
                             sendLabel="Save changes"
                             loading={loading}
@@ -148,11 +161,11 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                             handleCancel={handleCancel}
 
                         />
-                        : null
+                        : null*/
                     }
 
                     {
-                        !editMode
+                        /*!editMode
                         ? <Grid
                             container
                             direction="row"
@@ -168,7 +181,7 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
                                 Update email
                             </Button>
                         </Grid>
-                        : null
+                        : null*/
                     }
                 </CardContent>
             </Card>
@@ -176,10 +189,11 @@ const ContactDetails: React.FC<IContactDetailsProps> = props => {
     );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+/*const mapDispatchToProps = (dispatch: any) => {
     return {
         updateEmail: (email: string) => dispatch(actions.updateEmail(email))
     }
-};
+};*/
 
-export default connect(null, mapDispatchToProps)(ContactDetails);
+// export default connect(null, mapDispatchToProps)(ContactDetails);
+export default ContactDetails;

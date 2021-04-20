@@ -14,6 +14,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Avatar from '../../../widgets/Avatar';
 
 import Board from '../../../models/types/Board';
+import User from '../../../models/types/User';
 
 import Aux from '../../../hoc/Auxi';
 
@@ -73,14 +74,18 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                 startIcon={
                     props.board
                     ? <Avatar
-                        initials={props.board.code}
-                        color={props.board.color}
                         size={30}
+                        account={{
+                            color: props.board.color,
+                            initials: props.board.code
+                        } as User}
                     />
                     : <Avatar
-                        initials="W"
-                        color={theme.palette.primary.main}
                         size={30}
+                        account={{
+                            color: theme.palette.primary.main,
+                            initials: "W"
+                        } as User}
                     />
                 }
             >
@@ -113,9 +118,11 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                             >
                                 <ListItemIcon>
                                     <Avatar
-                                        initials={board.code}
-                                        color={board.color}
                                         size={30}
+                                        account={{
+                                            color: board.color,
+                                            initials: board.code
+                                        } as User}
                                     />
                                 </ListItemIcon>
 
@@ -132,9 +139,11 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                                 >
                                     <ListItemIcon>
                                         <Avatar
-                                            initials={board.code}
-                                            color={board.color}
                                             size={30}
+                                            account={{
+                                                color: board.color,
+                                                initials: board.code
+                                            } as User}
                                         />
                                     </ListItemIcon>
 

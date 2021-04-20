@@ -107,14 +107,15 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                     {
                         asignee
                         ? <Avatar
-                            color={asignee.color}
-                            initials={asignee.initials}
                             size={30}
+                            account={asignee}
                         />
                         : <Avatar
-                            color="#ccc"
-                            initials="U"
                             size={30}
+                            account={{
+                                color: "#ccc",
+                                initials: "U"
+                            } as User}
                         />
                     }
                     <Typography>{asignee?.displayName || 'Unassigned'}</Typography>
@@ -152,9 +153,8 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                                 >
                                     <ListItemIcon>
                                         <Avatar
-                                            color={user.color}
-                                            initials={user.initials}
                                             size={30}
+                                            account={user}
                                         />
                                     </ListItemIcon>
                                     <Typography>{user.displayName}</Typography>
@@ -166,9 +166,8 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                                 >
                                     <ListItemIcon>
                                         <Avatar
-                                            color={user.color}
-                                            initials={user.initials}
                                             size={30}
+                                            account={user}
                                         />
                                     </ListItemIcon>
                                     <Typography>{user.displayName}</Typography>

@@ -371,9 +371,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                         creator
                                         ? <div className={classes.reporter}>
                                             <Avatar
-                                                color={creator.color}
-                                                initials={creator.initials}
                                                 size={30}
+                                                account={creator}
                                             />
                                             <Typography>{creator.displayName}</Typography>
                                         </div>

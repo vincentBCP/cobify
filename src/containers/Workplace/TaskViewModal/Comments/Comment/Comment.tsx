@@ -156,9 +156,8 @@ const CommentComp: React.FC<ICommentProps> = props => {
     return (
         <div className={classes.root}>
             <Avatar
-                color={user.color}
-                initials={user.initials}
                 size={30}
+                account={user}
             />
             <div className={classes.main}>
                 <div className={classes.header}>

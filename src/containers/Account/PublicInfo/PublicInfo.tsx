@@ -12,35 +12,39 @@ import './PublicInfo.scss';
 import DetailsForm from './DetailsForm';
 import ProfilePicture from './ProfilePicture';
 
-import * as actions from '../../../store/actions';
-
-import UserDetails from '../../../models/types/UserDetails';
-
 import SendButton from '../../../widgets/FormModal/FormActions/SendButton';
 
 import User from '../../../models/types/User';
 
+import StorageAPI from '../../../api/StorageAPI';
+
+import * as actions from '../../../store/actions';
+
+export type PublicInfoDetails = {
+    firstName: string,
+    lastName: string
+}
+
 interface IPublicInfoProps {
     account: User,
-    updateUserDetails: (arg1: UserDetails) => Promise<any>
+    updateUserDetails: (arg1: User) => Promise<any>
 };
 
 const PublicInfo: React.FC<IPublicInfoProps> = props => {
     const [hasChange, setHasChange] = useState<boolean>(false);
-    const [userDetails, setUserDetails] = useState<UserDetails>();
+    const [userDetails, setUserDetails] = useState<PublicInfoDetails>();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!props.account) return;
 
         setUserDetails({
-            id: props.account.id,
             firstName: props.account.firstName,
             lastName: props.account.lastName
         });
     }, [ props.account ]);
 
-    const handleUserDetailsChange = (ud: UserDetails) => {
+    const handleUserDetailsChange = (ud: PublicInfoDetails) => {
         setUserDetails(ud);
         setHasChange(true);
     };
@@ -56,12 +60,34 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
         if (loading) return;
         setLoading(true);
 
-        props.updateUserDetails({...userDetails})
+        props.updateUserDetails({
+            ...props.account,
+            ...userDetails
+        })
         .then(response => {
             setLoading(false);
             setHasChange(false);
         })
         .catch(erorr => { });
+    };
+
+    const handleProfilePictureChange = (pic: File) => {
+        if (loading) return;
+        setLoading(true);
+
+        const tokens = pic.name.split(".");
+        const extension = tokens[tokens.length - 1];
+        const filename = props.account.id + "." + extension;
+
+        StorageAPI.upload(pic, true, filename)
+        .then(uploadedFile => {
+            props.updateUserDetails({
+                ...props.account,
+                profilePicture: uploadedFile
+            })
+        })
+        .catch(error => { })
+        .finally(() => setLoading(false));
     };
 
     if (!userDetails) return null;
@@ -72,10 +98,14 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
                 <Typography>Public info</Typography>
                 <Grid container spacing={2}>
                     <DetailsForm
-                        userDetails={userDetails}
+                        publicInfo={userDetails}
                         handleUserDetailsChange={handleUserDetailsChange}
                     />
-                    <ProfilePicture account={props.account} />
+                    <ProfilePicture
+                        account={props.account}
+                        uploading={loading}
+                        handleChange={handleProfilePictureChange}
+                    />
                 </Grid>
                 {/*<Button
                     variant="contained"
@@ -96,7 +126,7 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        updateUserDetails: (userDetails: UserDetails) => dispatch(actions.updateUserDetails(userDetails))
+        updateUserDetails: (user: User) => dispatch(actions.updateUserDetails(user))
     }
 };
 
