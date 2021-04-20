@@ -21,8 +21,8 @@ class UserAPI {
             });
     };
 
-    private static getRecordPath(email: string): string {
-        return (email.split("@")[0]).split(".").join("");
+    public static getRecordPath(email: string): string {
+        return (email.split("@")[0]).split(".").join("_");
     }
 
     public static getUser(email: string): Promise<any> {

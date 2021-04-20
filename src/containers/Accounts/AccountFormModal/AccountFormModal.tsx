@@ -10,6 +10,8 @@ import FormModal from '../../../widgets/FormModal';
 
 import User from '../../../models/types/User';
 
+import UserAPI from '../../../api/UserAPI';
+
 import { nameRegExp, emailRegExp } from '../../../constants';
 
 interface IFormInputs {
@@ -96,7 +98,8 @@ const AccountFormModal: React.FC<IAccountFormModalProps> = props => {
                                 message: 'Invalid email format'
                             },
                             validate: (email: string) => {
-                                const user = users.find(u => u.email === email);
+                                const user = users.find(u =>
+                                    UserAPI.getRecordPath(u.email) === UserAPI.getRecordPath(email));
 
                                 if (user) return "Email already in use";
 
