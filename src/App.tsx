@@ -22,6 +22,8 @@ import * as actions from './store/actions';
 import User from './models/types/User';
 import UserRole from './models/enums/UserRole';
 
+import withErrorHandler from './hoc/withErrorHandler';
+
 interface IAppProps {
     checkAuth: () => Promise<User>,
     getBoards: (arg1: User) => Promise<any>,
@@ -135,4 +137,4 @@ const mapDispatchToProps = (dispatch: any) => {
     }
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default withErrorHandler(connect(null, mapDispatchToProps)(App));

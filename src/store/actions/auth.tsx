@@ -44,7 +44,11 @@ export const checkAuth = () => {
             const storedEmail = localStorage.getItem("email");
 
             if (!Boolean(storedIDToken) || !Boolean(storedRefreshToken) || !Boolean(storedEmail)) {
-                resolve(false);
+                localStorage.removeItem("token");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("email");
+
+                resolve(null);
                 return;
             }
 
