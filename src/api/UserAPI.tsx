@@ -45,7 +45,7 @@ class UserAPI {
             };
 
             axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + API_KEY,
-                    { email: dto.email, password: "D3f@ult!", returnSecureToken: true}
+                    { email: dto.email, password: "D3f@ult!", role: dto.role, returnSecureToken: true}
             )
             .then(() => {
                 return axios.put(path + UserAPI.getRecordPath(dto.email) + extension, newUser)

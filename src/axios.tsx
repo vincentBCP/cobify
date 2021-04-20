@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+import { DATABASE_URL } from './config';
+
 const instance = axios.create({
-    baseURL: 'https://cobify-59a63-default-rtdb.firebaseio.com/'
+    baseURL: DATABASE_URL
 });
 
 instance.interceptors.request.use(
