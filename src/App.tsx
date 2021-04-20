@@ -10,6 +10,7 @@ import Workplace from './containers/Workplace';
 import Account from './containers/Account';
 import Boards from './containers/Boards';
 import Users from './containers/Users';
+import Accounts from './containers/Accounts';
 import ContactSupport from './containers/ContactSupport';
 import Login from './containers/Login';
 import ResetPassword from './containers/ResetPassword';
@@ -72,8 +73,14 @@ const App: React.FC<IAppProps> = props => {
         .catch(error => {});
     }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments ]);
 
-    let routes = (
-        <Switch>
+    let routes = account?.role === UserRole.SYSADMIN
+        ? <Switch>
+            <Route path="/accounts" component={Accounts} />
+            <Route path="/contactSupport" component={ContactSupport} exact={true} />
+            <Route path="/logout" component={Logout} exact={true} />
+            <Redirect to="/accounts" />
+        </Switch>
+        : <Switch>
             <Route path="/workplace/:boardCode?/:taskCode?" component={Workplace} />
             <Route path="/account" component={Account} exact={true} />
             {account?.role === UserRole.ADMIN ? <Route path="/boards" component={Boards} exact={true} /> : null}
@@ -81,8 +88,7 @@ const App: React.FC<IAppProps> = props => {
             <Route path="/contactSupport" component={ContactSupport} exact={true} />
             <Route path="/logout" component={Logout} exact={true} />
             <Redirect to="/workplace" />
-        </Switch>
-    );
+        </Switch>;
 
     if(loading) return <PreLoader />;
 

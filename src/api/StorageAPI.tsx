@@ -1,13 +1,14 @@
 import axios from '../axios';
 import { format } from 'date-fns';
 
+import { BUCKET } from '../config';
+
 import IAttachment from '../models/interfaces/IAttachment';
 
 //https://stackoverflow.com/questions/37631158/uploading-files-to-firebase-storage-using-rest-api
 
-const myBucket = "cobify-59a63.appspot.com";
 // const url = "https://storage.googleapis.com/storage/v1/b/" + myBucket + "/o/attachments/";
-const path = "https://firebasestorage.googleapis.com/v0/b/" + myBucket + "/o/attachments%2F";
+const path = "https://firebasestorage.googleapis.com/v0/b/" + BUCKET + "/o/attachments%2F";
 
 class StorageAPI {
     public static upload(file: File): Promise<IAttachment> {

@@ -41,9 +41,12 @@ const UserInvitationFormModal: React.FC<IUserInvitationFormModalProps> = props =
         setUser(props.user);
     }, [ props.user ]);
 
+    const account: User = useSelector((state: any) => state.app.account);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => {
         const filteredBoards = state.board.boards.filter((b: Board) => {
+            if(b.accountID !== account.id) return false;
+            
             const inv = invitations.find(i => i.boardID === b.id && i.userID === props.user?.id);
             return inv ? false : true;
         });

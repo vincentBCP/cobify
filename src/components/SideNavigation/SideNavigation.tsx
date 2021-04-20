@@ -15,6 +15,7 @@ import BoardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/PeopleAlt';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import PowerIcon from '@material-ui/icons/PowerSettingsNew';
+
 import Logo from '../../widgets/Logo';
 
 import './SideNavigation.scss';
@@ -63,24 +64,49 @@ const SideNavigation: React.FC = props => {
             </div>
 
             <div id="SideNavigation_Items">
-                <NavLink to="/workplace" activeClassName="active">
-                    <ListItem key="Workplace">
-                        <ListItemIcon>
-                            <WorkIcon className={classes.drawerItemIcon} />
-                        </ListItemIcon>
-                        <ListItemText className={classes.drawerItemText} primary="Workplace" />
-                    </ListItem>
-                </NavLink>
+                {
+                    account.role === UserRole.SYSADMIN 
+                    ? <NavLink to="/accounts" activeClassName="active">
+                        <ListItem key="Accounts">
+                            <ListItemIcon>
+                                <PeopleIcon className={classes.drawerItemIcon} />
+                            </ListItemIcon>
+                            <ListItemText className={classes.drawerItemText} primary="Accounts" />
+                        </ListItem>
+                    </NavLink>
+                    : null
+                }
 
-                <NavLink to="/account" activeClassName="active">
-                    <ListItem key="Account">
-                        <ListItemIcon>
-                            <AccountIcon className={classes.drawerItemIcon} />
-                        </ListItemIcon>
-                        <ListItemText className={classes.drawerItemText} primary="Account" />
-                    </ListItem>
-                </NavLink>
+                {
+                    account.role === UserRole.ADMIN || 
+                    account.role === UserRole.COADMIN || 
+                    account.role === UserRole.GUEST
+                    ? <NavLink to="/workplace" activeClassName="active">
+                        <ListItem key="Workplace">
+                            <ListItemIcon>
+                                <WorkIcon className={classes.drawerItemIcon} />
+                            </ListItemIcon>
+                            <ListItemText className={classes.drawerItemText} primary="Workplace" />
+                        </ListItem>
+                    </NavLink>
+                    : null
+                }
 
+                {
+                    account.role === UserRole.ADMIN || 
+                    account.role === UserRole.COADMIN || 
+                    account.role === UserRole.GUEST
+                    ? <NavLink to="/account" activeClassName="active">
+                        <ListItem key="Account">
+                            <ListItemIcon>
+                                <AccountIcon className={classes.drawerItemIcon} />
+                            </ListItemIcon>
+                            <ListItemText className={classes.drawerItemText} primary="Account" />
+                        </ListItem>
+                    </NavLink>
+                    : null
+                }
+                
                 {
                     account.role === UserRole.ADMIN
                     ? <NavLink to="/boards" activeClassName="active">

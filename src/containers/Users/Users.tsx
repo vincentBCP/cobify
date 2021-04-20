@@ -46,7 +46,7 @@ const Users: React.FC<IUsersProps> = props => {
 
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) =>
-        state.user.users.filter((u: User) => u.id !== account.id));
+        state.user.users.filter((u: User) => u.accountID === account.id));
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => state.board.boards);
 

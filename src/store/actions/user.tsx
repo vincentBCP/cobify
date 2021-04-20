@@ -13,12 +13,7 @@ export const getUsers = (account: User) => {
             .then(users => {
                 dispatch({
                     type: actionTypes.SET_USERS,
-                    payload: users.filter(u => {
-                        return u.id === account.id ||
-                                u.id === account.accountID ||
-                                u.accountID === account.id ||
-                                u.accountID === account.accountID;
-                    })
+                    payload: users
                 });
 
                 resolve(true);
