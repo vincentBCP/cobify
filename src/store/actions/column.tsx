@@ -3,6 +3,7 @@ import ColumnAPI from '../../api/ColumnAPI';
 import ColumnDTO from '../../models/dto/ColumnDTO';
 import Column from '../../models/types/Column';
 import User from '../../models/types/User';
+import UserRole from '../../models/enums/UserRole';
 
 import * as actionTypes from './actionTypes';
 
@@ -15,6 +16,8 @@ export const getColumns = (account: User) => {
                 dispatch({
                     type: actionTypes.SET_COLUMNS,
                     payload: columns.filter(c => {
+                        if (account.role === UserRole.SYSADMIN) return true;
+
                         return c.accountID === account.id ||
                                 c.accountID === account.accountID;
                     })

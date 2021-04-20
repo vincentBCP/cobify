@@ -4,6 +4,7 @@ import BoardDTO from '../../models/dto/BoardDTO';
 import Board from '../../models/types/Board';
 import Column from '../../models/types/Column';
 import User from '../../models/types/User';
+import UserRole from '../../models/enums/UserRole';
 
 import * as actionTypes from './actionTypes';
 
@@ -16,6 +17,8 @@ export const getBoards = (account: User) => {
                 dispatch({
                     type: actionTypes.SET_BOARDS,
                     payload: boards.filter(b => {
+                        if (account.role === UserRole.SYSADMIN) return true;
+                        
                         return b.accountID === account.id ||
                                 b.accountID === account.accountID;
                     })

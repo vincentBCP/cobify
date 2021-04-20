@@ -4,6 +4,7 @@ import StorageAPI from '../../api/StorageAPI';
 import CommentDTO from '../../models/dto/CommentDTO';
 import Comment from '../../models/types/Comment';
 import User from '../../models/types/User';
+import UserRole from '../../models/enums/UserRole';
 
 import * as actionTypes from './actionTypes';
 import IAttachment from '../../models/interfaces/IAttachment';
@@ -17,6 +18,8 @@ export const getComments = (account: User) => {
                 dispatch({
                     type: actionTypes.SET_COMMENTS,
                     payload: comments.filter(c => {
+                        if (account.role === UserRole.SYSADMIN) return true;
+
                         return c.accountID === account.id ||
                                 c.accountID === account.accountID;
                     })

@@ -4,6 +4,7 @@ import StorageAPI from '../../api/StorageAPI';
 import TaskDTO from '../../models/dto/TaskDTO';
 import Task from '../../models/types/Task';
 import User from '../../models/types/User';
+import UserRole from '../../models/enums/UserRole';
 
 import * as actionTypes from './actionTypes';
 import IAttachment from '../../models/interfaces/IAttachment';
@@ -17,6 +18,8 @@ export const getTasks = (account: User) => {
                 dispatch({
                     type: actionTypes.SET_TASKS,
                     payload: tasks.filter(t => {
+                        if (account.role === UserRole.SYSADMIN) return true;
+
                         return t.accountID === account.id ||
                                 t.accountID === account.accountID;
                     })

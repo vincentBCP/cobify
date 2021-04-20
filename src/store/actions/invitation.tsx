@@ -4,6 +4,7 @@ import * as actionTypes from './actionTypes';
 
 import InvitationDTO from '../../models/dto/InvitationDTO';
 import User from '../../models/types/User';
+import UserRole from '../../models/enums/UserRole';
 
 export const getInvitations = (account: User) => {
     return (dispatch: any) => {
@@ -14,6 +15,8 @@ export const getInvitations = (account: User) => {
                 dispatch({
                     type: actionTypes.SET_INVITATIONS,
                     payload: invitations.filter(i => {
+                        if (account.role === UserRole.SYSADMIN) return true;
+
                         return i.accountID === account.id ||
                                 i.accountID === account.accountID;
                     })

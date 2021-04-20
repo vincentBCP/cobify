@@ -17,6 +17,11 @@ import Table, { HeadCell } from '../../components/Table/Table';
 import User from '../../models/types/User';
 import UserDTO from '../../models/dto/UserDTO';
 import UserRole from '../../models/enums/UserRole';
+import Task from '../../models/types/Task';
+import Comment from '../../models/types/Comment';
+import Board from '../../models/types/Board';
+import Column from '../../models/types/Column';
+import Invitation from '../../models/types/Invitation';
 
 import AccountFormModal from './AccountFormModal';
 
@@ -24,15 +29,24 @@ import * as actions from '../../store/actions';
 
 interface IUsersProps {
     createUser: (arg1: UserDTO) => Promise<any>,
-    deleteUser: (arg1: string, arg2: string) => Promise<any>
+    deleteUser: (arg1: string, arg2: string) => Promise<any>,
+    deleteBoard: (arg1: string) => Promise<any>,
+    deleteColumn: (arg1: string) => Promise<string>,
+    deleteComment: (arg1: Comment) => Promise<any>,
+    deleteTask: (arg1: Task) => Promise<any>,
+    deleteInvitation: (arg1: string) => Promise<any>
 }
 
 const Users: React.FC<IUsersProps> = props => {
     const [open, setOpen] = useState(false);
 
     const account: User = useSelector((state: any) => state.app.account);
-    const users: User[] = useSelector((state: any) =>
-        state.user.users.filter((u: User) => u.accountID === account.id));
+    const users: User[] = useSelector((state: any) => state.user.users);
+    const boards: Board[] = useSelector((state: any) => state.board.boards);
+    const columns: Column[] = useSelector((state: any) => state.column.columns);
+    const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
+    const tasks: Task[] = useSelector((state: any) => state.task.tasks);
+    const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
     const handleUserSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
         const request = props.createUser({
@@ -64,6 +78,42 @@ const Users: React.FC<IUsersProps> = props => {
             const user = users.find(u => u.id === id);
 
             if (!user) return;
+
+            comments.forEach(c => {
+                if (c.accountID !== user.id) return;
+
+                promises.push(props.deleteComment(c));
+            });
+
+            tasks.forEach(t => {
+                if (t.accountID !== user.id) return;
+
+                promises.push(props.deleteTask(t));
+            });
+
+            columns.forEach(c => {
+                if (c.accountID !== user.id) return;
+
+                promises.push(props.deleteColumn(c.id));
+            });
+
+            invitations.forEach(i => {
+                if (i.accountID !== user.id) return;
+
+                promises.push(props.deleteInvitation(i.id));
+            });
+
+            boards.forEach(b => {
+                if (b.accountID !== user.id) return;
+
+                promises.push(props.deleteBoard(b.id));
+            });
+
+            users.forEach(u => {
+                if (u.accountID !== user.id) return;
+
+                promises.push(props.deleteUser(u.id, u.email));
+            });
 
             promises.push(props.deleteUser(id, user.email));
         });
@@ -113,7 +163,7 @@ const Users: React.FC<IUsersProps> = props => {
             <Page title="Accounts">
                 <Table
                     actions={tableActions}
-                    dataList={users}
+                    dataList={users.filter((u: User) => u.accountID === account.id)}
                     headCells={headCells}
                     defaultOrderBy="displayName"
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
@@ -127,7 +177,12 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         createUser: (dto: UserDTO) => dispatch(actions.createUser(dto)),
         deleteUser: (id: string, email: string) => 
-            dispatch(actions.deleteUser(id, email))
+            dispatch(actions.deleteUser(id, email)),
+        deleteBoard: (id: string) => dispatch(actions.deleteBoard(id)),
+        deleteTask: (task: Task) => dispatch(actions.deleteTask(task)),
+        deleteComment: (comment: Comment) => dispatch(actions.deleteComment(comment)),
+        deleteColumn: (id: string) => dispatch(actions.deleteColumn(id)),
+        deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
     }
 };
 
