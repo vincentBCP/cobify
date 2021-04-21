@@ -71,8 +71,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface ITasksProps {
     board: Board,
-    searchString?: string,
     column: Column,
+    data: Task[],
     sourceTask: Task | null,
     targetTask: Task | null,
     handleDragStart: (arg1: React.DragEvent, arg2: Task) => void,
@@ -82,25 +82,14 @@ interface ITasksProps {
 
 const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
     const classes = useStyles();
-
-    const tasks: Task[] = useSelector((state: any) => state.task.tasks);
+    
     const users: User[] = useSelector((state: any) => state.user.users);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
     return (
         <div className={classes.root}>
             {
-                (props.column.taskIDs || [])
-                .map(taskID => {
-                    const task = tasks.find(t => t.id === taskID);
-
-                    if (!task) return null;
-
-                    if (props.searchString &&
-                        task.code.toLowerCase().indexOf(props.searchString?.toLowerCase()) === -1 &&
-                        task.title.toLowerCase().indexOf(props.searchString?.toLowerCase()) === -1)
-                        return null;
-
+                props.data.map(task => {
                     const asignee = users.find(g => g.id === task.asigneeID);
 
                     return <NavLink
@@ -129,8 +118,8 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                                 }
                                 <div className={classes.commentsCount}>
                                     {
-                                        comments.filter(c => c.taskID === taskID).length > 0
-                                        ? <span>{comments.filter(c => c.taskID === taskID).length}</span>
+                                        comments.filter(c => c.taskID === task.id).length > 0
+                                        ? <span>{comments.filter(c => c.taskID === task.id).length}</span>
                                         : null
                                     }
                                     <ChatBubbleOutlineOutlinedIcon />

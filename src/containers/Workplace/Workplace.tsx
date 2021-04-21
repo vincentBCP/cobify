@@ -75,6 +75,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const [viewingTask, setViewingTask] = useState<Task | undefined>();
     const [loading, setLoading] = useState(false);
     const [searchString, setSearchString] = useState<string>();
+    const [selectedUserIDs, setSelectedUserIDs] = useState<string[]>();
 
     const account: User = useSelector((state: any) => state.app.account);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
@@ -320,11 +321,15 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                             <span style={{flexGrow: 1}}></span>
                             <UserList
                                 boardID={board?.id}
+                                handleSelectionChange={ids => setSelectedUserIDs(ids)}
                             />
                         </Grid>
                         <Columns
                             board={board}
-                            searchString={searchString}
+                            filter={{
+                                searchString: searchString,
+                                userIDs: selectedUserIDs
+                            }}
                             handleBoardUpdate={b => setBoard(b)}
                             handleColumnDelete={c => handleColumnDelete(c)}
                             handleColumnRename={c => handleColumnRename(c)}

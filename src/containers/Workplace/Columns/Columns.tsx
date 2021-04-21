@@ -27,9 +27,14 @@ import ColumnAPI from '../../../api/ColumnAPI';
 import TaskAPI from '../../../api/TaskAPI';
 import BoardAPI from '../../../api/BoardAPI';
 
+interface IFilter {
+    searchString?: string,
+    userIDs?: string[]
+}
+
 interface IColumnsProps {
     board: Board,
-    searchString?: string,
+    filter: IFilter,
     handleBoardUpdate: (arg1: Board) => void,
     handleColumnDelete: (arg1: Column) => void,
     handleColumnRename: (arg1: Column) => void
@@ -88,6 +93,7 @@ const Columns: React.FC<IColumnsProps> = props => {
 
     const account: User = useSelector((state: any) => state.app.account);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
+    const tasks: Task[] = useSelector((state: any) => state.task.tasks);
 
     useEffect(() => {
         setBoard(props.board);
@@ -245,6 +251,30 @@ const Columns: React.FC<IColumnsProps> = props => {
         clearDnD();
     }
 
+    const getTasks = (column: Column): Task[] => {
+        const data: Task[] = [];
+
+        column.taskIDs?.forEach(taskID => {
+            const task = tasks.find(t => t.id === taskID);
+
+            if (!task) return;
+
+            if (props.filter?.searchString &&
+                task.code.toLowerCase().indexOf(props.filter?.searchString?.toLowerCase()) === -1 &&
+                task.title.toLowerCase().indexOf(props.filter?.searchString?.toLowerCase()) === -1)
+                return;
+
+            if (props.filter?.userIDs &&
+                props.filter?.userIDs.length > 0 &&
+                !props.filter?.userIDs.includes(task?.asigneeID || ""))
+                return;
+
+            data.push(task);
+        });
+
+        return data;
+    }
+
     return (
         <Auxi>
             <Popover
@@ -294,6 +324,12 @@ const Columns: React.FC<IColumnsProps> = props => {
 
                         if (!column) return null;
 
+                        const columnTasks = getTasks(column);
+
+                        let columnTaskCountText = column.taskIDs?.length === columnTasks.length
+                            ? columnTasks.length
+                            : columnTasks.length + " of " + column.taskIDs?.length;
+
                         return <div
                             key={"columns-" + column.id}
                             className={classes.column}
@@ -304,7 +340,7 @@ const Columns: React.FC<IColumnsProps> = props => {
                         >
                             <div className={classes.header}>
                                 <Typography>
-                                    {column.name} {column.taskIDs?.length ? "(" + column.taskIDs?.length + ")" : ''}
+                                    {column.name} {column.taskIDs?.length ? "(" + columnTaskCountText + ")" : ''}
                                 </Typography>
                                 {
                                     ((account.role === UserRole.ADMIN || account.role === UserRole.COADMIN))
@@ -319,7 +355,7 @@ const Columns: React.FC<IColumnsProps> = props => {
                             </div>
                             <Tasks
                                 board={props.board}
-                                searchString={props.searchString}
+                                data={columnTasks}
                                 column={column}
                                 sourceTask={sourceTask}
                                 targetTask={targetTask}

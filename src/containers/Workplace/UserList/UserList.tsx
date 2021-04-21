@@ -12,7 +12,8 @@ import User from '../../../models/types/User';
 import Invitation from '../../../models/types/Invitation';
 
 interface IUserListProps {
-    boardID?: string
+    boardID?: string,
+    handleSelectionChange: (arg1: string[]) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -22,15 +23,31 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             alignItems: 'center'
         },
+        buttonContainer: {
+            border: '2px solid #f7f9fc',
+            marginLeft: -10,
+            borderRadius: '50%',
+
+            '&:first-of-type': {
+                marginLeft: 0
+            },
+            '&:hover': {
+                zIndex: '100 !important'
+            },
+            '&.selected': {
+                border: '2px dashed ' + theme.palette.primary.light
+            }
+        },
         button: {
-            width: 30,
-            height: 32,
-            minWidth: 30,
-            minHeight: 32,
+            width: 40,
+            height: 40,
+            minWidth: 40,
+            minHeight: 40,
             margin: 0,
-            marginLeft: 5,
             borderRadius: '50%',
             boxShadow: 'none',
+            zIndex: 0,
+
             '&:hover': {
                 boxShadow: 'none'
             }
@@ -40,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const UserList: React.FC<IUserListProps> = props => {
     const classes = useStyles();
+    const [selectedUserIDs, setSelectedUserIDs] = React.useState<string[]>();
 
     const users: User[] = useSelector((state: any) => state.user.users);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
@@ -53,22 +71,59 @@ const UserList: React.FC<IUserListProps> = props => {
         return _.orderBy(gs, ["firstName"]);
     }
 
+    const toggleSelection = (user: User) => {
+        if (!selectedUserIDs) {
+            const newArr = [user.id]
+            setSelectedUserIDs(newArr);
+            props.handleSelectionChange(newArr);
+            return;
+        }
+
+        const ind = selectedUserIDs.findIndex(id => id === user.id);
+
+        if (ind !== -1) {
+            const newArr = [...selectedUserIDs];
+            newArr.splice(ind, 1);
+            setSelectedUserIDs(newArr);
+            props.handleSelectionChange(newArr);
+            return;
+        }
+
+        const newArr = [
+            ...selectedUserIDs,
+            user.id
+        ];
+        setSelectedUserIDs(newArr);
+        props.handleSelectionChange(newArr);
+    }
+
     if (!props.boardID) return null;
+
+    const userList = filterUsers();
     
     return (
         <div className={classes.root}>
             {
-                filterUsers().map(user =>
-                    <Button
+                userList.map((user, index) =>
+                    <div
                         key={"user-list-" + user.id}
-                        className={classes.button}
-                        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}
+                        className={[classes.buttonContainer,
+                            selectedUserIDs?.includes(user.id) ? "selected" : ""].join(' ')}
+                        style={{
+                            zIndex: (userList.length - index)
+                        }}
                     >
-                        <Avatar
-                            size={32}
-                            account={user}
-                        />
-                    </Button>
+                        <Button
+                            className={classes.button}
+                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => toggleSelection(user)}
+                        >
+                            <Avatar
+                                size={40}
+                                account={user}
+                            />
+                        </Button>
+                    </div>
+                    
                 )
             }
         </div>
