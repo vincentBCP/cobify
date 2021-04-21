@@ -15,6 +15,11 @@ export const updateUserDetails = (account: User) => {
                     payload: account
                 });
 
+                dispatch({
+                    type: actionTypes.UPDATE_USER,
+                    payload: account
+                });
+
                 resolve(account);
             })
             .catch(error => {

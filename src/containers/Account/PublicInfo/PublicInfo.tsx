@@ -79,8 +79,14 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
         const extension = tokens[tokens.length - 1];
         const filename = props.account.id + "." + extension;
 
-        StorageAPI.upload(pic, true, filename)
-        .then(uploadedFile => {
+        const req = props.account.profilePicture 
+            ? StorageAPI.delete(props.account.profilePicture, true)
+            : Promise.resolve();
+        
+        req
+        .then(() => {
+            return StorageAPI.upload(pic, true, filename);
+        }).then(uploadedFile => {
             props.updateUserDetails({
                 ...props.account,
                 profilePicture: uploadedFile

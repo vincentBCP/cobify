@@ -107,9 +107,8 @@ const UserList: React.FC<IUserListProps> = props => {
         <div className={classes.root}>
             {
                 userList.map((user, index) =>
-                    <Tooltip title={user.displayName || ""}>
+                    <Tooltip key={"user-list-" + user.id} title={user.displayName || ""}>
                         <div
-                            key={"user-list-" + user.id}
                             className={[classes.buttonContainer,
                                 selectedUserIDs?.includes(user.id) ? "selected" : ""].join(' ')}
                             style={{
