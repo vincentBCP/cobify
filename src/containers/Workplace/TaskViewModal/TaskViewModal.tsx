@@ -176,6 +176,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     const [task, setTask] = useState<Task>();
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
+    const [_creator, setCreator] = useState<User>();
 
     useEffect(() => {
         if (!props.task) return;
@@ -189,6 +190,12 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
     const creator: User = useSelector((state: any) =>
         state.user.users.find((u: User) => u.id === props.task?.creatorID));
+
+    useEffect(() => {
+        if (!creator) return;
+
+        setCreator(creator);
+    }, [ creator ]);
 
     const handleClose = () => {
         props.history.push("/workplace/" + props.board?.code);
@@ -368,13 +375,13 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                 <div className={classes.row}>
                                     <Typography>Reporter</Typography>
                                     {
-                                        creator
+                                        _creator
                                         ? <div className={classes.reporter}>
                                             <Avatar
                                                 size={30}
-                                                account={creator}
+                                                account={_creator}
                                             />
-                                            <Typography>{creator.displayName}</Typography>
+                                            <Typography>{_creator.displayName}</Typography>
                                         </div>
                                         : null
                                     }
