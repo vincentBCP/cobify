@@ -50,10 +50,14 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'relative'
         },
         header: {
-            padding: "30px 50px 20px 50px"
+            padding: "30px 50px 30px 50px",
+            display: 'flex',
+            alignItems: 'center',
         },
         button: {
-            marginRight: 10
+            marginRight: 10,
+            paddingTop: 8,
+            paddingBottom: 8
         }
     })
 );
@@ -318,7 +322,6 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                 placeholder="Search task"
                                 handleChange={(searchString: string) => setSearchString(searchString)}
                             />
-                            <span style={{flexGrow: 1}}></span>
                             <UserList
                                 boardID={board?.id}
                                 handleSelectionChange={ids => setSelectedUserIDs(ids)}

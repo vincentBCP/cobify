@@ -14,7 +14,9 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
-            position: 'relative'
+            position: 'relative',
+            backgroundColor: "#172b4d",
+            borderRadius: 0
         },
         header: {
             position: 'fixed',
@@ -23,7 +25,12 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingLeft: 20,
-            backgroundColor: "rgba(0, 0, 0, 0.3)"
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            color: 'rgba(255,255,255,0.5)',
+
+            '& svg': {
+                color: 'rgba(255,255,255,0.5)'
+            }
         },
         content: {
             marginTop: 50,

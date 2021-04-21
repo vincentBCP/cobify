@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import Avatar from '../../../widgets/Avatar';
 
@@ -21,7 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'center'
+            alignItems: 'center',
+            marginLeft: 20
         },
         buttonContainer: {
             border: '2px solid #f7f9fc',
@@ -105,25 +107,26 @@ const UserList: React.FC<IUserListProps> = props => {
         <div className={classes.root}>
             {
                 userList.map((user, index) =>
-                    <div
-                        key={"user-list-" + user.id}
-                        className={[classes.buttonContainer,
-                            selectedUserIDs?.includes(user.id) ? "selected" : ""].join(' ')}
-                        style={{
-                            zIndex: (userList.length - index)
-                        }}
-                    >
-                        <Button
-                            className={classes.button}
-                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => toggleSelection(user)}
+                    <Tooltip title={user.displayName || ""}>
+                        <div
+                            key={"user-list-" + user.id}
+                            className={[classes.buttonContainer,
+                                selectedUserIDs?.includes(user.id) ? "selected" : ""].join(' ')}
+                            style={{
+                                zIndex: (userList.length - index)
+                            }}
                         >
-                            <Avatar
-                                size={40}
-                                account={user}
-                            />
-                        </Button>
-                    </div>
-                    
+                            <Button
+                                className={classes.button}
+                                onClick={(event: React.MouseEvent<HTMLButtonElement>) => toggleSelection(user)}
+                            >
+                                <Avatar
+                                    size={40}
+                                    account={user}
+                                />
+                            </Button>
+                        </div>
+                    </Tooltip>                    
                 )
             }
         </div>
