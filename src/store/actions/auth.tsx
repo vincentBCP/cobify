@@ -10,7 +10,7 @@ export const login = (email: string, password: string) => {
             .login(email, password)
             .then(response => {
                 localStorage.setItem("token", response.data.idToken);
-                localStorage.setItem("refreshToken", response.data.refreshToken);
+                localStorage.setItem("refreshToken", AuthAPI.encrypt(response.data.refreshToken));
                 
                 return UserAPI.getUser(email);
             })
@@ -53,10 +53,10 @@ export const checkAuth = () => {
             }
 
             AuthAPI
-            .reLogin(storedRefreshToken || "")
+            .reLogin(AuthAPI.decrypt(storedRefreshToken || ""))
             .then(response => {
                 localStorage.setItem("token", response.data.id_token);
-                localStorage.setItem("refreshToken", response.data.refresh_token);
+                localStorage.setItem("refreshToken", AuthAPI.encrypt(response.data.refresh_token));
 
                 return UserAPI.getUser(storedEmail || "");
             })
