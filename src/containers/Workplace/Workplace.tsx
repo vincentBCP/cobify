@@ -253,6 +253,15 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         setShowColumnForm(true);
     }
 
+    const handleBoardUpdate = (updatedBoard: Board) => {
+        dispatch({
+            type: actionTypes.UPDATE_BOARD,
+            payload: updatedBoard
+        });
+        setBoard(updatedBoard);
+        BoardAPI.updateBoard(updatedBoard);
+    }
+
     return (
         <Auxi>
             <ApplicationBar
@@ -333,9 +342,9 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                 searchString: searchString,
                                 userIDs: selectedUserIDs
                             }}
-                            handleBoardUpdate={b => setBoard(b)}
-                            handleColumnDelete={c => handleColumnDelete(c)}
-                            handleColumnRename={c => handleColumnRename(c)}
+                            handleBoardUpdate={handleBoardUpdate}
+                            handleColumnDelete={handleColumnDelete}
+                            handleColumnRename={handleColumnRename}
                         />
                     </Auxi>
                     : null

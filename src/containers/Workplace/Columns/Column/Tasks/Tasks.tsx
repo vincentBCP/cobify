@@ -6,13 +6,13 @@ import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
 import { makeStyles, createStyles, Theme, Typography } from '@material-ui/core';
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
 
-import Avatar from '../../../../widgets/Avatar';
+import Avatar from '../../../../../widgets/Avatar';
 
-import Task from '../../../../models/types/Task';
-import Column from '../../../../models/types/Column';
-import Board from '../../../../models/types/Board';
-import User from '../../../../models/types/User';
-import Comment from '../../../../models/types/Comment';
+import Task from '../../../../../models/types/Task';
+import Column from '../../../../../models/types/Column';
+import Board from '../../../../../models/types/Board';
+import User from '../../../../../models/types/User';
+import Comment from '../../../../../models/types/Comment';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
