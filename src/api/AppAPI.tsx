@@ -14,6 +14,14 @@ class AppAPI {
     public static updateEmail(email: string): Promise<AxiosResponse> {
         return axios.post('updateEmail', { email: email });
     }
+
+    public static sendSupportMessage(email: string, subject: string, content: string): Promise<any> {
+        return axios.post('supportMessages.json', {
+            email: email,
+            subject: subject,
+            content: content
+        });
+    }
 };
 
 export default AppAPI;

@@ -1,18 +1,11 @@
 import React from 'react';
 
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-
 import Aux from '../hoc/Auxi';
+
+import Alert from '../widgets/Alert';
 
 import useHttpErrorHandler from '../hooks/http-error-handler';
 import axios from '../axios';
-
-// https://material-ui.com/components/snackbars/
-
-const Alert: React.FC<AlertProps> = props => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-};
 
 const withErrorHandler = (WrappedComponent: React.FC) => {
     return (props: any) => {
@@ -27,19 +20,12 @@ const withErrorHandler = (WrappedComponent: React.FC) => {
             <Aux>
                 {
                     error
-                    ? <Snackbar
+                    ? <Alert
                         open={true}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}
-                        autoHideDuration={6000}
-                        onClose={() => clearError()}
-                    >
-                        <Alert onClose={() => clearError()} severity="error">
-                            Request failed!
-                        </Alert>
-                    </Snackbar>
+                        type="error"
+                        handleClose={() => clearError()}
+                        message="Request failed!"
+                    />
                     : null
                 }
                 <WrappedComponent {...props} />
