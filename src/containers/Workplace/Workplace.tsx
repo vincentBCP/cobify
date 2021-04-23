@@ -130,7 +130,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         }, 2000);
     }, [props.match, boards, board, tasks, loading]);
 
-    const handleSumbitColumn = (data: any): [Promise<any>, () => void, () => void] => {
+    const handleSumbitColumn = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         const request = selectedColumn
         ? props.updateColumn({
             ...selectedColumn,
@@ -156,7 +156,12 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 type: actionTypes.UPDATE_BOARD,
                 payload: updatedBoard
             });
-            BoardAPI.updateBoard(updatedBoard);
+            BoardAPI.updateBoard(updatedBoard)
+            .then(response => { })
+            .catch(error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            });
 
             setBoard(updatedBoard);
 
@@ -165,10 +170,13 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         
         return [
             request,
-            () => {
+            response => {
                 setShowColumnForm(false);
             },
-            () => { }
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
         ];
     }
 
@@ -186,7 +194,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         return board?.code + "-" + num;
     }
 
-    const handleSumbitTask = (data: any): [Promise<any>, () => void, () => void] => {
+    const handleSumbitTask = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         const t: TaskDTO = {
             ...data,
             code: createTaskCode(),
@@ -217,14 +225,22 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                     type: actionTypes.UPDATE_COLUMN,
                     payload: updatedColumn
                 });
-                ColumnAPI.updateColumn(updatedColumn);
+                ColumnAPI.updateColumn(updatedColumn)
+                .then(response => { })
+                .catch(error => {
+                    //TO DO: handle error
+                    alert("Error occured.");
+                });
 
                 return task;
             }),
-            () => {
+            response => {
                 setAddTask(false);
             },
-            () => { }
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
         ];
     }
 
@@ -242,10 +258,16 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         updatedBoard.columnIDs.splice(ind, 1); // remove column id from the list
 
         setBoard({...updatedBoard});
+
         Promise.all([
             ColumnAPI.deleteColumn(column.id),
             BoardAPI.updateBoard(updatedBoard)
-        ]);
+        ])
+        .then(response => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
     }
 
     const handleColumnRename = (column: Column) => {
@@ -259,7 +281,12 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
             payload: updatedBoard
         });
         setBoard(updatedBoard);
-        BoardAPI.updateBoard(updatedBoard);
+        BoardAPI.updateBoard(updatedBoard)
+        .then(response => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
     }
 
     return (

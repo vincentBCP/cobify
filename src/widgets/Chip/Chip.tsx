@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 interface IChipProps {
     label: string,
     color: string,
-    handleDelete?: () => [Promise<any>, () => void, () => void]
+    handleDelete?: () => [Promise<any>, (arg: any) => void, (arg: any) => void]
 }
 
 const CustomChip: React.FC<IChipProps> = props => {
@@ -26,10 +26,10 @@ const CustomChip: React.FC<IChipProps> = props => {
         const [request, successCallback, failCallback] = props.handleDelete();
 
         request
-        .then(() => {
-            successCallback()
+        .then(response => {
+            successCallback(response)
         })
-        .catch(error => failCallback());
+        .catch(error => failCallback(error));
     };
 
     return (

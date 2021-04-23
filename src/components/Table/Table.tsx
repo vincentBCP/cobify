@@ -84,7 +84,7 @@ interface ITableProps {
     defaultOrderBy: string,
     title?: string,
     actions?: JSX.Element,
-    handleDeleteSelectedRows: (arg1: string[]) => [Promise<any>, () => void, () => void]
+    handleDeleteSelectedRows: (arg1: string[]) => [Promise<any>, (arg: any) => void, (arg: any) => void]
 }
 
 const CustomTable: React.FC<ITableProps> = props => {
@@ -153,12 +153,12 @@ const CustomTable: React.FC<ITableProps> = props => {
         setLoading(true);
 
         request
-        .then(() => {
+        .then(response => {
             setLoading(false);
             setSelected([]);
-            successCallback();
+            successCallback(response);
         })
-        .catch(() => failCallback());
+        .catch(error => failCallback(error));
     }
 
     const isSelected = (id: string) => selected.indexOf(id) !== -1;

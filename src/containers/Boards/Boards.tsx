@@ -64,15 +64,18 @@ const Boards: React.FC<IBoardsProps> = props => {
     const users: User[] = useSelector((state: any) => state.user.users);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
-    const handleRemoveInvitation = (id: string): [Promise<any>, () => void, () => void] => {
+    const handleRemoveInvitation = (id: string): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return [
             props.deleteInvitation(id),
-            () => {},
-            () => {}
+            response => {},
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
         ];
     };
 
-    const handleBoardSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
+    const handleBoardSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
         const request = board
             ? props.updateBoard({
                 ...board,
@@ -86,11 +89,12 @@ const Boards: React.FC<IBoardsProps> = props => {
 
         return [
             request,
-            () => { // succes callback
+            response => {
                 setOpen(false);
             },
-            () => { // fail callback
-
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
             }
         ];
     }
@@ -99,7 +103,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         setOpen(false);
     }
 
-    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, () => void, () => void] => {
+    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         const promises: any = [];
 
         ids.forEach(id => {
@@ -130,18 +134,26 @@ const Boards: React.FC<IBoardsProps> = props => {
             promises.push(props.deleteBoard(id));
         });
 
-        return [Promise.all(promises), () => {}, () => {}];
+        return [
+            Promise.all(promises),
+            respone => {},
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
+        ];
     }
 
-    const handleBoardInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] =>  {
+    const handleBoardInvitationSubmit = (dto: InvitationDTO): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
         return [
             props.sendInvitation(dto),
-            () => { // succes callback
+            response => {
                 setOpenInvitation(false);
                 setBoard(null);
             },
-            () => { // fail callback
-
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
             }
         ];
     }
@@ -167,7 +179,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                                 key={i.id}
                                 label={user.firstName + " " + user.lastName}
                                 color={user.color}
-                                handleDelete={(): [Promise<any>, () => void, () => void] => 
+                                handleDelete={(): [Promise<any>, (arg: any) => void, (arg: any) => void] => 
                                     handleRemoveInvitation(i.id)}
                             />;
                         }

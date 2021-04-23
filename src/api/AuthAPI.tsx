@@ -10,8 +10,6 @@ const SECRET = "Lorem ipsum dolor sit amet";
 const EXTRA = "18ZzPgK";
 const INDEX_OF_EXTRA = 7;
 
-// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
-
 class AuthAPI {
     public signin(email: string, password: string): Promise<string> {
         return firebase.auth().signInWithEmailAndPassword(email, password)
@@ -50,9 +48,6 @@ class AuthAPI {
 
     public sendResetPassword(email: string): Promise<void> {
         return firebase.auth().sendPasswordResetEmail(email);
-        /*return axios.post("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + 
-            FIREBASE_CONFIG.apiKey,
-            { requestType: "PASSWORD_RESET", email: email });*/
     }
 
     private encrypt(str: string): string {

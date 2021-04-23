@@ -26,7 +26,6 @@ export const getColumns = (account: User) => {
                 resolve(true);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         })
@@ -47,7 +46,6 @@ export const createColumn = (dto: ColumnDTO) => {
                 resolve(column);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -68,7 +66,6 @@ export const updateColumn = (column: Column) => {
                 resolve(column);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -88,7 +85,6 @@ export const deleteColumn = (id: string) => {
                 resolve(id);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             })
         });

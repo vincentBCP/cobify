@@ -86,18 +86,18 @@ const Login: React.FC<ILoginProps> = props => {
             window.location.reload();
         })
         .catch(error => {
-            // https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
+            // https://firebase.google.com/docs/auth/web/password-auth
+            // https://firebase.google.com/docs/reference/js/firebase.auth.Error
 
-            console.log(error);
-            const errMsg = error.response ? error.response.data.error.message : "ERR_OCCURED";
+            const code = error.code;
 
-            switch (errMsg) {
-                case 'EMAIL_NOT_FOUND':
-                case 'INVALID_PASSWORD':
-                case 'USER_DISABLED':
+            switch (code) {
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                case 'auth/user-disabled':
                     setErrorMessage("Invalid email or password.");
                     break;
-                case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+                case 'auth/too-many-requests':
                     setErrorMessage("Too many invalid attempts. Try again later.");
                     break;
                 default: setErrorMessage("Error occured.")

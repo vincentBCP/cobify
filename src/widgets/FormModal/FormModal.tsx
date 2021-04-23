@@ -17,7 +17,7 @@ interface IFormModalProps {
     title: string,
     reset: UseFormReset<any>,
     useFormHandleSubmit: UseFormHandleSubmit<any>,
-    handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void]
+    handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void]
     handleCancel: () => void
 }
 
@@ -71,12 +71,12 @@ const FormModal: React.FC<IFormModalProps> = props => {
             setLoading(false);
 
             setTimeout(() => {
-                successCallback();
+                successCallback(response);
             }, SUCCESS_DELAY);
         })
         .catch(error => {
             console.log(error);
-            failCallback();
+            failCallback(error);
             setLoading(false);
         });
     };

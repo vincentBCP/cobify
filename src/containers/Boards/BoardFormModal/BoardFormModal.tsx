@@ -20,7 +20,7 @@ interface IFormInputs {
 interface IBoardFormModalModalProps {
     open?: boolean,
     board: Board | null,
-    handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
+    handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void],
     handleCancel: () => void
 }
 
@@ -29,7 +29,7 @@ const BoardFormModal: React.FC<IBoardFormModalModalProps> = props => {
 
     const boards: Board[] = useSelector((state: any) => state.board.boards);
 
-    const handleFormSubmit = (data: IFormInputs): [Promise<any>, () => void, () => void] => {
+    const handleFormSubmit = (data: IFormInputs): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return props.handleSubmit(data);
     }
 

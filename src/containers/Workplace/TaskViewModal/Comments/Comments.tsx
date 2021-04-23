@@ -81,7 +81,10 @@ const Comments: React.FC<ICommentsProps> = props => {
         .then(comment => {
             setTextEditorValue(null);
         })
-        .catch(error => {})
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        })
         .finally(() => setLoading(false));
     };
 

@@ -23,8 +23,6 @@ export const login = (email: string, password: string) => {
             })
             .catch(error => {
                 localStorage.removeItem("refreshToken");
-
-                console.log(error);
                 reject(error);
             });
         });
@@ -49,7 +47,6 @@ export const checkAuth = () => {
                 resolve(user);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
             /*const storedRefreshToken = localStorage.getItem("refreshToken");

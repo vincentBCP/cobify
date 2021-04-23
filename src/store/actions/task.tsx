@@ -64,7 +64,6 @@ export const createTask = (dto: TaskDTO) => {
                 resolve(task);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -85,7 +84,6 @@ export const updateTask = (task: Task) => {
                 resolve(task);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -147,7 +145,6 @@ export const updateTaskAndAttachments = (task: Task, dto: TaskDTO) => {
                 resolve(task);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -175,7 +172,6 @@ export const deleteTask = (task: Task) => {
                 resolve(id);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });

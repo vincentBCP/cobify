@@ -19,7 +19,6 @@ export const getUsers = (account: User) => {
                 resolve(true);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         })
@@ -46,7 +45,6 @@ export const createUser = (dto: UserDTO) => {
                 resolve(g);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -67,7 +65,6 @@ export const updateUser = (user: User) => {
                 resolve(user);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -87,7 +84,6 @@ export const deleteUser = (uID: string, email: string) => {
                 resolve(uID);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             })
         });

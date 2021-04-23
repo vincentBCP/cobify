@@ -27,7 +27,6 @@ export const getBoards = (account: User) => {
                 resolve(true);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         })
@@ -62,7 +61,6 @@ export const createBoard = (dto: BoardDTO) => {
                 resolve(board);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -83,7 +81,6 @@ export const updateBoard = (board: Board) => {
                 resolve(board);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -103,7 +100,6 @@ export const deleteBoard = (id: string) => {
                 resolve(id);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             })
         });

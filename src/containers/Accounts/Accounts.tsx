@@ -51,7 +51,7 @@ const Users: React.FC<IUsersProps> = props => {
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
-    const handleUserSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
+    const handleUserSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
         const request = props.createUser({
             ...data,
             role: UserRole.ADMIN,
@@ -62,11 +62,12 @@ const Users: React.FC<IUsersProps> = props => {
 
         return [
             request,
-            () => { // succes callback
+            (response: any) => {
                 setOpen(false);
             },
-            () => { // fail callback
-
+            (error: any) => {
+                //TO DO: handle error
+                alert("Error occured.");
             }
         ];
     }
@@ -75,7 +76,7 @@ const Users: React.FC<IUsersProps> = props => {
         setOpen(false);
     }
 
-    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, () => void, () => void] => {
+    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         const promises: any = [];
 
         ids.forEach(id => {
@@ -122,7 +123,14 @@ const Users: React.FC<IUsersProps> = props => {
             promises.push(props.deleteUser(id, user.email));
         });
 
-        return [Promise.all(promises), () => {}, () => {}];
+        return [
+            Promise.all(promises),
+            (response: any) => {},
+            (error: any) => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
+        ];
     }
 
     const renderActions = (user: User) => {

@@ -97,12 +97,12 @@ const App: React.FC<IAppProps> = props => {
         setLoading(true);
 
         Promise.all(promises)
-        .then(() => {
-            setTimeout(() => {
-                setLoading(false);
-            }, 2000);
+        .then(() => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
         })
-        .catch(error => {});
+        .finally(() => setLoading(false));
     }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments ]);
 
     let routes = account?.role === UserRole.SYSADMIN

@@ -25,7 +25,6 @@ export const getInvitations = (account: User) => {
                 resolve(true);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         })
@@ -45,7 +44,6 @@ export const deleteInvitation = (id: string) => {
                 resolve(id);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -65,7 +63,6 @@ export const sendInvitation = (dto: InvitationDTO) => {
                 resolve(invitation);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });

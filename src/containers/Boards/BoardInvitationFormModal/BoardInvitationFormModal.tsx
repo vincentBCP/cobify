@@ -26,7 +26,7 @@ interface IFormInputs {
 interface IBoardInvitationFormModalProps {
     open?: boolean,
     board: Board | null,
-    handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
+    handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void],
     handleCancel: () => void
 }
 
@@ -55,7 +55,7 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
         return _.orderBy(filteredUsers, ["firstName"]);
     });
 
-    const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
+    const handleFormSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return props.handleSubmit({
             boardID: (board || {}).id || "",
             userID: data.userID,

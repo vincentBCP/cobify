@@ -23,7 +23,6 @@ export const updateUserDetails = (account: User) => {
                 resolve(account);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });

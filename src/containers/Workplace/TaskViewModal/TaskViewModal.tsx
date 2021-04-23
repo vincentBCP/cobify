@@ -214,9 +214,6 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
             updated: (new Date()).toISOString()
         }
 
-        props.updateTask(updatedTask)
-        .then(newTask => setTask({...newTask}));
-
         const updatedSourceColumn: Column = { ...sourceColumn};
         const sNewTaskIDs = [...(updatedSourceColumn.taskIDs || [])];
         const ind = sNewTaskIDs.findIndex(tID => tID === task.id);
@@ -232,9 +229,15 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         };
 
         Promise.all([
+            props.updateTask(updatedTask).then(newTask => setTask({...newTask})),
             props.updateColumn(updatedSourceColumn),
             props.updateColumn(updatedTargetColumn)
-        ]);
+        ])
+        .then(responses => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
     };
 
     const handleAsigneeChange = (asignee: User) => {
@@ -247,7 +250,11 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         }
 
         props.updateTask(updatedTask)
-        .then(newTask => setTask({...newTask}));
+        .then(newTask => setTask({...newTask}))
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
     };
 
     const handleDelete = () => {
@@ -273,15 +280,17 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         promises.push(props.updateColumn({...column}));
         promises.push(props.deleteTask(props.task));
             
-
         Promise.all(promises)
         .then(() => {
             props.history.replace("/workplace/" + board.code);
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
     };
 
-    const handleUpdateTask = (data: any): [Promise<any>, () => void, () => void] => {
+    const handleUpdateTask = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         const dto: TaskDTO = {
             ...props.task,
             ...data
@@ -291,10 +300,13 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
             props.task
             ? props.updateTaskAndAttachments({...props.task, updated: (new Date()).toISOString()}, dto)
             : Promise.reject(),
-            () => {
+            response => {
                 setEditMode(false)
             },
-            () => {}
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
         ];
     };
 

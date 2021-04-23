@@ -64,11 +64,15 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
             ...props.account,
             ...userDetails
         })
-        .then(response => {
+        .then(response => { })
+        .catch(erorr => {
+            //TO DO: handle error
+            alert("Error occured.");
+        })
+        .finally(() => {
             setLoading(false);
             setHasChange(false);
-        })
-        .catch(erorr => { });
+        });
     };
 
     const handleProfilePictureChange = (pic: File) => {
@@ -86,13 +90,17 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
         req
         .then(() => {
             return StorageAPI.upload(pic, true, filename);
-        }).then(uploadedFile => {
+        })
+        .then(uploadedFile => {
             props.updateUserDetails({
                 ...props.account,
                 profilePicture: uploadedFile
             })
         })
-        .catch(error => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        })
         .finally(() => setLoading(false));
     };
 

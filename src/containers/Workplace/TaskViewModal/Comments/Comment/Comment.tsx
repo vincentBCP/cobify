@@ -105,7 +105,10 @@ const CommentComp: React.FC<ICommentProps> = props => {
         .then(comment => {
             setTextEditorValue(null);
         })
-        .catch(error => {})
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        })
         .finally(() => setLoading(false));
     }
 
@@ -120,7 +123,8 @@ const CommentComp: React.FC<ICommentProps> = props => {
         props.deleteComment(props.comment)
         .then(() => {})
         .catch(error => {
-            console.log(error);
+            //TO DO: handle error
+            alert("Error occured.");
         })
         .finally(() => setLoading(false));
     }

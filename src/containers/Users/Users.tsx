@@ -51,7 +51,7 @@ const Users: React.FC<IUsersProps> = props => {
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const boards: Board[] = useSelector((state: any) => state.board.boards);
 
-    const handleUserSubmit = (data: any): [Promise<any>, () => void, () => void] =>  {
+    const handleUserSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
         const request = user
             ? props.updateUser({
                 ...user,
@@ -66,11 +66,12 @@ const Users: React.FC<IUsersProps> = props => {
 
         return [
             request,
-            () => { // succes callback
+            response => { // succes callback
                 setOpen(false);
             },
-            () => { // fail callback
-
+            error => { // fail callback
+                //TO DO: handle error
+                alert("Error occured.");
             }
         ];
     }
@@ -79,7 +80,7 @@ const Users: React.FC<IUsersProps> = props => {
         setOpen(false);
     }
 
-    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, () => void, () => void] => {
+    const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         const promises: any = [];
 
         ids.forEach(id => {
@@ -96,18 +97,26 @@ const Users: React.FC<IUsersProps> = props => {
             promises.push(props.deleteUser(id, user.email));
         });
 
-        return [Promise.all(promises), () => {}, () => {}];
+        return [
+            Promise.all(promises),
+            respones => {},
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
+        ];
     }
 
-    const handleUserInvitationSubmit = (dto: InvitationDTO): [Promise<any>, () => void, () => void] => {
+    const handleUserInvitationSubmit = (dto: InvitationDTO): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return [
             props.sendInvitation(dto),
-            () => { // succes callback
+            response => { // succes callback
                 setOpenInvitation(false);
                 setUser(null);
             },
-            () => { // fail callback
-
+            error => { // fail callback
+                //TO DO: handle error
+                alert("Error occured.");
             }
         ];
     }
@@ -117,11 +126,14 @@ const Users: React.FC<IUsersProps> = props => {
         setUser(null);
     }
 
-    const handleRemoveInvitation = (id: string): [Promise<any>, () => void, () => void] => {
+    const handleRemoveInvitation = (id: string): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return [
             props.deleteInvitation(id),
-            () => {},
-            () => {}
+            response => {},
+            error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            }
         ];
     };
 
@@ -141,7 +153,7 @@ const Users: React.FC<IUsersProps> = props => {
                                 key={i.id}
                                 label={board.name}
                                 color={board.color}
-                                handleDelete={(): [Promise<any>, () => void, () => void] => 
+                                handleDelete={(): [Promise<any>, (arg: any) => void, (arg: any) => void] => 
                                     handleRemoveInvitation(i.id)}
                             />;
                         }

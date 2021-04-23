@@ -16,7 +16,7 @@ interface IFormInputs {
 interface ITaskFormModalProps {
     open?: boolean,
     task?: Task,
-    handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
+    handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void],
     handleCancel: () => void
 }
 
@@ -38,7 +38,7 @@ const TaskFormModal: React.FC<ITaskFormModalProps> = props => {
         });
     }, [ props.open, props.task ]);
 
-    const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
+    const handleFormSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         const obj = {
             ...data,
             description: textEditorValue?.content || "",

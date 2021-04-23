@@ -28,7 +28,6 @@ export const getComments = (account: User) => {
                 resolve(true);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         })
@@ -64,7 +63,6 @@ export const createComment = (dto: CommentDTO) => {
                 resolve(comment);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -124,7 +122,6 @@ export const updateComment = (comment: Comment, dto: CommentDTO) => {
                 resolve(comment);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });
@@ -152,7 +149,6 @@ export const deleteComment = (comment: Comment) => {
                 resolve(id);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         });

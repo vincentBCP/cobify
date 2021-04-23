@@ -63,7 +63,8 @@ const ContactSupport: React.FC = props => {
             setSuccess(true);
         })
         .catch(error => {
-            console.log(error.response);
+            //TO DO: handle error
+            alert("Error occured.");
             setError(true);
         })
         .finally(() => {

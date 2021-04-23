@@ -17,14 +17,14 @@ interface IFormInputs {
 interface IColumnFormModalProps {
     open?: boolean,
     column?: Column | null,
-    handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
+    handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void],
     handleCancel: () => void
 }
 
 const ColumnFormModal: React.FC<IColumnFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
-    const handleFormSubmit = (data: any): [Promise<any>, () => void, () => void] => {
+    const handleFormSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return props.handleSubmit(data);
     }
 

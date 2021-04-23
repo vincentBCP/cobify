@@ -163,7 +163,12 @@ const Columns: React.FC<IColumnsProps> = props => {
                 type: actionTypes.UPDATE_COLUMN,
                 payload: {...updatedTargetColumn}
             });
-            ColumnAPI.updateColumn(updatedTargetColumn);
+            ColumnAPI.updateColumn(updatedTargetColumn)
+            .then(response => { })
+            .catch(error => {
+                //TO DO: handle error
+                alert("Error occured.");
+            });
 
             clearDnD();
             return;
@@ -175,7 +180,12 @@ const Columns: React.FC<IColumnsProps> = props => {
             type: actionTypes.UPDATE_COLUMN,
             payload: {...updatedTargetColumn}
         });
-        ColumnAPI.updateColumn(updatedTargetColumn);
+        ColumnAPI.updateColumn(updatedTargetColumn)
+        .then(response => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
 
         const updatedSourceTask: Task = {
             ...sourceTask,
@@ -187,7 +197,12 @@ const Columns: React.FC<IColumnsProps> = props => {
             type: actionTypes.UPDATE_TASK,
             payload: {...updatedSourceTask}
         });
-        TaskAPI.updateTask(updatedSourceTask);
+        TaskAPI.updateTask(updatedSourceTask)
+        .then(response => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
         
         const updatedSourceColumn: Column = {
             ...sColumn,
@@ -200,7 +215,12 @@ const Columns: React.FC<IColumnsProps> = props => {
             type: actionTypes.UPDATE_COLUMN,
             payload: {...updatedSourceColumn}
         });
-        ColumnAPI.updateColumn(updatedSourceColumn);
+        ColumnAPI.updateColumn(updatedSourceColumn)
+        .then(response => { })
+        .catch(error => {
+            //TO DO: handle error
+            alert("Error occured.");
+        });
 
         clearDnD();
     }

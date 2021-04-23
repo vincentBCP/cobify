@@ -20,7 +20,7 @@ interface IFormInputs {
 
 interface IAccountFormModalProps {
     open?: boolean,
-    handleSubmit: (arg1: any) => [Promise<any>, () => void, () => void],
+    handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void],
     handleCancel: () => void
 }
 
@@ -29,7 +29,7 @@ const AccountFormModal: React.FC<IAccountFormModalProps> = props => {
 
     const users: User[] = useSelector((state: any) => state.user.users);
 
-    const handleFormSubmit = (data: IFormInputs): [Promise<any>, () => void, () => void] => {
+    const handleFormSubmit = (data: IFormInputs): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return props.handleSubmit(data);
     }
 
