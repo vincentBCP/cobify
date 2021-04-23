@@ -1,3 +1,8 @@
-export const DATABASE_URL = "https://cobify-vbcp-default-rtdb.firebaseio.com/";
-export const API_KEY = "AIzaSyB4lWbO9exgCe-SJQz5m0KQZvpZsNUBBvU";
-export const BUCKET = "cobify-vbcp.appspot.com";
+export const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyB4lWbO9exgCe-SJQz5m0KQZvpZsNUBBvU",
+    authDomain: "cobify-vbcp.firebaseapp.com",
+    databaseURL: "https://cobify-vbcp-default-rtdb.firebaseio.com/",
+    projectId: "cobify-vbcp",
+    storageBucket: 'cobify-vbcp.appspot.com',
+    messagingSenderId: "",
+}

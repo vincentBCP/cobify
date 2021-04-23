@@ -1,25 +1,20 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import axios from '../axios';
-
 import CommentDTO from '../models/dto/CommentDTO';
 import Comment from '../models/types/Comment';
 
-const path = "comments/";
-const extension = ".json";
+import API from './API';
 
-class CommentAPI {
-    public static getComments(): Promise<Comment[]> {
-        return axios.get(path + extension)
-            .then(response => {
-                const data: any = response.data || {};
+class CommentAPI extends API<Comment> {
+    constructor() {
+        super("comments");
+    }
 
-                return Object.keys(data).map(key =>
-                    ({...data[key]} as Comment))
-            });
+    public getComments(): Promise<Comment[]> {
+        return super.getRecords();
     };
 
-    public static createComment(dto: CommentDTO): Promise<Comment> {
+    public createComment(dto: CommentDTO): Promise<Comment> {
         const commentID = uuidv4();
 
         const d: any = {...dto};
@@ -29,19 +24,16 @@ class CommentAPI {
             ...d
         }
 
-        return axios.put(path + commentID + extension, newComment)
-            .then(response => newComment);
+        return super.create(commentID, newComment);
     };
 
-    public static updateComment(comment: Comment): Promise<Comment> {
-        return axios.put(path + comment.id + extension, comment)
-                .then(response => comment);
+    public updateComment(comment: Comment): Promise<Comment> {
+        return super.update(comment.id, comment);
     }
 
-    public static deleteComment(id: string): Promise<string> {
-        return axios.delete(path + id + extension)
-            .then(response => id);
+    public deleteComment(id: string): Promise<string> {
+        return super.delete(id);
     };
 };
 
-export default CommentAPI;
+export default new CommentAPI();

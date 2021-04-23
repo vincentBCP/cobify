@@ -1,51 +1,29 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import axios from '../axios';
-
 import UserDTO from '../models/dto/UserDTO';
 import User from '../models/types/User';
 
-import { API_KEY } from '../config';
+import API from './API';
+import AuthAPI from './AuthAPI';
 
-const path = "users/";
-const extension = ".json";
+class UserAPI extends API<User> {
+    constructor() {
+        super("users");
+    }
 
-class UserAPI {
-    public static getUsers(): Promise<User[]> {
-        return axios.get(path + extension)
-            .then(response => {
-                const data: any = response.data || {};
-
-                return Object.keys(data).map(key =>
-                    ({...data[key]} as User));
-            });
+    public getUsers(): Promise<User[]> {
+        return super.getRecords();
     };
 
-    public static getRecordPath(email: string): string {
+    private getRecordPath(email: string): string {
         return (email.split("@")[0]).split(".").join("_");
     }
 
-    public static getUser(email: string): Promise<any> {
-        return axios.get(path + UserAPI.getRecordPath(email) + extension)
-        .then(response => {
-            if (!Boolean(response.data)) {
-                return Promise.reject({
-                    response:{
-                        data: {
-                            error: {
-                                message: "EMAIL_NOT_FOUND"
-                            }
-                        }
-                    }
-                });
-            } else {
-                const user: User = {...response.data}
-                return user;
-            }
-        });
+    public getUser(email: string): Promise<User> {
+        return super.getRecord(this.getRecordPath(email));
     };
 
-    public static createUser(dto: UserDTO): Promise<User> {
+    public createUser(dto: UserDTO): Promise<User> {
         return new Promise((resolve, reject) => {
             const userID = uuidv4();
 
@@ -56,11 +34,9 @@ class UserAPI {
                 initials: ((dto.firstName).charAt(0).toUpperCase() + (dto.lastName).charAt(0)).toUpperCase()
             };
 
-            axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + API_KEY,
-                    { email: dto.email, password: "D3f@ult!", role: dto.role, returnSecureToken: true}
-            )
-            .then(() => {
-                return axios.put(path + UserAPI.getRecordPath(dto.email) + extension, newUser)
+            AuthAPI.signup(dto.email, "D3f@ult!")
+            .then(response => {
+                return super.create(this.getRecordPath(dto.email), newUser);
             })
             .then(response => {
                 resolve(newUser);
@@ -69,20 +45,20 @@ class UserAPI {
         });
     };
 
-    public static updateUser(user: User): Promise<User> {
+    public updateUser(user: User): Promise<User> {
         const u: User = {
             ...user,
             displayName: user.firstName + " " + user.lastName,
             initials: ((user.firstName).charAt(0).toUpperCase() + (user.lastName).charAt(0)).toUpperCase()
         }
-        return axios.put(path + UserAPI.getRecordPath(user.email) + extension, u)
-        .then(response => u);
+
+        return super.update(this.getRecordPath(user.email), u);
     };
 
-    public static deleteUser(email: string): Promise<string> {
-        return axios.delete(path + UserAPI.getRecordPath(email) + extension)
-            .then(response => email);
+    public deleteUser(email: string): Promise<string> {
+        return super.delete(this.getRecordPath(email))
+            .then(() => email);
     };
 };
 
-export default UserAPI;
+export default new UserAPI();

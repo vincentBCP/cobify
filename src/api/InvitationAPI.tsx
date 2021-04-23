@@ -1,25 +1,20 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import axios from '../axios';
-
 import InvitationDTO from '../models/dto/InvitationDTO';
 import Invitation from '../models/types/Invitation';
 
-const path = "invitations/";
-const extension = ".json";
+import API from './API';
 
-class InvitationAPI {
-    public static getInvitations(): Promise<Invitation[]> {
-        return axios.get(path + extension)
-            .then(response => {
-                const data: any = response.data || {};
+class InvitationAPI extends API<Invitation> {
+    constructor() {
+        super("invitations");
+    }
 
-                return Object.keys(data).map(key =>
-                    ({...data[key]} as Invitation))
-            });
+    public getInvitations(): Promise<Invitation[]> {
+        return super.getRecords();
     };
 
-    public static sendInvitation(dto: InvitationDTO): Promise<Invitation> {
+    public sendInvitation(dto: InvitationDTO): Promise<Invitation> {
         const invitationID = uuidv4();
 
         const newInvitation: Invitation = {
@@ -28,14 +23,12 @@ class InvitationAPI {
             link: ""
         };
 
-        return axios.put(path + invitationID + extension, newInvitation)
-            .then(response => newInvitation);
+        return super.create(invitationID, newInvitation);
     };
 
-    public static deleteInvitation(id: string): Promise<string> {
-        return axios.delete(path + id + extension)
-            .then(response => id);
+    public deleteInvitation(id: string): Promise<string> {
+        return super.delete(id);
     };
 };
 
-export default InvitationAPI;
+export default new InvitationAPI();

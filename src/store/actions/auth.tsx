@@ -7,16 +7,13 @@ export const login = (email: string, password: string) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
             AuthAPI
-            .login(email, password)
-            .then(response => {
-                localStorage.setItem("token", response.data.idToken);
-                localStorage.setItem("refreshToken", AuthAPI.encrypt(response.data.refreshToken));
+            .signin(email, password)
+            .then(refreshToken => {
+                localStorage.setItem("refreshToken", refreshToken);
                 
                 return UserAPI.getUser(email);
             })
             .then(user => {
-                localStorage.setItem("email", user.email);
-
                 dispatch({
                     type: actionTypes.SET_ACCOUNT,
                     payload: user
@@ -25,9 +22,7 @@ export const login = (email: string, password: string) => {
                 resolve(true);
             })
             .catch(error => {
-                localStorage.removeItem("token");
                 localStorage.removeItem("refreshToken");
-                localStorage.removeItem("email");
 
                 console.log(error);
                 reject(error);
@@ -39,12 +34,28 @@ export const login = (email: string, password: string) => {
 export const checkAuth = () => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            const storedIDToken = localStorage.getItem("token");
-            const storedRefreshToken = localStorage.getItem("refreshToken");
+            AuthAPI.isLoggedIn()
+            .then(user => {
+                const email = user.email;
+
+                return UserAPI.getUser(email);
+            })
+            .then(user => {
+                dispatch({
+                    type: actionTypes.SET_ACCOUNT,
+                    payload: user
+                });
+
+                resolve(user);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+            /*const storedRefreshToken = localStorage.getItem("refreshToken");
             const storedEmail = localStorage.getItem("email");
 
-            if (!Boolean(storedIDToken) || !Boolean(storedRefreshToken) || !Boolean(storedEmail)) {
-                localStorage.removeItem("token");
+            if (!Boolean(storedRefreshToken) || !Boolean(storedEmail)) {
                 localStorage.removeItem("refreshToken");
                 localStorage.removeItem("email");
 
@@ -53,10 +64,10 @@ export const checkAuth = () => {
             }
 
             AuthAPI
-            .reLogin(AuthAPI.decrypt(storedRefreshToken || ""))
+            .reLogin(storedRefreshToken || "")
             .then(response => {
                 localStorage.setItem("token", response.data.id_token);
-                localStorage.setItem("refreshToken", AuthAPI.encrypt(response.data.refresh_token));
+                localStorage.setItem("refreshToken", response.data.refresh_token);
 
                 return UserAPI.getUser(storedEmail || "");
             })
@@ -69,13 +80,12 @@ export const checkAuth = () => {
                 resolve(user);
             })
             .catch(error => {
-                localStorage.removeItem("token");
                 localStorage.removeItem("refreshToken");
                 localStorage.removeItem("email");
                 
                 console.log(error);
                 reject(error);
-            });
+            });*/
         });
     };
 };

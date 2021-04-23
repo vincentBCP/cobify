@@ -1,11 +1,11 @@
 import axios from '../axios';
 import { format } from 'date-fns';
 
-import { BUCKET } from '../config';
+import { FIREBASE_CONFIG } from '../config';
 
 import IAttachment from '../models/interfaces/IAttachment';
 
-const URL = "https://firebasestorage.googleapis.com/v0/b/" + BUCKET + "/o/";
+const URL = "https://firebasestorage.googleapis.com/v0/b/" + FIREBASE_CONFIG.storageBucket + "/o/";
 const attachmentURL = URL + "attachments%2F";
 const profilePicURL = URL + "profilePicture%2F";
 

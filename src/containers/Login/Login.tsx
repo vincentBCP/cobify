@@ -87,7 +87,9 @@ const Login: React.FC<ILoginProps> = props => {
         })
         .catch(error => {
             // https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
-            const errMsg = error.response.data.error.message;
+
+            console.log(error);
+            const errMsg = error.response ? error.response.data.error.message : "ERR_OCCURED";
 
             switch (errMsg) {
                 case 'EMAIL_NOT_FOUND':

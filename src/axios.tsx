@@ -1,19 +1,19 @@
 import axios from 'axios';
 
-import { DATABASE_URL } from './config';
+import { FIREBASE_CONFIG } from './config';
 
 const instance = axios.create({
-    baseURL: DATABASE_URL
+    baseURL: FIREBASE_CONFIG.databaseURL
 });
 
 instance.interceptors.request.use(
     config => {
         
-        if (config.url?.endsWith('.json')) { // add auth to realtime database request
+        /*if (config.url?.endsWith('.json')) { // add auth to realtime database request
             const token = localStorage.getItem("token");
 
             config.url = config.url + "?auth=" + token;
-        }
+        }*/
 
         return config;
     },

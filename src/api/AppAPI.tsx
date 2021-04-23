@@ -1,6 +1,9 @@
 import { AxiosResponse } from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 import axios from '../axios';
+
+import firebase from '../firebase';
 
 class AppAPI {
     public static requestCode(email: string): Promise<AxiosResponse> {
@@ -16,11 +19,15 @@ class AppAPI {
     }
 
     public static sendSupportMessage(email: string, subject: string, content: string): Promise<any> {
-        return axios.post('supportMessages.json', {
-            email: email,
-            subject: subject,
-            content: content
-        });
+        const id = uuidv4();
+
+        return firebase.database().ref("supportMessages/" + id)
+            .set({
+                id: id,
+                email: email,
+                subject: subject,
+                content: content
+            });
     }
 };
 

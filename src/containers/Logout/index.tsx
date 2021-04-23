@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
+import firebase from '../../firebase';
+
 const Logout: React.FC = props => {
     useEffect(() => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("email");
+        firebase.auth().signOut();
         window.location.reload();
     }, []);
 

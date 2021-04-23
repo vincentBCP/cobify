@@ -24,6 +24,8 @@ import UserRole from './models/enums/UserRole';
 
 import withErrorHandler from './hoc/withErrorHandler';
 
+import firebase from './firebase';
+
 interface IAppProps {
     checkAuth: () => Promise<User>,
     getBoards: (arg1: User) => Promise<any>,
@@ -39,6 +41,27 @@ const App: React.FC<IAppProps> = props => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [account, setAccount] = useState<User | null>();
+
+    /*useEffect(() => {
+        if (!account) return;
+
+        var tasksRef = firebase.database().ref('tasks');
+
+        tasksRef.on('child_added', (data) => {
+            console.log("added");
+            console.log(data);
+        });
+
+        tasksRef.on('child_changed', (data) => {
+            console.log("changed");
+            console.log(data);
+        });
+
+        tasksRef.on('child_removed', (data) => {
+            console.log("removed");
+            console.log(data);
+        });
+    }, [account]);*/
 
     useEffect(() => {
         checkAuth()

@@ -13,7 +13,7 @@ const withErrorHandler = (WrappedComponent: React.FC) => {
         const [error, clearError] = useHttpErrorHandler(axios);
 
         if (error && error?.response?.status === 401) {
-            window.location.reload();
+            // window.location.reload();
         }
 
         return (

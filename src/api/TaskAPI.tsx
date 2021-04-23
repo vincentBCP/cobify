@@ -1,25 +1,20 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import axios from '../axios';
-
 import TaskDTO from '../models/dto/TaskDTO';
 import Task from '../models/types/Task';
 
-const path = "tasks/";
-const extension = ".json";
+import API from './API';
 
-class TaskAPI {
-    public static getTasks(): Promise<Task[]> {
-        return axios.get(path + extension)
-            .then(response => {
-                const data: any = response.data || {};
+class TaskAPI extends API<Task> {
+    constructor() {
+        super("tasks");
+    }
 
-                return Object.keys(data).map(key =>
-                    ({...data[key]} as Task))
-            });
+    public getTasks(): Promise<Task[]> {
+        return super.getRecords();
     };
 
-    public static createTask(dto: TaskDTO): Promise<Task> {
+    public createTask(dto: TaskDTO): Promise<Task> {
         const taskID = uuidv4();
 
         const d: any = {...dto};
@@ -29,19 +24,16 @@ class TaskAPI {
             ...d
         }
 
-        return axios.put(path + taskID + extension, newTask)
-            .then(response => newTask);
+        return super.create(taskID, newTask);
     };
 
-    public static updateTask(task: Task): Promise<Task> {
-        return axios.put(path + task.id + extension, task)
-                .then(response => task);
+    public updateTask(task: Task): Promise<Task> {
+        return super.update(task.id, task);
     }
 
-    public static deleteTask(id: string): Promise<string> {
-        return axios.delete(path + id + extension)
-            .then(response => id);
+    public deleteTask(id: string): Promise<string> {
+        return super.delete(id);
     };
 };
 
-export default TaskAPI;
+export default  new TaskAPI();

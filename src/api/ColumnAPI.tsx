@@ -1,25 +1,20 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import axios from '../axios';
-
 import ColumnDTO from '../models/dto/ColumnDTO';
 import Column from '../models/types/Column';
 
-const path = "columns/";
-const extension = ".json";
+import API from './API';
 
-class ColumnAPI {
-    public static getColumns(): Promise<Column[]> {
-        return axios.get(path + extension)
-            .then(response => {
-                const data: any = response.data || {};
+class ColumnAPI extends API<Column> {
+    constructor() {
+        super("columns");
+    }
 
-                return Object.keys(data).map(key =>
-                    ({...data[key]} as Column))
-            });
+    public getColumns(): Promise<Column[]> {
+        return super.getRecords();
     };
 
-    public static createColumn(dto: ColumnDTO): Promise<Column> {
+    public createColumn(dto: ColumnDTO): Promise<Column> {
         const columnID = uuidv4();
 
         const newColumn: Column = {
@@ -27,19 +22,16 @@ class ColumnAPI {
             ...dto
         };
 
-        return axios.put(path + columnID + extension, newColumn)
-            .then(response => newColumn);
+        return super.create(columnID, newColumn);
     };
 
-    public static updateColumn(column: Column): Promise<Column> {
-        return axios.put(path + column.id + extension, column)
-            .then(response => column);
+    public updateColumn(column: Column): Promise<Column> {
+        return super.update(column.id, column);
     }
 
-    public static deleteColumn(id: string): Promise<string> {
-        return axios.delete(path + id + extension)
-            .then(response => id);
+    public deleteColumn(id: string): Promise<string> {
+        return super.delete(id);
     };
 };
 
-export default ColumnAPI;
+export default new ColumnAPI();
