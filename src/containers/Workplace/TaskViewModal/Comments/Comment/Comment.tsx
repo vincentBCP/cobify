@@ -21,6 +21,8 @@ import Avatar from '../../../../../widgets/Avatar';
 
 import * as actions from '../../../../../store/actions';
 
+import ErrorContext from '../../../../../context/errorContext';
+
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
@@ -76,6 +78,8 @@ const CommentComp: React.FC<ICommentProps> = props => {
     const [textEditorValue, setTextEditorValue] = useState<ITextEditorValue | null>();
     const [loading, setLoading] = useState(false);
 
+    const errorContext = React.useContext(ErrorContext);
+
     const account = useSelector((state: any) => state.app.account);
     const user = useSelector((state: any) => state.user.users.find((u: User) => u.id === props.comment.userID));
 
@@ -106,8 +110,7 @@ const CommentComp: React.FC<ICommentProps> = props => {
             setTextEditorValue(null);
         })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         })
         .finally(() => setLoading(false));
     }
@@ -123,8 +126,7 @@ const CommentComp: React.FC<ICommentProps> = props => {
         props.deleteComment(props.comment)
         .then(() => {})
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         })
         .finally(() => setLoading(false));
     }

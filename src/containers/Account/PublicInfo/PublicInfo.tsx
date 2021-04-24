@@ -20,6 +20,8 @@ import StorageAPI from '../../../api/StorageAPI';
 
 import * as actions from '../../../store/actions';
 
+import ErrorContext from '../../../context/errorContext';
+
 export type PublicInfoDetails = {
     firstName: string,
     lastName: string
@@ -34,6 +36,8 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
     const [hasChange, setHasChange] = useState<boolean>(false);
     const [userDetails, setUserDetails] = useState<PublicInfoDetails>();
     const [loading, setLoading] = useState(false);
+
+    const errorContext = React.useContext(ErrorContext);
 
     useEffect(() => {
         if (!props.account) return;
@@ -65,9 +69,8 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
             ...userDetails
         })
         .then(response => { })
-        .catch(erorr => {
-            //TO DO: handle error
-            alert("Error occured.");
+        .catch(error => {
+            errorContext.setError(error);
         })
         .finally(() => {
             setLoading(false);
@@ -98,8 +101,7 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
             })
         })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         })
         .finally(() => setLoading(false));
     };

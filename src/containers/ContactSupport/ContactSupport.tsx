@@ -19,6 +19,8 @@ import Alert from '../../widgets/Alert';
 
 import AppAPI from '../../api/AppAPI';
 
+import ErrorContext from '../../context/errorContext';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -43,10 +45,11 @@ interface IFormInputs {
 const ContactSupport: React.FC = props => {
     const classes = useStyles();
 
+    const errorContext = React.useContext(ErrorContext);
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
     const account = useSelector((state: any) => state.app.account);
@@ -63,9 +66,7 @@ const ContactSupport: React.FC = props => {
             setSuccess(true);
         })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
-            setError(true);
+            errorContext.setError(error);
         })
         .finally(() => {
             setLoading(false);
@@ -74,17 +75,6 @@ const ContactSupport: React.FC = props => {
 
     return (
         <Auxi>
-            {
-                error
-                ? <Alert
-                    open={true}
-                    type="error"
-                    handleClose={() => setError(false)}
-                    message="Request failed!"
-                />
-                : null
-            }
-
             {
                 success
                 ? <Alert

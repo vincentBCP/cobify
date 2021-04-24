@@ -36,6 +36,8 @@ import UserRole from '../../../models/enums/UserRole';
 
 import * as actions from '../../../store/actions';
 
+import ErrorContext from '../../../context/errorContext';
+
 interface ITaskViewModalProps {
     board?: Board,
     task?: Task,
@@ -178,6 +180,8 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     const [editMode, setEditMode] = useState(false);
     const [_creator, setCreator] = useState<User>();
 
+    const errorContext = React.useContext(ErrorContext);
+
     useEffect(() => {
         if (!props.task) return;
         
@@ -235,8 +239,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         ])
         .then(responses => { })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
     };
 
@@ -252,8 +255,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         props.updateTask(updatedTask)
         .then(newTask => setTask({...newTask}))
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
     };
 
@@ -285,8 +287,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
             props.history.replace("/workplace/" + board.code);
         })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
     };
 
@@ -304,8 +305,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                 setEditMode(false)
             },
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     };

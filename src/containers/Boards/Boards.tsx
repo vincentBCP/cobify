@@ -34,6 +34,8 @@ import Avatar from '../../widgets/Avatar';
 
 import * as actions from '../../store/actions';
 
+import ErrorContext from '../../context/errorContext';
+
 interface IBoardsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
@@ -49,6 +51,8 @@ const Boards: React.FC<IBoardsProps> = props => {
     const [board, setBoard] = useState<Board | null>(null);
     const [open, setOpen] = useState(false);
     const [openInvitation, setOpenInvitation] = useState(false);
+
+    const errorContext = React.useContext(ErrorContext);
 
     const account: any = useSelector((state: any) => state.app.account);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
@@ -69,8 +73,7 @@ const Boards: React.FC<IBoardsProps> = props => {
             props.deleteInvitation(id),
             response => {},
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     };
@@ -93,8 +96,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                 setOpen(false);
             },
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -138,8 +140,7 @@ const Boards: React.FC<IBoardsProps> = props => {
             Promise.all(promises),
             respone => {},
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -152,8 +153,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                 setBoard(null);
             },
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }

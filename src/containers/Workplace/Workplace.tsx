@@ -39,6 +39,8 @@ import * as actionTypes from '../../store/actions/actionTypes';
 import BoardAPI from '../../api/BoardAPI';
 import ColumnAPI from '../../api/ColumnAPI';
 
+import ErrorContext from '../../context/errorContext';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -71,6 +73,8 @@ interface IWorkplaceProps {
 const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
+
+    const errorContext = React.useContext(ErrorContext);
 
     const [showColumnForm, setShowColumnForm] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState<Column | null>();
@@ -156,16 +160,9 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 type: actionTypes.UPDATE_BOARD,
                 payload: updatedBoard
             });
-            BoardAPI.updateBoard(updatedBoard)
-            .then(response => { })
-            .catch(error => {
-                //TO DO: handle error
-                alert("Error occured.");
-            });
-
             setBoard(updatedBoard);
 
-            return column;
+            return BoardAPI.updateBoard(updatedBoard);
         });
         
         return [
@@ -174,8 +171,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 setShowColumnForm(false);
             },
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -225,21 +221,14 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                     type: actionTypes.UPDATE_COLUMN,
                     payload: updatedColumn
                 });
-                ColumnAPI.updateColumn(updatedColumn)
-                .then(response => { })
-                .catch(error => {
-                    //TO DO: handle error
-                    alert("Error occured.");
-                });
 
-                return task;
+                return ColumnAPI.updateColumn(updatedColumn);
             }),
             response => {
                 setAddTask(false);
             },
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -265,8 +254,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         ])
         .then(response => { })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
     }
 
@@ -284,8 +272,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         BoardAPI.updateBoard(updatedBoard)
         .then(response => { })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
     }
 

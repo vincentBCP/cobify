@@ -15,6 +15,8 @@ import Task from '../../../../models/types/Task'
 
 import * as actions from '../../../../store/actions';
 
+import ErrorContext from '../../../../context/errorContext';
+
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
@@ -54,6 +56,8 @@ const Comments: React.FC<ICommentsProps> = props => {
     const [textEditorValue, setTextEditorValue] = useState<ITextEditorValue | null>();
     const [loading, setLoading] = useState(false);
 
+    const errorContext = React.useContext(ErrorContext);
+
     const account = useSelector((state: any) => state.app.account);
     const comments: Comment[] = useSelector((state: any) => 
         state.comment.comments.filter((c: Comment) => c.taskID === props.task?.id));
@@ -82,8 +86,7 @@ const Comments: React.FC<ICommentsProps> = props => {
             setTextEditorValue(null);
         })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         })
         .finally(() => setLoading(false));
     };

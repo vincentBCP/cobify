@@ -16,6 +16,8 @@ import TaskAPI from '../../../api/TaskAPI';
 
 import ColumnComp from './Column';
 
+import ErrorContext from '../../../context/errorContext';
+
 export interface IFilter {
     searchString?: string,
     userIDs?: string[]
@@ -43,6 +45,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const Columns: React.FC<IColumnsProps> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
+
+    const errorContext = React.useContext(ErrorContext);
 
     const [board, setBoard] = useState<Board>();
     const [sourceTask, setSourceTask] = useState<Task | null>(null);
@@ -166,8 +170,7 @@ const Columns: React.FC<IColumnsProps> = props => {
             ColumnAPI.updateColumn(updatedTargetColumn)
             .then(response => { })
             .catch(error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             });
 
             clearDnD();
@@ -183,8 +186,7 @@ const Columns: React.FC<IColumnsProps> = props => {
         ColumnAPI.updateColumn(updatedTargetColumn)
         .then(response => { })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
 
         const updatedSourceTask: Task = {
@@ -200,8 +202,7 @@ const Columns: React.FC<IColumnsProps> = props => {
         TaskAPI.updateTask(updatedSourceTask)
         .then(response => { })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
         
         const updatedSourceColumn: Column = {
@@ -218,8 +219,7 @@ const Columns: React.FC<IColumnsProps> = props => {
         ColumnAPI.updateColumn(updatedSourceColumn)
         .then(response => { })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         });
 
         clearDnD();

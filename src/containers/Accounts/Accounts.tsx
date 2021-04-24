@@ -30,6 +30,8 @@ import Avatar from '../../widgets/Avatar';
 
 import * as actions from '../../store/actions';
 
+import ErrorContext from '../../context/errorContext';
+
 interface IUsersProps {
     createUser: (arg1: UserDTO) => Promise<any>,
     deleteUser: (arg1: string, arg2: string) => Promise<any>,
@@ -42,6 +44,8 @@ interface IUsersProps {
 
 const Users: React.FC<IUsersProps> = props => {
     const [open, setOpen] = useState(false);
+
+    const errorContext = React.useContext(ErrorContext);
 
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) => state.user.users);
@@ -66,8 +70,7 @@ const Users: React.FC<IUsersProps> = props => {
                 setOpen(false);
             },
             (error: any) => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -127,8 +130,7 @@ const Users: React.FC<IUsersProps> = props => {
             Promise.all(promises),
             (response: any) => {},
             (error: any) => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }

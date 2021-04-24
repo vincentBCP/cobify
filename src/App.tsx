@@ -22,7 +22,7 @@ import * as actions from './store/actions';
 import User from './models/types/User';
 import UserRole from './models/enums/UserRole';
 
-import withErrorHandler from './hoc/withErrorHandler';
+import ErrorContext from './context/errorContext';
 
 import firebase from './firebase';
 
@@ -41,6 +41,8 @@ const App: React.FC<IAppProps> = props => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [account, setAccount] = useState<User | null>();
+
+    const errorContext = React.useContext(ErrorContext);
 
     /*useEffect(() => {
         if (!account) return;
@@ -99,11 +101,10 @@ const App: React.FC<IAppProps> = props => {
         Promise.all(promises)
         .then(() => { })
         .catch(error => {
-            //TO DO: handle error
-            alert("Error occured.");
+            errorContext.setError(error);
         })
         .finally(() => setLoading(false));
-    }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments ]);
+    }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments, errorContext ]);
 
     let routes = account?.role === UserRole.SYSADMIN
         ? <Switch>
@@ -160,4 +161,4 @@ const mapDispatchToProps = (dispatch: any) => {
     }
 };
 
-export default withErrorHandler(connect(null, mapDispatchToProps)(App));
+export default connect(null, mapDispatchToProps)(App);

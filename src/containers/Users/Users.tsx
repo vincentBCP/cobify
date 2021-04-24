@@ -32,6 +32,8 @@ import UserFormModal from './UserFormModal';
 
 import * as actions from '../../store/actions';
 
+import ErrorContext from '../../context/errorContext';
+
 interface IUsersProps {
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
@@ -44,6 +46,8 @@ const Users: React.FC<IUsersProps> = props => {
     const [openInvitation, setOpenInvitation] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [open, setOpen] = useState(false);
+
+    const errorContext = React.useContext(ErrorContext);
 
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) =>
@@ -70,8 +74,7 @@ const Users: React.FC<IUsersProps> = props => {
                 setOpen(false);
             },
             error => { // fail callback
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -101,8 +104,7 @@ const Users: React.FC<IUsersProps> = props => {
             Promise.all(promises),
             respones => {},
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -115,8 +117,7 @@ const Users: React.FC<IUsersProps> = props => {
                 setUser(null);
             },
             error => { // fail callback
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     }
@@ -131,8 +132,7 @@ const Users: React.FC<IUsersProps> = props => {
             props.deleteInvitation(id),
             response => {},
             error => {
-                //TO DO: handle error
-                alert("Error occured.");
+                errorContext.setError(error);
             }
         ];
     };
