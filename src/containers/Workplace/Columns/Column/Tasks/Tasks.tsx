@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: 10
         },
         footer: {
-            marginTop: 20,
+            marginTop: 10,
             display: 'flex',
             alignItems: 'center'
         },
