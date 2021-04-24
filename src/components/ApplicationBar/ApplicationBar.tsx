@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import Avatar from '../../widgets/Avatar';
+import OrganizationSelector from './OrganizationSelector';
 
 import { SIDE_NAVIGATION_WIDTH, SHRINK_SIDE_NAVIGATION_WIDTH } from '../SideNavigation/SideNavigation';
 
@@ -121,14 +121,9 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
                         </StyledBadge>
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Account">
-                    <IconButton>
-                        <Avatar
-                            size={30}
-                            account={account}
-                        />
-                    </IconButton>
-                </Tooltip>
+                <OrganizationSelector
+                
+                />
             </Toolbar>
         </AppBar>
     );

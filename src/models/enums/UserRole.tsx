@@ -1,8 +1,8 @@
 enum UserRole {
-    SYSADMIN = "sysAdmin",
-    ADMIN = "admin",
-    COADMIN = "coAdmin",
-    GUEST = "guest"
+    SYSADMIN = "System Admin",
+    ADMIN = "Administrator",
+    COADMIN = "Co-admin",
+    GUEST = "Guest"
 }
 
 export default UserRole;
