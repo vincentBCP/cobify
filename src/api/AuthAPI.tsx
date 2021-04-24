@@ -21,7 +21,12 @@ class AuthAPI {
     }
 
     public signup(email: string, password: string) {
-        return firebase.auth().createUserWithEmailAndPassword(email, password);
+        // logins the user automatically
+        // return firebase.auth().createUserWithEmailAndPassword(email, password);
+        return axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + 
+            FIREBASE_CONFIG.apiKey,
+            { email: email, password: "D3f@ult!", returnSecureToken: true}
+        );
     }
 
     public isLoggedIn(): Promise<any> {
