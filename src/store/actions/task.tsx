@@ -28,7 +28,6 @@ export const getTasks = (account: User) => {
                 resolve(true);
             })
             .catch(error => {
-                console.log(error);
                 reject(error);
             });
         })
