@@ -2,12 +2,16 @@ import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
-const Logo: React.FC = props => {
+interface ILogoProps {
+    invert?: boolean
+}
+
+const Logo: React.FC<ILogoProps> = props => {
     return (
         <Typography style={{
             fontSize: 24,
             fontWeight: 'bold',
-            color: '#c5c8cc',
+            color: props.invert ? '#233044' : '#c5c8cc',
             fontStyle: 'italic'
         }}>Cobify</Typography>
     );
