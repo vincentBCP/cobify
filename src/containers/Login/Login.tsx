@@ -210,8 +210,8 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
             <div className={classes.content}>                
                 <div className={classes.form}>
                     <div className={classes.header}>
-                        
-                        <Route
+                        <Logo />
+                        {/*<Route
                             path="/login"
                             render={() => (
                                 <Typography>Welcome</Typography>
@@ -222,7 +222,7 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                             render={() => (
                                 <Typography>Reset Password</Typography>
                             )}
-                        />
+                        />*/}
                     </div>
                     {
                         Boolean(errorMessage)
@@ -270,7 +270,7 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                     </div>
                 </div>
                 <div className={classes.demo}>
-                    <Logo invert={true} />
+                    <Typography>How it works?</Typography>
                     <div className={classes.carousel}>
                         <Carousel
                             animation="slide"
