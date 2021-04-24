@@ -39,9 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         appBar: {
             backgroundColor: 'white',
-            padding: 2,
             boxShadow: 'none',
-            zIndex: 1000
+            zIndex: 1000,
+            paddingTop: 2,
+            paddingLeft: 25
         },
         appBarOpen: {
             width: 'calc(100vw - ' + SIDE_NAVIGATION_WIDTH + 'px)',
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
             cursor: 'pointer',
             borderRadius: '50%',
             position: 'absolute',
-            left: -15,
+            left: -40,
 
             '& svg': {
                 color: '#ccc', 
