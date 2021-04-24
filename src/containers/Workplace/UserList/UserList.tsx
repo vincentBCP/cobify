@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 zIndex: '100 !important'
             },
             '&.selected': {
-                border: '2px dashed ' + theme.palette.primary.light
+                border: '2px solid ' + theme.palette.primary.light
             }
         },
         button: {
