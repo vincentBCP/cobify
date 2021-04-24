@@ -1,4 +1,5 @@
 import UserAPI from '../../api/UserAPI';
+import StorageAPI from '../../api/StorageAPI';
 
 import UserDTO from '../../models/dto/UserDTO';
 import User from '../../models/types/User';
@@ -71,17 +72,24 @@ export const updateUser = (user: User) => {
     };
 };
 
-export const deleteUser = (uID: string, email: string) => {
+export const deleteUser = (user: User) => {
     return (dispatch: any) => {
         return new Promise((resolve, reject) => {
-            UserAPI.deleteUser(email)
+            const promises: any = [];
+
+            if (user.profilePicture) {
+                promises.push(StorageAPI.delete(user.profilePicture));
+            }
+            promises.push(UserAPI.deleteUser(user.email))
+
+            Promise.all(promises)
             .then(email => {
                 dispatch({
                     type: actionTypes.DELETE_USER,
-                    payload: uID // user id
+                    payload: user.id // user id
                 });
 
-                resolve(uID);
+                resolve(user.id);
             })
             .catch(error => {
                 reject(error);

@@ -39,7 +39,7 @@ interface IUsersProps {
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
     createUser: (arg1: UserDTO) => Promise<any>,
     updateUser: (arg21: User) => Promise<any>,
-    deleteUser: (arg1: string, arg2: string) => Promise<any>
+    deleteUser: (arg1: User) => Promise<any>
 }
 
 const Users: React.FC<IUsersProps> = props => {
@@ -97,7 +97,7 @@ const Users: React.FC<IUsersProps> = props => {
                 promises.push(props.deleteInvitation(inv.id));
             });
 
-            promises.push(props.deleteUser(id, user.email));
+            promises.push(props.deleteUser(user));
         });
 
         return [
@@ -267,8 +267,8 @@ const mapDispatchToProps = (dispatch: any) => {
         sendInvitation: (dto: InvitationDTO) => dispatch(actions.sendInvitation(dto)),
         createUser: (dto: UserDTO) => dispatch(actions.createUser(dto)),
         updateUser: (user: User) => dispatch(actions.updateUser(user)),
-        deleteUser: (id: string, email: string) => 
-            dispatch(actions.deleteUser(id, email))
+        deleteUser: (user: User) => 
+            dispatch(actions.deleteUser(user))
     }
 };
 

@@ -1,6 +1,7 @@
 interface IAttachment {
     name: string,
-    downloadTokens: string,
+    path: string,
+    downloadURL: string,
     timeCreated: string
 }
 

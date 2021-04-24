@@ -87,7 +87,7 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
         const filename = props.account.id + "." + extension;
 
         const req = props.account.profilePicture 
-            ? StorageAPI.delete(props.account.profilePicture, true)
+            ? StorageAPI.delete(props.account.profilePicture)
             : Promise.resolve();
         
         req

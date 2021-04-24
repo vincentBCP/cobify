@@ -34,7 +34,7 @@ import ErrorContext from '../../context/errorContext';
 
 interface IUsersProps {
     createUser: (arg1: UserDTO) => Promise<any>,
-    deleteUser: (arg1: string, arg2: string) => Promise<any>,
+    deleteUser: (arg1: User) => Promise<any>,
     deleteBoard: (arg1: string) => Promise<any>,
     deleteColumn: (arg1: string) => Promise<string>,
     deleteComment: (arg1: Comment) => Promise<any>,
@@ -120,10 +120,10 @@ const Users: React.FC<IUsersProps> = props => {
             users.forEach(u => {
                 if (u.accountID !== user.id) return;
 
-                promises.push(props.deleteUser(u.id, u.email));
+                promises.push(props.deleteUser(u));
             });
 
-            promises.push(props.deleteUser(id, user.email));
+            promises.push(props.deleteUser(user));
         });
 
         return [
@@ -205,8 +205,8 @@ const Users: React.FC<IUsersProps> = props => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         createUser: (dto: UserDTO) => dispatch(actions.createUser(dto)),
-        deleteUser: (id: string, email: string) => 
-            dispatch(actions.deleteUser(id, email)),
+        deleteUser: (user: User) => 
+            dispatch(actions.deleteUser(user)),
         deleteBoard: (id: string) => dispatch(actions.deleteBoard(id)),
         deleteTask: (task: Task) => dispatch(actions.deleteTask(task)),
         deleteComment: (comment: Comment) => dispatch(actions.deleteComment(comment)),

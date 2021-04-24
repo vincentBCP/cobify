@@ -10,7 +10,6 @@ import Auxi from '../../hoc/Auxi';
 import './ImagePreview.scss';
 
 import IAttachment from '../../models/interfaces/IAttachment';
-import StorageAPI from '../../api/StorageAPI';
 
 interface IImagePreviewProps {
     file?: File | IAttachment,
@@ -36,7 +35,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
             reader.onerror = error => { };
         } else { // props.file is an URL
             setName(props.file?.name);
-            setUrl(StorageAPI.getAttachmentPublicUrl(props.file as IAttachment));
+            setUrl((props.file as IAttachment).downloadURL);
         }
     }, [ props.file ]);
 

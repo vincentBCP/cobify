@@ -6,8 +6,6 @@ import { deepPurple } from '@material-ui/core/colors';
 
 import User from '../../models/types/User';
 
-import StorageAPI from '../../api/StorageAPI';
-
 interface IAvatarProps {
     size: number,
     account: User
@@ -28,9 +26,7 @@ const ProfileAvatar: React.FC<IAvatarProps> = props => {
                 backgroundColor: props.account.color ? props.account.color : deepPurple[500],
                 color: theme.palette.getContrastText(props.account.color ? props.account.color : deepPurple[500])
             }}
-            src={props.account.profilePicture
-                ? StorageAPI.getAttachmentPublicUrl(props.account.profilePicture, true)
-                : ""}
+            src={props.account.profilePicture ? props.account.profilePicture.downloadURL : ""}
         >
             {props.account.initials}
         </Avatar>
