@@ -52,9 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'relative'
         },
         header: {
-            padding: "30px 50px 30px 50px",
+            padding: "30px 50px 0px 50px",
             display: 'flex',
             alignItems: 'center',
+        },
+        content: {
+            overflow: 'auto'
         },
         button: {
             marginRight: 10,
@@ -350,16 +353,18 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                 handleSelectionChange={ids => setSelectedUserIDs(ids)}
                             />
                         </Grid>
-                        <Columns
-                            board={board}
-                            filter={{
-                                searchString: searchString,
-                                userIDs: selectedUserIDs
-                            }}
-                            handleBoardUpdate={handleBoardUpdate}
-                            handleColumnDelete={handleColumnDelete}
-                            handleColumnRename={handleColumnRename}
-                        />
+                        <Grid container direction="row" className={classes.content}>
+                            <Columns
+                                board={board}
+                                filter={{
+                                    searchString: searchString,
+                                    userIDs: selectedUserIDs
+                                }}
+                                handleBoardUpdate={handleBoardUpdate}
+                                handleColumnDelete={handleColumnDelete}
+                                handleColumnRename={handleColumnRename}
+                            />
+                        </Grid>
                     </Auxi>
                     : null
                 }

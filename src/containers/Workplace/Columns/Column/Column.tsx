@@ -50,8 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 'calc((100vw - ' + SIDE_NAVIGATION_WIDTH + 'px - 140px) / 3)',
             maxWidth: 'calc((100vw - ' + SIDE_NAVIGATION_WIDTH + 'px - 140px) / 3)',
             marginRight: 20,
-            overflowX: 'hidden',
-            overflowY: 'auto',
             '&:last-of-type': {
                 marginRight: 0
             }

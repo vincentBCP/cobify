@@ -35,9 +35,8 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             flexGrow: 1,
-            overflow: 'auto',
             whiteSpace: 'nowrap',
-            padding: "0 50px 20px 50px"
+            padding: "30px 50px 30px 50px"
         }
     })
 );
