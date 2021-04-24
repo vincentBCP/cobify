@@ -57,7 +57,8 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
         },
         content: {
-            overflow: 'auto'
+            overflow: 'auto',
+            flexGrow: 1
         },
         button: {
             marginRight: 10,
