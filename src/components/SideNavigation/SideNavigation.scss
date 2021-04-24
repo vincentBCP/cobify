@@ -30,12 +30,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    img {
+        width: 40px;
+        height: auto;
+    }
 }
 
 #SideNavigation_Items {
     flex-grow: 1;
     overflow-x: hidden;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 
     a.active {
         background-color: $sideNavigation_secondaryColor;

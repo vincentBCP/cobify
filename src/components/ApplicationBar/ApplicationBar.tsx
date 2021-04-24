@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
@@ -8,10 +9,14 @@ import IconButton from '@material-ui/core/IconButton';
 import NotificationIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import Avatar from '../../widgets/Avatar';
 
-import { SIDE_NAVIGATION_WIDTH } from '../SideNavigation/SideNavigation';
+import { SIDE_NAVIGATION_WIDTH, SHRINK_SIDE_NAVIGATION_WIDTH } from '../SideNavigation/SideNavigation';
+
+import AppContext from '../../context/appContext';
 
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
@@ -36,11 +41,38 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundColor: 'white',
             padding: 2,
             boxShadow: 'none',
-            paddingLeft: SIDE_NAVIGATION_WIDTH
+            zIndex: 1000
+        },
+        appBarOpen: {
+            width: 'calc(100vw - ' + SIDE_NAVIGATION_WIDTH + 'px)',
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+        appBarClose: {
+            width: 'calc(100vw - ' + SHRINK_SIDE_NAVIGATION_WIDTH + 'px)',
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            })
         },
         icon: {
             color: '#9e9e9e',
             fontSize: 30
+        },
+        arrow: {
+            width: 25,
+            height: 25,
+            backgroundColor: '#233044',
+            cursor: 'pointer',
+            borderRadius: '50%',
+            position: 'absolute',
+            left: -15,
+
+            '& svg': {
+                color: '#ccc', 
+            }
         }
     })
 );
@@ -53,13 +85,31 @@ interface IHeaderProps {
 const ApplicationBar: React.FC<IHeaderProps> = props => {
     const classes = useStyles();
 
+    const appContext = React.useContext(AppContext);
+
     const account = useSelector((state: any) => state.app.account);
 
     if (!account) return null;
 
     return (
-        <AppBar id="Header" position="fixed" className={classes.appBar}>
+        <AppBar
+            id="Header"
+            position="fixed"
+            className={clsx(classes.appBar, {
+                [classes.appBarOpen]: !appContext.shrinkNavigation,
+                [classes.appBarClose]: appContext.shrinkNavigation,
+            })}
+        >
             <Toolbar>
+                {
+                    <div
+                        className={classes.arrow}
+                        onClick={() => appContext.toggleNavigation()}
+                    >
+                        { appContext.shrinkNavigation ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
+                    </div>
+                }
+
                 <div style={{flexGrow: 1}}>
                     {props.component}
                 </div>
