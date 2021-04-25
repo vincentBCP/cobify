@@ -98,6 +98,8 @@ const ContactSupport: React.FC = props => {
                                 label="Subject"
                                 variant="outlined"
                                 style={{marginBottom: 30}}
+                                error={errors.subject !== undefined}
+                                helperText={errors.subject ? errors.subject.message : ''}
                                 inputProps={{
                                     ...register('subject', { 
                                         required: 'Required'
@@ -113,6 +115,8 @@ const ContactSupport: React.FC = props => {
                                 rows={5}
                                 rowsMax={10}
                                 style={{marginBottom: 20}}
+                                error={errors.content !== undefined}
+                                helperText={errors.content ? errors.content.message : ''}
                                 inputProps={{
                                     ...register('content', { 
                                         required: 'Required'

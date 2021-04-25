@@ -18,11 +18,11 @@ import User from '../../../models/types/User';
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         popover: {
-            marginTop: 20,
+            marginTop: 10,
             marginLeft: -10,
 
             '& .MuiPopover-paper': {
-                width: 350,
+                width: 320,
                 maxHeight: 'calc(100vh * .70)',
                 borderRadius: 10,
                 border: '1px solid rgba(0,0,0,0.1)',
@@ -70,21 +70,22 @@ const useStyles = makeStyles((theme: Theme) =>
             '& > div': {
                 display: 'flex',
                 alignItems: 'center',
-                padding: '12px 25px'
+                padding: '12px 30px'
             },
-            '& > div div': {
+            '& > div > div:last-of-type': {
                 marginLeft: 10,
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden'
             },
             '& > div div p': {
-                fontSize: '1em',
+                fontSize: '1.2em',
                 flexGrow: 1,
                 maxWidth: '100%',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                lineHeight: '1.2em'
+                lineHeight: '1.2em',
+                color: '#3c4043'
             },
             '& > div div p:nth-of-type(2)': {
                 fontSize: '0.9em',
@@ -170,7 +171,7 @@ const OrganizationSelector: React.FC = props => {
                                         }}
                                     >
                                         <Avatar
-                                            size={35}
+                                            size={38}
                                             account={{
                                                 color: adminAccount.color,
                                                 initials: adminAccount.organization?.charAt(0)

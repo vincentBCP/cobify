@@ -7,7 +7,6 @@ import { useSelector, connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
 
 import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
@@ -135,16 +134,6 @@ const Users: React.FC<IUsersProps> = props => {
         ];
     }
 
-    const renderActions = (user: User) => {
-        return (
-            <div>
-                <IconButton size="medium">
-                    <EditIcon />
-                </IconButton>
-            </div>
-        );
-    };
-
     const renderCreated = (user: User) => {
         return <span>{format(new Date(user.created), "MMM d, yyyy")}</span>
     }
@@ -163,8 +152,7 @@ const Users: React.FC<IUsersProps> = props => {
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
         { id: 'organization', property: "organization", label: 'Organization' },
-        { id: 'created', property: 'created', label: 'Created', render: renderCreated },
-        { id: 'actions', label: 'Actions', align: 'center', render: renderActions }
+        { id: 'created', property: 'created', label: 'Created', render: renderCreated }
     ];
 
     const tableActions = (

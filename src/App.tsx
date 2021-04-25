@@ -23,7 +23,7 @@ import UserRole from './models/enums/UserRole';
 
 import ErrorContext from './context/errorContext';
 
-import firebase from './firebase';
+// import firebase from './firebase';
 
 interface IAppProps {
     checkAuth: () => Promise<User>,
