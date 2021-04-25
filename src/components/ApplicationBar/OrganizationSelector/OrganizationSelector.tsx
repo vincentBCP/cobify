@@ -150,7 +150,7 @@ const OrganizationSelector: React.FC = props => {
                         />
                         <Typography>{account.displayName}</Typography>
                         <Typography>{account.email}</Typography>
-                        <Typography>{account.role}</Typography>
+                        {/*<Typography>{account.role}</Typography>*/}
                     </div>
                     <div className={classes.accountList}>
                         {
