@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 overflow: 'hidden'
             },
             '& > div div p': {
+                fontSize: '1em',
                 flexGrow: 1,
                 maxWidth: '100%',
                 overflow: 'hidden',
