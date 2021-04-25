@@ -42,6 +42,21 @@ const DetailsForm: React.FC<IDetailsFormProps> = props => {
                     });
                 }}
             />
+
+            {
+                props.publicInfo.organization
+                ? <TextField
+                    id="publicInfo-organization"
+                    label="Organization"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    value={props.publicInfo.organization}
+                    disabled={true}
+                    style={{marginBottom: 20}}
+                />
+                : null
+            }
         </Grid>
     );
 };

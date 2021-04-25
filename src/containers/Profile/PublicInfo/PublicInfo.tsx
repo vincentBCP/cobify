@@ -24,7 +24,8 @@ import ErrorContext from '../../../context/errorContext';
 
 export type PublicInfoDetails = {
     firstName: string,
-    lastName: string
+    lastName: string,
+    organization?: string
 }
 
 interface IPublicInfoProps {
@@ -44,7 +45,8 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
 
         setUserDetails({
             firstName: props.account.firstName,
-            lastName: props.account.lastName
+            lastName: props.account.lastName,
+            organization: props.account?.organization
         });
     }, [ props.account ]);
 
