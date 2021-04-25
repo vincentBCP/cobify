@@ -1,8 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import './Account.scss';
-
 import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
 import Page from '../../components/Page';
@@ -15,9 +13,9 @@ const Account: React.FC = props => {
 
     return (
         <Auxi>
-            <ApplicationBar title="Account" />
+            <ApplicationBar title="Profile" />
 
-            <Page title="Account">
+            <Page title="Profile">
                 <PublicInfo account={account} />
                 <ContactDetails email={account.email} />
             </Page>
