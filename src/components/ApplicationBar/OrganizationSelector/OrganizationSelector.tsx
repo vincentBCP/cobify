@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
 
@@ -21,13 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: -10,
 
             '& .MuiPopover-paper': {
+                width: 350,
+                maxHeight: 'calc(100vh * .70)',
                 borderRadius: 10,
                 border: '1px solid rgba(0,0,0,0.1)',
                 boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.05)'
             }
         },
         root: {
-            width: 320,
         },
         account: {
             display: 'flex',
@@ -55,12 +57,37 @@ const useStyles = makeStyles((theme: Theme) =>
                 borderRadius: 20
             }
         },
-        action: {
-            borderTop: '1px solid #ccc',
-            padding: "15px 50px",
-
-            '& button': {
-                color: '#5f6368'
+        accountList: {
+            borderTop: '1px solid rgba(0,0,0,0.1)',
+            
+            '& > div.selected': {
+                backgroundColor: '#f7f9fc'
+            },
+            '& > div:not(.selected):hover': {
+                cursor: 'pointer',
+                backgroundColor: '#f7f9fc'
+            },
+            '& > div': {
+                display: 'flex',
+                alignItems: 'center',
+                padding: '12px 25px'
+            },
+            '& > div div': {
+                marginLeft: 10,
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden'
+            },
+            '& > div div p': {
+                flexGrow: 1,
+                maxWidth: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                lineHeight: '1.2em'
+            },
+            '& > div div p:nth-of-type(2)': {
+                fontSize: '0.9em',
+                color: "#5f6368"
             }
         }
     })
@@ -71,6 +98,8 @@ const OrganizationSelector: React.FC = props => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const account: User = useSelector((state: any) => state.app.account);
+    const users: User[] = useSelector((state: any) => state.user.users);
+    const userAccounts: User[] = users.filter(u => u.email === account.email);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -78,6 +107,11 @@ const OrganizationSelector: React.FC = props => {
 
     const handleClose = () => {
         setAnchorEl(null);
+    }
+
+    const handleChooseAccount = (account: User) => {
+        localStorage.setItem("account", account.id);
+        window.location.reload();
     }
 
     return (
@@ -115,6 +149,40 @@ const OrganizationSelector: React.FC = props => {
                         <Typography>{account.displayName}</Typography>
                         <Typography>{account.email}</Typography>
                         <Typography>{account.role}</Typography>
+                    </div>
+                    <div className={classes.accountList}>
+                        {
+                            _.orderBy(userAccounts, ["role"]).map(uAccount => {
+                                const adminAccount = uAccount.organization
+                                    ? uAccount
+                                    : users.find(u => u.id === uAccount.accountID);
+                                
+                                if (!adminAccount) return null;
+
+                                return (
+                                    <div
+                                        key={"user-account-" + uAccount.id}
+                                        className={uAccount.id === account.id ? "selected" : ""}
+                                        onClick={() => {
+                                            if (uAccount.id === account.id) return;
+                                            handleChooseAccount(uAccount);
+                                        }}
+                                    >
+                                        <Avatar
+                                            size={35}
+                                            account={{
+                                                color: adminAccount.color,
+                                                initials: adminAccount.organization?.charAt(0)
+                                            } as User}
+                                        />
+                                        <div>
+                                            <Typography>{adminAccount.organization}</Typography>
+                                            <Typography>{uAccount.role}</Typography>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </Paper>
             </Popover>

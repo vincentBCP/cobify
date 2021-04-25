@@ -161,8 +161,8 @@ const SideNavigation: React.FC = props => {
                         disableTouchListener
                         disableHoverListener={!appContext.shrinkNavigation}
                     >
-                        <NavLink to="/account" activeClassName="active">
-                            <ListItem key="Account">
+                        <NavLink to="/profile" activeClassName="active">
+                            <ListItem key="profile">
                                 <ListItemIcon className={classes.listItemIcon}>
                                     <AccountIcon className={classes.drawerItemIcon} />
                                 </ListItemIcon>

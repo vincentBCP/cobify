@@ -80,7 +80,7 @@ export const deleteUser = (user: User) => {
             if (user.profilePicture) {
                 promises.push(StorageAPI.delete(user.profilePicture));
             }
-            promises.push(UserAPI.deleteUser(user.email))
+            promises.push(UserAPI.deleteUser(user.id))
 
             Promise.all(promises)
             .then(email => {

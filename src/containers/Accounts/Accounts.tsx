@@ -162,6 +162,7 @@ const Users: React.FC<IUsersProps> = props => {
         { id: 'avatar', label: '', render: renderAvatar },
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
+        { id: 'organization', property: "organization", label: 'Organization' },
         { id: 'created', property: 'created', label: 'Created', render: renderCreated },
         { id: 'actions', label: 'Actions', align: 'center', render: renderActions }
     ];

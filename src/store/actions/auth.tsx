@@ -11,17 +11,22 @@ export const login = (email: string, password: string) => {
             .then(refreshToken => {
                 localStorage.setItem("refreshToken", refreshToken);
                 
-                return UserAPI.getUser(email);
+                return UserAPI.getAccounts(email);
             })
-            .then(user => {
+            .then(accounts => {
+                const selectedAccount = localStorage.getItem("account");
+
+                const account = accounts.find(account => account.id === selectedAccount) || accounts[0];
+
                 dispatch({
                     type: actionTypes.SET_ACCOUNT,
-                    payload: user
+                    payload: account
                 });
 
-                resolve(true);
+                resolve(account);
             })
             .catch(error => {
+                localStorage.removeItem("account");
                 localStorage.removeItem("refreshToken");
                 reject(error);
             });
@@ -36,17 +41,23 @@ export const checkAuth = () => {
             .then(user => {
                 const email = user.email;
 
-                return UserAPI.getUser(email);
+                return UserAPI.getAccounts(email);
             })
-            .then(user => {
+            .then(accounts => {
+                const selectedAccount = localStorage.getItem("account");
+
+                const account = accounts.find(account => account.id === selectedAccount) || accounts[0];
+
                 dispatch({
                     type: actionTypes.SET_ACCOUNT,
-                    payload: user
+                    payload: account
                 });
 
-                resolve(user);
+                resolve(account);
             })
             .catch(error => {
+                localStorage.removeItem("account");
+                localStorage.removeItem("refreshToken");
                 reject(error);
             });
             /*const storedRefreshToken = localStorage.getItem("refreshToken");

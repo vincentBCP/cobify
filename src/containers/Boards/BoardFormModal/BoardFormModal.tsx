@@ -84,7 +84,7 @@ const BoardFormModal: React.FC<IBoardFormModalModalProps> = props => {
                             validate: code => {
                                 const board = boards.find(b => b.code === code);
 
-                                if (board) return "Code is already in use.";
+                                if (board) return "Code is already taken";
 
                                 return true;
                             }

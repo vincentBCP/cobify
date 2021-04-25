@@ -8,6 +8,7 @@ type User = {
     role: string,
     color: string,
     accountID: string,
+    organization?: string,
     created: string,
     profilePicture?: IAttachment,
     // computed

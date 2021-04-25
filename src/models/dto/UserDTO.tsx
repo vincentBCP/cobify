@@ -5,6 +5,7 @@ type UserDTO = {
     role: string,
     color: string,
     accountID: string,
+    organization?: string,
     created: string
 }
 

@@ -15,7 +15,8 @@ import { nameRegExp, emailRegExp } from '../../../constants';
 interface IFormInputs {
     firstName: string,
     lastName: string,
-    email: string
+    email: string,
+    organization: string
 };
 
 interface IAccountFormModalProps {
@@ -98,7 +99,29 @@ const AccountFormModal: React.FC<IAccountFormModalProps> = props => {
                             validate: (email: string) => {
                                 const user = users.find(u => u.email === email);
 
-                                if (user) return "Email already in use";
+                                if (user?.organization) return "Email is already taken";
+
+                                return true;
+                            }
+                        })
+                    }}
+                    style={{marginBottom: 20}}
+                />
+
+                <TextField
+                    label="Organization"
+                    defaultValue=""
+                    fullWidth
+                    required
+                    error={errors.organization !== undefined}
+                    helperText={errors.organization ? errors.organization.message : ''}
+                    inputProps={{
+                        ...register('organization', { 
+                            required: 'Required',
+                            validate: (organization: string) => {
+                                const user = users.find(u => u.organization === organization);
+
+                                if (user) return "Organization name is already taken";
 
                                 return true;
                             }

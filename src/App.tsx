@@ -114,7 +114,7 @@ const App: React.FC<IAppProps> = props => {
         </Switch>
         : <Switch>
             <Route path="/workplace/:boardCode?/:taskCode?" component={Workplace} />
-            <Route path="/account" component={Account} exact={true} />
+            <Route path="/profile" component={Account} exact={true} />
             {account?.role === UserRole.ADMIN ? <Route path="/boards" component={Boards} exact={true} /> : null}
             {account?.role === UserRole.ADMIN ? <Route path="/users" component={Users} exact={true} /> : null}
             <Route path="/contactSupport" component={ContactSupport} exact={true} />

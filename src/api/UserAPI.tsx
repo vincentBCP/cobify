@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import _ from 'lodash';
 
 import UserDTO from '../models/dto/UserDTO';
 import User from '../models/types/User';
@@ -13,15 +14,18 @@ class UserAPI extends API<User> {
 
     public getUsers(): Promise<User[]> {
         return super.getRecords();
-    };
-
-    private getRecordPath(email: string): string {
-        return (email.split("@")[0]).split(".").join("_");
     }
 
-    public getUser(email: string): Promise<User> {
-        return super.getRecord(this.getRecordPath(email));
-    };
+    public getAccounts(email: string): Promise<User[]> {
+        return super.getRecords()
+            .then(users => {
+                if (!users || users.length < 1) {
+                    Promise.reject({status: 400, message: "No record found."});
+                }
+
+                return _.orderBy(users.filter(user => user.email === email), ["role"]);
+            });
+    }
 
     public createUser(dto: UserDTO): Promise<User> {
         return new Promise((resolve, reject) => {
@@ -36,12 +40,24 @@ class UserAPI extends API<User> {
 
             AuthAPI.signup(dto.email, "D3f@ult!")
             .then(response => {
-                return super.create(this.getRecordPath(dto.email), newUser);
+                return super.create(userID, newUser);
             })
             .then(response => {
                 resolve(newUser);
             })
-            .catch(error => reject(error));
+            .catch(error => {
+                if (error.response && error.response.data && error.response.data.error && 
+                    error.response.data.error.message === "EMAIL_EXISTS") {
+                    
+                    super.create(userID, newUser)
+                    .then(response => {
+                        resolve(newUser);
+                    })
+                    .catch(error => reject(error))
+                } else {
+                    reject(error)
+                }
+            });
         });
     };
 
@@ -52,12 +68,12 @@ class UserAPI extends API<User> {
             initials: ((user.firstName).charAt(0).toUpperCase() + (user.lastName).charAt(0)).toUpperCase()
         }
 
-        return super.update(this.getRecordPath(user.email), u);
+        return super.update(user.id, u);
     };
 
-    public deleteUser(email: string): Promise<string> {
-        return super.delete(this.getRecordPath(email))
-            .then(() => email);
+    public deleteUser(id: string): Promise<string> {
+        return super.delete(id)
+            .then(() => id);
     };
 };
 

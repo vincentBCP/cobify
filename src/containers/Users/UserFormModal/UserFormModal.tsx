@@ -36,6 +36,7 @@ interface IUserFormModalProps {
 const UserFormModal: React.FC<IUserFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
 
+    const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) => state.user.users);
 
     const handleFormSubmit = (data: IFormInputs): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
@@ -107,9 +108,10 @@ const UserFormModal: React.FC<IUserFormModalProps> = props => {
                                     message: 'Invalid email format'
                                 },
                                 validate: (email: string) => {
-                                    const user = users.find(u => u.email === email);
+                                    const user = users.find(u => u.email === email &&
+                                            u.accountID === account.id);
 
-                                    if (user) return "Email already in use";
+                                    if (user) return "Email is already taken";
 
                                     return true;
                                 }
