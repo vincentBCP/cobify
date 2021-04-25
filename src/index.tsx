@@ -12,7 +12,6 @@ import { Provider } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 
 import AppProvider from './context/appContext/appProvider';
-import ErrorProvider from './context/errorContext/errorProvider';
 
 import appReducer from './store/reducers/app';
 import userReducer from './store/reducers/user';
@@ -91,9 +90,7 @@ ReactDOM.render(
         <BrowserRouter>
             <ThemeProvider theme={theme}>
                 <AppProvider>
-                    <ErrorProvider>
-                        <App />
-                    </ErrorProvider>
+                    <App />
                 </AppProvider>
             </ThemeProvider>
         </BrowserRouter>

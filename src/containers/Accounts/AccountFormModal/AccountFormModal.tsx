@@ -118,13 +118,13 @@ const AccountFormModal: React.FC<IAccountFormModalProps> = props => {
                     inputProps={{
                         ...register('organization', { 
                             required: 'Required',
-                            validate: (organization: string) => {
+                            /*validate: (organization: string) => {
                                 const user = users.find(u => u.organization === organization);
 
                                 if (user) return "Organization name is already taken";
 
                                 return true;
-                            }
+                            }*/
                         })
                     }}
                 />

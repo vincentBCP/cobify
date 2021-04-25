@@ -22,6 +22,7 @@ import User from './models/types/User';
 import UserRole from './models/enums/UserRole';
 
 import ErrorContext from './context/errorContext';
+import ErrorProvider from './context/errorContext/errorProvider';
 
 // import firebase from './firebase';
 
@@ -140,10 +141,12 @@ const App: React.FC<IAppProps> = props => {
 
     return (
         <div id="App">
-            <SideNavigation />
-            <main id="AppContent">
-                { routes }
-            </main>
+            <ErrorProvider>
+                <SideNavigation />
+                <main id="AppContent">
+                    { routes }
+                </main>
+            </ErrorProvider>
         </div>
     );
 };

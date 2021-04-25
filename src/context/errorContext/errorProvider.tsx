@@ -7,11 +7,16 @@ import Alert from '../../widgets/Alert';
 const ErrorProvider: React.FC = props => {
     const [error, setError] = React.useState<any | null>();
 
+    const _setError = (arg: any) => {
+        // console.log(arg.response);
+        setError(arg);
+    }
+
     return (
         <ErrorContext.Provider
             value={{
                 error: error,
-                setError: setError
+                setError: _setError
             }}
         >
             {
