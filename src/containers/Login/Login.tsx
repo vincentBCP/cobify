@@ -346,19 +346,17 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                     </div>
                     {
                         active === 0
-                        ? <Typography>Manage your project's tasks in workplace.</Typography>
-                        : null
-                    }
-
-                    {
-                        active === 1
                         ? <Typography>Create boards for your projects.</Typography>
                         : null
                     }
-
+                    {
+                        active === 1
+                        ? <Typography>Add users to work with.</Typography>
+                        : null
+                    }
                     {
                         active === 2
-                        ? <Typography>Add users to work on tasks.</Typography>
+                        ? <Typography>Manage tasks in workplace.</Typography>
                         : null
                     }
                 </div>
