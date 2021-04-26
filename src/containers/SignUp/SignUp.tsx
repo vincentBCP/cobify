@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            //backgroundColor: '#f7f9fc',
             backgroundImage: 'linear-gradient(#344866, #52709f)',
             scrollbarColor: 'transparent transparent', /* thumb and track color */
             scrollbarWidth: 'none',
@@ -32,12 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 20,
-            height: '80%',
+            height: '82%',
             width: '35%',
             overflow: 'hidden',
             backgroundColor: '#f7f9fc',
             boxShadow: "rgba(0,0,0,0.3) 1px 2px 5px 1px, rgba(0,0,0,0.3) 0px 1px 3px -1px",
-            padding: "0 5%",
+            padding: "0 4%",
         },
         form: {
             width: '100%',
@@ -46,7 +45,16 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
         },
         input: {
-            marginBottom: 30
+            marginBottom: 20
+        },
+        linear: {
+            display: 'flex',
+            marginBottom: 20,
+            justifyContent: 'space-between',
+            
+            '& > div': {
+                width: "calc(50% - 5px)"
+            }
         },
         header: {
             display: 'flex',
@@ -74,6 +82,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IFormInputs {
     organization: string,
+    firstName: string,
+    lastName: string,
     email: string,
     password: string
 }
@@ -100,7 +110,7 @@ const SignUp: React.FC<RouteComponentProps> = props => {
                     errorMessage
                     ? <FormMessage
                         type="error"
-                        message={errorMessage}
+                        message={errorMessage || "You already have an account. Please login to upgrade your account instead."}
                     />
                     : null
                 }     
@@ -119,6 +129,32 @@ const SignUp: React.FC<RouteComponentProps> = props => {
                         }}
                         className={classes.input}
                     />
+                    <div className={classes.linear}>
+                        <TextField
+                            variant="outlined"
+                            label="First name"
+                            required
+                            error={errors.firstName !== undefined}
+                            helperText={errors.firstName ? errors.firstName.message : ''}
+                            inputProps={{
+                                ...register('firstName', { 
+                                    required: 'Required'
+                                })
+                            }}
+                        />
+                        <TextField
+                            variant="outlined"
+                            label="Last name"
+                            required
+                            error={errors.lastName !== undefined}
+                            helperText={errors.lastName ? errors.lastName.message : ''}
+                            inputProps={{
+                                ...register('lastName', { 
+                                    required: 'Required'
+                                })
+                            }}
+                        />
+                    </div>
                     <TextField
                         fullWidth
                         variant="outlined"
