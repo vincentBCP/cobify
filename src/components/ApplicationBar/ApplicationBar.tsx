@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme: Theme) =>
             boxShadow: 'none',
             zIndex: 1000,
             paddingTop: 2,
-            paddingLeft: 25
+            paddingLeft: 25,
+            paddingRight: 10
         },
         appBarOpen: {
             width: 'calc(100vw - ' + SIDE_NAVIGATION_WIDTH + 'px)',
