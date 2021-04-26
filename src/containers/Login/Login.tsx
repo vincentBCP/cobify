@@ -179,6 +179,11 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
 
             const code = error.code;
 
+            if (error.toString().includes("Client is offline")) {
+                window.location.reload();
+                return;
+            }
+
             switch (code) {
                 case 'auth/user-not-found':
                 case 'auth/wrong-password':

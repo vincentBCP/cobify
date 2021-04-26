@@ -181,7 +181,7 @@ const Users: React.FC<IUsersProps> = props => {
             <Page title="Accounts">
                 <Table
                     actions={tableActions}
-                    dataList={users.filter((u: User) => u.accountID === account.id)}
+                    dataList={users.filter((u: User) => u.role === UserRole.ADMIN)}
                     headCells={headCells}
                     defaultOrderBy="displayName"
                     handleDeleteSelectedRows={handleDeleteSelectedRows}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ramdomcolor from 'randomcolor';
 
 import { useForm } from 'react-hook-form';
 
@@ -12,6 +13,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import FormMessage from '../../widgets/FormMessage';
 
 import { emailRegExp } from '../../constants';
+
+import AuthAPI from '../../api/AuthAPI';
+import UserAPI from '../../api/UserAPI';
+
+import UserRole from '../../models/enums/UserRole';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,6 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
             borderRadius: 20,
             height: '82%',
             width: '35%',
+            minWidth: 500,
+            maxWidth: '80%',
             overflow: 'hidden',
             backgroundColor: '#f7f9fc',
             boxShadow: "rgba(0,0,0,0.3) 1px 2px 5px 1px, rgba(0,0,0,0.3) 0px 1px 3px -1px",
@@ -97,7 +105,34 @@ const SignUp: React.FC<RouteComponentProps> = props => {
     const classes = useStyles();
 
     const signUp = (data: IFormInputs) => {
+        if (loading) return;
+        setLoading(true);
 
+        AuthAPI.signupAndLogin(data.email, data.password)
+        .then(response => {
+            return UserAPI.createUser({
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    email: data.email,
+                    accountID: 'signed_up',
+                    organization: data.organization,
+                    role: UserRole.ADMIN,
+                    color: ramdomcolor(),
+                    created: (new Date()).toISOString()
+                });
+        })
+        .then(user => {
+            window.location.reload();
+        })
+        .catch(error => {
+            const code = error.code;
+            const msg = code === "auth/email-already-in-use"
+                ? "You already have an account. Please login and upgrade your account instead."
+                : "Error occured.";
+                
+            setErrorMessage(msg);
+            setLoading(false);
+        });
     }
 
     return (
@@ -159,6 +194,7 @@ const SignUp: React.FC<RouteComponentProps> = props => {
                         fullWidth
                         variant="outlined"
                         label="Email"
+                        type="email"
                         required
                         error={errors.email !== undefined}
                         helperText={errors.email ? errors.email.message : ''}
@@ -181,6 +217,7 @@ const SignUp: React.FC<RouteComponentProps> = props => {
                         error={errors.password !== undefined}
                         required
                         helperText={errors.password ? errors.password.message : ''}
+                        autoComplete="new-password"
                         inputProps={{
                             ...register('password', { 
                                 required: 'Required'

@@ -56,6 +56,12 @@ export const checkAuth = () => {
                 resolve(account);
             })
             .catch(error => {
+                // quick fix for annoying issue
+                if (error.toString().includes("Client is offline")) {
+                    window.location.reload();
+                    return;
+                }
+
                 localStorage.removeItem("account");
                 localStorage.removeItem("refreshToken");
                 reject(error);
