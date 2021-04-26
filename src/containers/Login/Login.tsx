@@ -88,16 +88,10 @@ const useStyles = makeStyles((theme: Theme) =>
         login: {
             width: '100%'
         },
-        header: {
+        logo: {
             display: 'flex',
             marginBottom: 20,
             justifyContent: 'center',
-
-            '& p': {
-                fontSize: '1.5em',
-                color: '#c5c8cc',
-                fontWeight: 'bold'
-            }
         },
         forgotPassword: {
             marginTop: 10,
@@ -235,21 +229,40 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
         <div className={classes.root}>
             <div className={classes.content}>                
                 <div className={classes.form}>
-                    <div className={classes.header}>
-                        <Logo />
-                        {/*<Route
-                            path="/login"
-                            render={() => (
-                                <Typography>Welcome</Typography>
-                            )}
-                        />
-                        <Route
-                            path="/resetPassword"
-                            render={() => (
-                                <Typography>Reset Password</Typography>
-                            )}
-                        />*/}
-                    </div>
+                    <Route
+                        path="/login"
+                        render={() => (
+                            <div className={classes.logo}>
+                                <Logo />
+                            </div>
+                        )}
+                    />
+                    <Route
+                        path="/resetPassword"
+                        render={() => (
+                            <Typography style={{
+                                textAlign: 'center', 
+                                marginBottom: 5, 
+                                fontSize: '1.2em', 
+                                color: 'rgba(0,0,0,0.8)'
+                            }}>
+                                Reset Password
+                            </Typography>
+                        )}
+                    />
+                    <Route
+                        path="/resetPassword"
+                        render={() => (
+                            <Typography style={{
+                                textAlign: 'center', 
+                                marginBottom: 20, 
+                                fontSize: '1em', 
+                                color: 'rgba(0,0,0,0.8)'
+                            }}>
+                                Enter your email to reset your password
+                            </Typography>
+                        )}
+                    />
                     {
                         Boolean(errorMessage)
                         ? <FormMessage
