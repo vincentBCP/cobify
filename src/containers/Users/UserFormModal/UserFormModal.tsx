@@ -53,44 +53,52 @@ const UserFormModal: React.FC<IUserFormModalProps> = props => {
             handleCancel={props.handleCancel}
         >
             <div style={{width: "300px"}}>
-                <TextField
-                    label="First name"
-                    defaultValue={props.user ? props.user.firstName : ""}
-                    fullWidth
-                    required
-                    error={errors.firstName !== undefined}
-                    helperText={errors.firstName ? errors.firstName.message : ''}
-                    inputProps={{
-                        ...register('firstName', { 
-                            required: 'Required', 
-                            pattern: {
-                                value: nameRegExp,
-                                message: 'Invalid name format'
-                            }
-                        })
-                    }}
-                    style={{marginBottom: 20}}
-                />
-
-                <TextField
-                    label="Last name"
-                    defaultValue={props.user ? props.user.lastName : ""}
-                    fullWidth
-                    required
-                    error={errors.lastName !== undefined}
-                    helperText={errors.lastName ? errors.lastName.message : ''}
-                    inputProps={{
-                        ...register('lastName', { 
-                            required: 'Required', 
-                            pattern: {
-                                value: nameRegExp,
-                                message: 'Invalid name format'
-                            }
-                        })
-                    }}
-                    style={{marginBottom: 20}}
-                />
-
+                {
+                    !props.user
+                    ? <TextField
+                        label="First name"
+                        defaultValue=""
+                        fullWidth
+                        required
+                        error={errors.firstName !== undefined}
+                        helperText={errors.firstName ? errors.firstName.message : ''}
+                        inputProps={{
+                            ...register('firstName', { 
+                                required: 'Required', 
+                                pattern: {
+                                    value: nameRegExp,
+                                    message: 'Invalid name format'
+                                }
+                            })
+                        }}
+                        style={{marginBottom: 20}}
+                    />
+                    : null
+                }
+                
+                {
+                    !props.user
+                    ? <TextField
+                        label="Last name"
+                        defaultValue=""
+                        fullWidth
+                        required
+                        error={errors.lastName !== undefined}
+                        helperText={errors.lastName ? errors.lastName.message : ''}
+                        inputProps={{
+                            ...register('lastName', { 
+                                required: 'Required', 
+                                pattern: {
+                                    value: nameRegExp,
+                                    message: 'Invalid name format'
+                                }
+                            })
+                        }}
+                        style={{marginBottom: 20}}
+                    />
+                    : null
+                }
+                
                 {
                     !props.user
                     ? <TextField
