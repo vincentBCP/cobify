@@ -7,6 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -28,7 +29,7 @@ interface IAccountProps {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         input: {
-            marginBottom: 30,
+            marginBottom: 20,
             
             '& input': {
                 color: 'black'
@@ -87,21 +88,24 @@ const Account: React.FC<IAccountProps> = props => {
                     <Typography style={{marginBottom: 15}}>Account</Typography>
                     {
                         Boolean(adminAccount)
-                        ? <TextField
-                            id="account-organization"
-                            label="Organization"
-                            fullWidth
-                            variant="outlined"
-                            className={classes.input}
-                            disabled={true}
-                            value={adminAccount.organization}
-                        />
+                        ? <Aux>
+                            <InputLabel style={{marginBottom: 7}}>Organization</InputLabel>
+
+                            <TextField
+                                id="account-organization"
+                                fullWidth
+                                variant="outlined"
+                                className={classes.input}
+                                disabled={true}
+                                value={adminAccount.organization}
+                            />
+                        </Aux>
                         : null
                     }
 
+                    <InputLabel style={{marginBottom: 7}}>Email</InputLabel>
                     <TextField
                         id="account-email"
-                        label="Email"
                         fullWidth
                         variant="outlined"
                         className={classes.input}
