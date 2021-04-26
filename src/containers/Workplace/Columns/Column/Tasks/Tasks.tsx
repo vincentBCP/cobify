@@ -48,7 +48,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         taskCode: {
             color: 'gray',
-            marginBottom: 10
+            marginBottom: 0,
+            fontSize: '1em'
         },
         footer: {
             marginTop: 10,
@@ -116,14 +117,14 @@ const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
                                     />
                                     : null
                                 }
-                                <div className={classes.commentsCount}>
-                                    {
-                                        comments.filter(c => c.taskID === task.id).length > 0
-                                        ? <span>{comments.filter(c => c.taskID === task.id).length}</span>
-                                        : null
-                                    }
-                                    <ChatBubbleOutlineOutlinedIcon />
-                                </div>
+                                {
+                                    comments.filter(c => c.taskID === task.id).length > 0
+                                    ? <div className={classes.commentsCount}>
+                                        <span>{comments.filter(c => c.taskID === task.id).length}</span>
+                                        <ChatBubbleOutlineOutlinedIcon />
+                                    </div>
+                                    : null
+                                }
                             </div>
                         </div>
                     </NavLink>
