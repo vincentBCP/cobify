@@ -18,7 +18,8 @@ interface IFormModalProps {
     reset: UseFormReset<any>,
     useFormHandleSubmit: UseFormHandleSubmit<any>,
     handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void]
-    handleCancel: () => void
+    handleCancel: () => void,
+    sendLabel?: string
 }
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -93,6 +94,7 @@ const FormModal: React.FC<IFormModalProps> = props => {
                                 loading={loading}
                                 success={success}
                                 handleCancel={props.handleCancel}
+                                sendLabel={props.sendLabel}
                             />
                         </div>
                     </form>

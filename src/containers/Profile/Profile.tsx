@@ -6,9 +6,9 @@ import ApplicationBar from '../../components/ApplicationBar';
 import Page from '../../components/Page';
 
 import PublicInfo from './PublicInfo';
-import ContactDetails from './ContactDetails';
+import Account from './Account';
 
-const Account: React.FC = props => {
+const Profile: React.FC = props => {
     const account: any = useSelector((state: any) => state.app.account);
 
     return (
@@ -17,10 +17,10 @@ const Account: React.FC = props => {
 
             <Page title="Profile">
                 <PublicInfo account={account} />
-                <ContactDetails email={account.email} />
+                <Account account={account} />
             </Page>
         </Auxi>
     );
 };
 
-export default Account;
+export default Profile;

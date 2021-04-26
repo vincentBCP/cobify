@@ -125,13 +125,6 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
                         handleChange={handleProfilePictureChange}
                     />
                 </Grid>
-                {/*<Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSaveChanges}
-                >
-                    Save changes
-                </Button>*/}
                 <SendButton
                     label="Save changes"
                     loading={loading}
