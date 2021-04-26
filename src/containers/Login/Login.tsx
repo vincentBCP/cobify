@@ -13,6 +13,8 @@ import Logo from '../../widgets/Logo';
 import SigninForm from './SigninForm';
 import ResetPasswordForm from './ResetPasswordForm';
 
+import FormMessage from '../../widgets/FormMessage';
+
 import AuthAPI from '../../api/AuthAPI';
 
 import * as actions from '../../store/actions';
@@ -75,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
             }
         },
         form: {
-            width: "42%",
+            width: "45%",
             flexShrink: 0,
             display: 'flex',
             flexDirection: 'column',
@@ -83,29 +85,8 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: "0 7%",
             backgroundColor: 'white'
         },
-        input: {
-            marginBottom: 20
-        },
         login: {
             width: '100%'
-        },
-        error: {
-            textAlign: 'center',
-            fontSize: '0.9em',
-            backgroundColor: '#fff7f7',
-            border: '1px solid #c72e2e',
-            borderRadius: 5,
-            padding: 15,
-            marginBottom: 20
-        },
-        success: {
-            textAlign: 'center',
-            fontSize: '0.9em',
-            backgroundColor: '#f7ffff',
-            border: '1px solid #2ec7c7',
-            borderRadius: 5,
-            padding: 15,
-            marginBottom: 20
         },
         header: {
             display: 'flex',
@@ -118,13 +99,48 @@ const useStyles = makeStyles((theme: Theme) =>
                 fontWeight: 'bold'
             }
         },
-        footer: {
-            marginTop: 20,
+        forgotPassword: {
+            marginTop: 10,
             textAlign: 'right',
             
             '& a': {
                 color: 'rgba(0, 0, 0, 0.3)',
                 textDecoration: 'none'
+            }
+        },
+        signUp: {
+            display: 'flex',
+            flexDirection: 'column',
+
+            '& div': {
+                display: 'flex',
+                alignItems: 'center',
+                marginTop: 10,
+                marginBottom: 10,
+                
+                '& span': {
+                    padding: '0 3px',
+                    marginTop: -5,
+                    color: '#6c7378'
+                },
+                '& div': {
+                    borderTop: '1px solid #cbd2d6',
+                    flexGrow: 1
+                }
+            },
+            '& a': {
+                backgroundColor: '#E1E7EB',
+                textAlign: 'center',
+                color: '#2C2E2F',
+                borderRadius: 5,
+                padding: 10,
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                transitionDuration: '0.3s',
+
+                '&:hover': {
+                    backgroundColor: "#d2dbe1"
+                }
             }
         }
     })
@@ -193,14 +209,19 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
         })
         .catch(error => {
             setSuccessMessage('');
-            const errMsg = error.response.data.error.message;
+            
+            const errMsg = error.code || error.response.data.error.message;
 
             switch (errMsg) {
+                case 'auth/user-not-found':
                 case 'EMAIL_NOT_FOUND':
                     setErrorMessage("Email not found.")
                     break;
                 default: setErrorMessage("Error occured.")
             }
+        })
+        .catch(error => {
+            setErrorMessage("Error occured.");
         })
         .finally(() => setLoading(false));
     }
@@ -226,15 +247,20 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                     </div>
                     {
                         Boolean(errorMessage)
-                        ? <Typography className={classes.error}>{errorMessage}</Typography>
+                        ? <FormMessage
+                            type="error"
+                            message={errorMessage}
+                        />
                         : null
                     }
                     {
                         Boolean(successMessage)
-                        ? <Typography className={classes.success}>{successMessage}</Typography>
+                        ? <FormMessage
+                            type="success"
+                            message={successMessage}
+                        />
                         : null
                     }
-
                     <Route
                         path="/login"
                         render={() => (
@@ -254,7 +280,7 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                         )}
                     />
                     
-                    <div className={classes.footer}>
+                    <div className={classes.forgotPassword}>
                         <Route
                             path="/login"
                             render={() => (
@@ -264,10 +290,20 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                         <Route
                             path="/resetPassword"
                             render={() => (
-                                <NavLink to="/login">Back to login</NavLink>
+                                <NavLink to="/login">Login</NavLink>
                             )}
                         />
                     </div>
+
+                    <Route
+                        path="/login"
+                        render={() => (
+                            <div className={classes.signUp}>
+                                <div><div></div><span>or</span><div></div></div>
+                                <NavLink to="/signUp">Sign Up</NavLink>
+                            </div>
+                        )}
+                    />
                 </div>
                 <div className={classes.demo}>
                     <Typography>How it works?</Typography>

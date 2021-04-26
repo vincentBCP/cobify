@@ -47,7 +47,7 @@ const ResetPasswordForm: React.FC<IResetPasswordFormProps> = props => {
                     variant="contained"
                     fullWidth
                 >
-                    { props.loading ? <CircularProgress color="inherit" size={22} /> : 'SEND RESET PASSWORD' }
+                    { props.loading ? <CircularProgress color="inherit" size={22} /> : 'Send reset password' }
                 </Button>
         </form>
     )

@@ -15,6 +15,7 @@ import ContactSupport from './containers/ContactSupport';
 import Login from './containers/Login';
 import Logout from './containers/Logout';
 import PreLoader from './components/PreLoader';
+import SignUp from './containers/SignUp';
 
 import * as actions from './store/actions';
 
@@ -130,6 +131,7 @@ const App: React.FC<IAppProps> = props => {
             <Switch>
                 <Route path="/login" component={Login} exact={true} />
                 <Route path="/resetPassword" component={Login} exact={true} />
+                <Route path="/signUp" component={SignUp} exact={true} />
                 <Redirect to="/login" />
             </Switch>
         );

@@ -64,7 +64,7 @@ const SigninForm: React.FC<ISigninFormProps> = props => {
                 variant="contained"
                 fullWidth
             >
-                { props.loading ? <CircularProgress color="inherit" size={22} /> : 'LOGIN' }
+                { props.loading ? <CircularProgress color="inherit" size={22} /> : 'Log In' }
             </Button>
         </form>
     )
