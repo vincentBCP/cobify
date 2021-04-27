@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import _ from 'lodash';
 
 import { connect, useSelector } from 'react-redux'; 
 
@@ -12,9 +13,11 @@ import CommentComp from './Comment';
 import CommentDTO from '../../../../models/dto/CommentDTO';
 import Comment from '../../../../models/types/Comment';
 import Task from '../../../../models/types/Task'
+import User from '../../../../models/types/User';
 
 import * as actions from '../../../../store/actions';
 
+import AppContext from '../../../../context/appContext';
 import ErrorContext from '../../../../context/errorContext';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -47,18 +50,19 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface ICommentsProps {
     task?: Task,
+    addCommentCallback: () => void,
     createComment: (arg1: CommentDTO) => Promise<Comment>
 }
-
 
 const Comments: React.FC<ICommentsProps> = props => {
     const classes = useStyles();
     const [textEditorValue, setTextEditorValue] = useState<ITextEditorValue | null>();
     const [loading, setLoading] = useState(false);
 
+    const appContext = React.useContext(AppContext);
     const errorContext = React.useContext(ErrorContext);
 
-    const account = useSelector((state: any) => state.app.account);
+    const account: User = useSelector((state: any) => state.app.account);
     const comments: Comment[] = useSelector((state: any) => 
         state.comment.comments.filter((c: Comment) => c.taskID === props.task?.id));
 
@@ -84,8 +88,12 @@ const Comments: React.FC<ICommentsProps> = props => {
         props.createComment(dto)
         .then(comment => {
             setTextEditorValue(null);
+            appContext.sendNotification(comment);
+
+            props.addCommentCallback();
         })
         .catch(error => {
+            console.log(error);
             errorContext.setError(error);
         })
         .finally(() => setLoading(false));
@@ -99,7 +107,7 @@ const Comments: React.FC<ICommentsProps> = props => {
                 : null
             }
             {
-                comments.map(c => <CommentComp key={"comment" + c.id} comment={c} />)
+                _.orderBy(comments, ["date"], ["desc"]).map(c => <CommentComp key={"comment" + c.id} comment={c} />)
             }
             <div className={classes.newComment}>
                 <TextEditor

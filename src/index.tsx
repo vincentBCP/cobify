@@ -11,8 +11,6 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 
-import AppProvider from './context/appContext/appProvider';
-
 import appReducer from './store/reducers/app';
 import userReducer from './store/reducers/user';
 import boardReducer from './store/reducers/board';
@@ -91,9 +89,7 @@ ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
             <ThemeProvider theme={theme}>
-                <AppProvider>
-                    <App />
-                </AppProvider>
+                <App />
             </ThemeProvider>
         </BrowserRouter>
     </Provider>,

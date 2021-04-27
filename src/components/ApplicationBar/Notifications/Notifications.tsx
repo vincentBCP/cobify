@@ -1,7 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles, createStyles, Theme, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -18,6 +19,10 @@ import Avatar from '../../../widgets/Avatar';
 
 import User from '../../../models/types/User';
 import Notification from '../../../models/types/Notification';
+import Task from '../../../models/types/Task';
+import Board from '../../../models/types/Board';
+
+import * as actions from '../../../store/actions';
 
 const StyledBadge = withStyles((theme: Theme) =>
     createStyles({
@@ -74,14 +79,14 @@ const useStyles = makeStyles((theme: Theme) =>
                 padding: '10px 15px',
                 borderBottom: '1px solid #eee',
 
+                '&.notRead': {
+                    backgroundColor: '#f7f9fc'
+                },
                 '& > div:last-of-type': { // list item content
                     display: 'flex',
                     flexDirection: 'column',
                     marginLeft: 15,
 
-                    '&.notRead': {
-                        backgroundColor: '#f7f9fc'
-                    },
                     '& p': {
                         lineHeight: '1.5em',
                         fontSize: '1em'
@@ -108,14 +113,22 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const Notifications: React.FC = props => {
+interface INotificationsProps {
+    updateNotification: (arg1: Notification) => void
+}
+
+const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) => state.user.users);
+    const tasks: Task[] = useSelector((state: any) => state.task.tasks);
+    const boards: Board[] = useSelector((state: any) => state.board.boards);
     const notifications: Notification[] = useSelector((state: any) =>
-        state.notification.notifications.filter((notif: Notification) => notif.recipient === account.id));
+        state.notification.notifications.filter((notif: Notification) =>
+            notif.recipientID === account.id &&
+            notif.senderID !== account.id));
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -125,11 +138,32 @@ const Notifications: React.FC = props => {
         setAnchorEl(null);
     }
 
+    const handleNotificationClick = (notification: Notification) => {
+        const task = tasks.find(t => t.id === notification.taskID);
+
+        if (!task) return;
+
+        const board = boards.find(b => b.id === task.boardID);
+
+        if (!board) return;
+
+        setAnchorEl(null);
+
+        props.updateNotification({
+            ...notification,
+            read: true
+        } as Notification);
+
+        props.history.push('/workplace/' + board.code + "/" + task.code);
+    }
+
+    const unreadCount = notifications.filter(n => !Boolean(n.read)).length
+
     return (
         <Auxi>
             <Tooltip title="Notifications">
                 <IconButton onClick={handleClick}>
-                    <StyledBadge badgeContent={4}>
+                    <StyledBadge badgeContent={unreadCount}>
                         <NotificationIcon className={classes.icon} />
                     </StyledBadge>
                 </IconButton>
@@ -161,12 +195,16 @@ const Notifications: React.FC = props => {
                                 {
                                     _.orderBy(notifications, ["date"], ["desc"]).map(
                                         notif => {
-                                            const sender = users.find(u => u.id === notif.sender);
+                                            const sender = users.find(u => u.id === notif.senderID);
 
                                             if (!sender) return null;
 
                                             return (
-                                                <div className={!notif.read ? 'notRead' : ''}>
+                                                <div
+                                                    key={"notification-" + notif.id}
+                                                    className={!notif.read ? 'notRead' : ''}
+                                                    onClick={() => handleNotificationClick(notif)}
+                                                >
                                                     <Avatar
                                                         size={40}
                                                         account={sender}
@@ -200,4 +238,9 @@ const Notifications: React.FC = props => {
     )
 }
 
-export default Notifications;
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        updateNotification: (notification: Notification) => dispatch(actions.updateNotification(notification))
+    }
+}
+export default connect(null, mapDispatchToProps)(withRouter(Notifications));

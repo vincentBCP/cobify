@@ -180,6 +180,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     const [editMode, setEditMode] = useState(false);
     const [_creator, setCreator] = useState<User>();
 
+    const mainElemRef = React.useRef(null);
     const errorContext = React.useContext(ErrorContext);
 
     useEffect(() => {
@@ -333,7 +334,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                             <CloseIcon className={classes.close} onClick={handleClose}/>
                         </div>
                         <div className={classes.content}>
-                            <div className={classes.main}>
+                            <div className={classes.main} ref={mainElemRef}>
                                 <div className={classes.title}>
                                     <Typography>{task?.title}</Typography>
                                     {
@@ -359,7 +360,15 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     ? <Attachments attachments={task.attachments} />
                                     : null
                                 }
-                                <Comments task={props.task} />
+                                <Comments
+                                    task={props.task}
+                                    addCommentCallback={() => {
+                                        const div: any = mainElemRef.current;
+
+                                        if (!div) return;
+                                        div.scrollTop = 0;
+                                    }}
+                                />
                             </div>
                             <div className={classes.side}>
                                 {

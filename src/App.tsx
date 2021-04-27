@@ -24,6 +24,7 @@ import UserRole from './models/enums/UserRole';
 
 import ErrorContext from './context/errorContext';
 import ErrorProvider from './context/errorContext/errorProvider';
+import AppProvider from './context/appContext/appProvider';
 
 // import firebase from './firebase';
 
@@ -145,12 +146,14 @@ const App: React.FC<IAppProps> = props => {
 
     return (
         <div id="App">
-            <ErrorProvider>
-                <SideNavigation />
-                <main id="AppContent">
-                    { routes }
-                </main>
-            </ErrorProvider>
+            <AppProvider>
+                <ErrorProvider>
+                    <SideNavigation />
+                    <main id="AppContent">
+                        { routes }
+                    </main>
+                </ErrorProvider>
+            </AppProvider>
         </div>
     );
 };
