@@ -34,11 +34,12 @@ interface IAppProps {
     getUsers: (arg1: User) => Promise<any>,
     getTasks: (arg1: User) => Promise<any>,
     getInvitations: (arg1: User) => Promise<any>,
-    getComments: (arg1: User) => Promise<any>
+    getComments: (arg1: User) => Promise<any>,
+    getNotifications: (arg1: User) => Promise<any>
 }
 
 const App: React.FC<IAppProps> = props => {
-    const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments } = props;
+    const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments, getNotifications } = props;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [account, setAccount] = useState<User | null>();
@@ -94,7 +95,8 @@ const App: React.FC<IAppProps> = props => {
             getUsers(account),
             getTasks(account),
             getInvitations(account),
-            getComments(account)
+            getComments(account),
+            getNotifications(account)
         );
 
         setLoading(true);
@@ -105,7 +107,7 @@ const App: React.FC<IAppProps> = props => {
             errorContext.setError(error);
         })
         .finally(() => setLoading(false));
-    }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments, errorContext ]);
+    }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments, getNotifications, errorContext ]);
 
     let routes = account?.role === UserRole.SYSADMIN
         ? <Switch>
@@ -161,7 +163,8 @@ const mapDispatchToProps = (dispatch: any) => {
         getUsers: (account: User) => dispatch(actions.getUsers(account)),
         getTasks: (account: User) => dispatch(actions.getTasks(account)),
         getInvitations: (account: User) => dispatch(actions.getInvitations(account)),
-        getComments: (account: User) => dispatch(actions.getComments(account))
+        getComments: (account: User) => dispatch(actions.getComments(account)),
+        getNotifications: (account: User) => dispatch(actions.getNotifications(account))
     }
 };
 

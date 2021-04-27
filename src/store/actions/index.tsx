@@ -49,3 +49,8 @@ export {
     updateComment,
     deleteComment
 } from './comment';
+
+export {
+    getNotifications,
+    updateNotification
+} from './notification';
