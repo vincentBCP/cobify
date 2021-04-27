@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { isPast, format, formatDistance } from 'date-fns';
 
 import { useSelector, connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
             '& > div': { // list item
                 display: 'flex',
-                alignItems: 'center',
+                flexDirection: 'column',
                 transitionDuration: '0.3s',
                 cursor: 'pointer',
                 padding: '10px 15px',
@@ -82,18 +83,28 @@ const useStyles = makeStyles((theme: Theme) =>
                 '&.notRead': {
                     backgroundColor: '#f7f9fc'
                 },
-                '& > div:last-of-type': { // list item content
+                '& > div:first-of-type': { // avatar and details container
                     display: 'flex',
-                    flexDirection: 'column',
-                    marginLeft: 15,
+                    alignItems: 'center',
 
-                    '& p': {
-                        lineHeight: '1.5em',
-                        fontSize: '1em'
-                    },
-                    '& p:first-of-type': {
-                        fontWeight: 'bold'
+                    '& > div:last-of-type': { // list item content
+                        display: 'flex',
+                        flexDirection: 'column',
+                        marginLeft: 15,
+    
+                        '& p': {
+                            lineHeight: '1.5em',
+                            fontSize: '1em'
+                        },
+                        '& p:first-of-type': {
+                            fontWeight: 'bold'
+                        },
                     }
+                },
+                '& > p': { // time
+                    textAlign: 'right',
+                    fontSize: '1em',
+                    color: '#5f6368'
                 }
             }
         },
@@ -127,8 +138,15 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
     const boards: Board[] = useSelector((state: any) => state.board.boards);
     const notifications: Notification[] = useSelector((state: any) =>
         state.notification.notifications.filter((notif: Notification) =>
-            notif.recipientID === account.id &&
-            notif.senderID !== account.id));
+            (
+                notif.recipientID === account.id &&
+                notif.senderID !== account.id &&
+                (
+                    !isPast(new Date(format(new Date(notif.date), "yyyy-mm-dd"))) ||
+                    !Boolean(notif.read)
+                )
+            )
+        ));
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -155,6 +173,21 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
         } as Notification);
 
         props.history.push('/workplace/' + board.code + "/" + task.code);
+    }
+
+    const handleMarkAllAsRead = () => {
+        const promises: any[] = [];
+
+        notifications.forEach(notif =>
+            promises.push(
+                props.updateNotification({
+                    ...notif,
+                    read: true
+                } as Notification)
+            )    
+        );
+
+        Promise.all(promises);
     }
 
     const unreadCount = notifications.filter(n => !Boolean(n.read)).length
@@ -189,7 +222,7 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                         notifications.length > 0
                         ? <Auxi>
                             <Typography className={classes.header}>
-                                3 New Notifications
+                                {notifications.length} Notifications
                             </Typography>
                             <div className={classes.list}>
                                 {
@@ -205,14 +238,20 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                                                     className={!notif.read ? 'notRead' : ''}
                                                     onClick={() => handleNotificationClick(notif)}
                                                 >
-                                                    <Avatar
-                                                        size={40}
-                                                        account={sender}
-                                                    />
                                                     <div>
-                                                        <Typography>{notif.title}</Typography>
-                                                        <Typography>{notif.message}</Typography>
+                                                        <Avatar
+                                                            size={40}
+                                                            account={sender}
+                                                        />
+                                                        <div>
+                                                            <Typography>{notif.title}</Typography>
+                                                            <Typography>{notif.message}</Typography>
+                                                            
+                                                        </div>
                                                     </div>
+                                                    <Typography>
+                                                        {formatDistance(new Date(notif.date), new Date())}
+                                                    </Typography>
                                                 </div>
                                             );
                                         }
@@ -220,7 +259,12 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                                 }
                             </div>
                             <div className={classes.footer}>
-                                <Button>Mark all as read</Button>
+                                <Button
+                                    disabled={unreadCount < 1}
+                                    onClick={handleMarkAllAsRead}
+                                >
+                                    Mark all as read
+                                </Button>
                             </div>
                         </Auxi>
                         : null

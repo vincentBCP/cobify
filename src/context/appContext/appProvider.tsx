@@ -14,7 +14,6 @@ const AppProvider: React.FC = props => {
     const [shrinkNavigation, setShrinkNavigation] = React.useState(false);
 
     const account: User = useSelector((state: any) => state.app.account);
-    const users: User[] = useSelector((state: any) => state.user.users);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
 
@@ -31,7 +30,7 @@ const AppProvider: React.FC = props => {
         
         taskComments.forEach(c => {
             if (recipients.includes(c.userID)) return;
-            
+
             recipients.push(c.userID)
         });
 
