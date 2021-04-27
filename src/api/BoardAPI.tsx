@@ -7,9 +7,11 @@ import ColumnAPI from './ColumnAPI';
 
 import API from './API';
 
+import Collections from './Collections';
+
 class BoardAPI extends API<Board> {
     constructor() {
-        super("boards");
+        super(Collections.BOARDS);
     }
 
     public getBoards(): Promise<Board[]> {

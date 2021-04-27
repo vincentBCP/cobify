@@ -7,9 +7,11 @@ import User from '../models/types/User';
 import API from './API';
 import AuthAPI from './AuthAPI';
 
+import Collections from './Collections';
+
 class UserAPI extends API<User> {
     constructor() {
-        super("users");
+        super(Collections.USERS);
     }
 
     public getUsers(): Promise<User[]> {

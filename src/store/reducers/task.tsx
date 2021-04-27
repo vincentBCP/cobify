@@ -7,44 +7,30 @@ interface IState {
 };
 
 const initialState: IState = {
-    tasks: [
-        /*{
-            id: "1",
-            title: "Redesign the homepage",
-            boardID: "1",
-            columnID: "1",
-            accountID: "1"
-        },
-        {
-            id: "2",
-            title: "Upgrade dependencies to latest versions",
-            boardID: "1",
-            columnID: "1",
-            accountID: "1"
-        },
-        {
-            id: "3",
-            title: "Stripe payment integration",
-            boardID: "1",
-            columnID: "2",
-            accountID: "1"
-        }*/
-    ]
+    tasks: []
 };
 
 const addTask = (state: IState, task: Task) => {
+    const updatedTasks = [...state.tasks];
+    const index = updatedTasks.findIndex(t => t.id === task.id);
+
+    if (index !== -1) {
+        updatedTasks[index] = task;
+    } else {
+        updatedTasks.push(task);
+    }
+
     return {
         ...state,
-        tasks: [
-            ...state.tasks,
-            task
-        ]
+        tasks: [...updatedTasks]
     };
 };
 
 const updateTask = (state: IState, task: Task) => {
     const ind = state.tasks.findIndex(t => t.id === task.id);
 
+    if (ind === -1) return state;
+    
     const updatedTasks = [...state.tasks];
     updatedTasks[ind] = { ...task };
 
@@ -63,6 +49,8 @@ const setTasks = (state: IState, tasks: Task[]) => {
 
 const deleteTask = (state: IState, id: string) => {
     const ind = state.tasks.findIndex(t => t.id === id);
+
+    if (ind === -1) return state;
 
     const updatedTasks = [...state.tasks];
     updatedTasks.splice(ind, 1);

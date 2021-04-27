@@ -5,9 +5,11 @@ import Task from '../models/types/Task';
 
 import API from './API';
 
+import Collections from './Collections';
+
 class TaskAPI extends API<Task> {
     constructor() {
-        super("tasks");
+        super(Collections.TASKS);
     }
 
     public getTasks(): Promise<Task[]> {

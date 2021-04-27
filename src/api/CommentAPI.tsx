@@ -5,9 +5,11 @@ import Comment from '../models/types/Comment';
 
 import API from './API';
 
+import Collections from './Collections';
+
 class CommentAPI extends API<Comment> {
     constructor() {
-        super("comments");
+        super(Collections.COMMENTS);
     }
 
     public getComments(): Promise<Comment[]> {

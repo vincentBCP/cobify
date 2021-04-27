@@ -5,9 +5,11 @@ import Column from '../models/types/Column';
 
 import API from './API';
 
+import Collections from './Collections';
+
 class ColumnAPI extends API<Column> {
     constructor() {
-        super("columns");
+        super(Collections.COLUMNS);
     }
 
     public getColumns(): Promise<Column[]> {

@@ -47,27 +47,6 @@ const App: React.FC<IAppProps> = props => {
 
     const errorContext = React.useContext(ErrorContext);
 
-    /*useEffect(() => {
-        if (!account) return;
-
-        var tasksRef = firebase.database().ref('tasks');
-
-        tasksRef.on('child_added', (data) => {
-            console.log("added");
-            console.log(data);
-        });
-
-        tasksRef.on('child_changed', (data) => {
-            console.log("changed");
-            console.log(data);
-        });
-
-        tasksRef.on('child_removed', (data) => {
-            console.log("removed");
-            console.log(data);
-        });
-    }, [account]);*/
-
     useEffect(() => {
         checkAuth()
         .then(acct => {

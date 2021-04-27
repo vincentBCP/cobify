@@ -5,9 +5,11 @@ import Invitation from '../models/types/Invitation';
 
 import API from './API';
 
+import Collections from './Collections';
+
 class InvitationAPI extends API<Invitation> {
     constructor() {
-        super("invitations");
+        super(Collections.INVITATIONS);
     }
 
     public getInvitations(): Promise<Invitation[]> {

@@ -5,9 +5,11 @@ import Notification from '../models/types/Notification';
 
 import API from './API';
 
+import Collections from './Collections';
+
 class NotificationAPI extends API<Notification> {
     constructor() {
-        super("notifications");
+        super(Collections.NOTIFICATIONS);
     }
 
     public getNotifications(): Promise<Notification[]> {

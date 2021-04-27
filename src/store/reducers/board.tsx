@@ -7,59 +7,30 @@ interface IState {
 }
 
 const initialState: IState = {
-    boards: [
-        /*{
-            id: "1",
-            name: "Congrego",
-            code: "C",
-            accountID: "1",
-            color: "#8B56F0",
-            columnIDs: [
-                "1",
-                "2",
-                "3"
-            ]
-        },
-        {
-            id: "2",
-            name: "IHS",
-            code: "I",
-            accountID: "1",
-            color: "#CB4AAF",
-            columnIDs: []
-        },
-        {
-            id: "3",
-            name: "Safeplaces",
-            code: "S",
-            accountID: "1",
-            color: "#B8F393",
-            columnIDs: []
-        },
-        {
-            id: "4",
-            name: "Congrego version 2",
-            code: "CC",
-            accountID: "1",
-            color: "#144EEB",
-            columnIDs: []
-        }*/
-    ]
+    boards: []
 };
 
 const addBoard = (state: IState, board: Board) => {
+    const updatedBoards = [...state.boards];
+    const index = updatedBoards.findIndex(b => b.id === board.id);
+
+    if (index !== -1) {
+        updatedBoards[index] = board;
+    } else {
+        updatedBoards.push(board);
+    }
+
     return {
         ...state,
-        boards: [
-            ...state.boards,
-            board
-        ]
+        boards: [...updatedBoards]
     };
 };
 
 const updateBoard = (state: IState, board: Board) => {
     const ind = state.boards.findIndex(b => b.id === board.id);
 
+    if (ind === -1) return state;
+    
     const updatedBoards = [...state.boards];
     updatedBoards[ind] = { ...board };
 
@@ -78,6 +49,8 @@ const setBoards = (state: IState, boards: Board[]) => {
 
 const deleteBoard = (state: IState, id: string) => {
     const ind = state.boards.findIndex(b => b.id === id);
+
+    if (ind === -1) return state;
 
     const updatedBoards = [...state.boards];
     updatedBoards.splice(ind, 1);

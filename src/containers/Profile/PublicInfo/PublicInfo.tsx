@@ -72,6 +72,8 @@ const PublicInfo: React.FC<IPublicInfoProps> = props => {
         })
         .then(response => { })
         .catch(error => {
+            console.log(error);
+            console.log(error.response);
             errorContext.setError(error);
         })
         .finally(() => {

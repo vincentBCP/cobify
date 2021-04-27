@@ -11,18 +11,26 @@ const initialState: IState = {
 };
 
 const addComment = (state: IState, comment: Comment) => {
+    const updatedComments = [...state.comments];
+    const index = updatedComments.findIndex(c => c.id === comment.id);
+
+    if (index !== -1) {
+        updatedComments[index] = comment;
+    } else {
+        updatedComments.push(comment);
+    }
+
     return {
         ...state,
-        comments: [
-            ...state.comments,
-            comment
-        ]
+        comments: [...updatedComments]
     };
 };
 
 const updateComment = (state: IState, comment: Comment) => {
     const ind = state.comments.findIndex(c => c.id === comment.id);
 
+    if (ind === -1) return state;
+    
     const updatedComments = [...state.comments];
     updatedComments[ind] = { ...comment };
 
@@ -41,6 +49,8 @@ const setComments = (state: IState, comments: Comment[]) => {
 
 const deleteComment = (state: IState, id: string) => {
     const ind = state.comments.findIndex(c => c.id === id);
+
+    if (ind === -1) return state;
 
     const updatedComments = [...state.comments];
     updatedComments.splice(ind, 1);

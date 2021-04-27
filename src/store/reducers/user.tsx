@@ -11,18 +11,26 @@ const initialState: IState = {
 };
 
 const addUser = (state: any, user: User) => {
+    const updatedUsers = [...state.users];
+    const index = updatedUsers.findIndex(u => u.id === user.id);
+
+    if (index !== -1) {
+        updatedUsers[index] = user;
+    } else {
+        updatedUsers.push(user);
+    }
+
     return {
         ...state,
-        users: [
-            ...state.users,
-            user
-        ]
+        users: [...updatedUsers]
     };
 };
 
 const updateUser = (state: IState, user: User) => {
     const ind = state.users.findIndex(g => g.id === user.id);
 
+    if (ind === -1) return state;
+    
     const updatedUser = [...state.users];
     updatedUser[ind] = { ...user };
 
@@ -41,6 +49,8 @@ const setUsers = (state: IState, users: User[]) => {
 
 const deleteUser = (state: IState, id: string) => {
     const ind = state.users.findIndex(g => g.id === id);
+
+    if (ind === -1) return state;
 
     const updatedUsers = [...state.users];
     updatedUsers.splice(ind, 1);

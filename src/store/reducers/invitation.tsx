@@ -7,77 +7,36 @@ interface IState {
 }
 
 const initialState: IState = {
-    invitations: [
-        /*{
-            id: "1",
-            userID: "1",
-            accountID: "1",
-            boardID: "1",
-            link: ""
-        },
-        {
-            id: "2",
-            userID: "1",
-            accountID: "1",
-            boardID: "2",
-            link: ""
-        },
-        {
-            id: "3",
-            userID: "2",
-            accountID: "1",
-            boardID: "3",
-            link: ""
-        },
-        {
-            id: "4",
-            userID: "3",
-            accountID: "1",
-            boardID: "4",
-            link: ""
-        },
-        {
-            id: "5",
-            userID: "4",
-            accountID: "1",
-            boardID: "2",
-            link: ""
-        },
-        {
-            id: "6",
-            userID: "5",
-            accountID: "1",
-            boardID: "3",
-            link: ""
-        },
-        {
-            id: "7",
-            userID: "6",
-            accountID: "1",
-            boardID: "4",
-            link: ""
-        }*/
-    ]
+    invitations: []
 };
 
-const deleteInvitation = (state: any, id: string) => {
+const deleteInvitation = (state: IState, id: string) => {
+    const ind = state.invitations.findIndex(c => c.id === id);
+
+    if (ind === -1) return state;
+
     const updatedInvitations = [...state.invitations];
-    const index = updatedInvitations.findIndex(i => i.id === id);
-    updatedInvitations.splice(index, 1);
+    updatedInvitations.splice(ind, 1);
 
     return {
         ...state,
         invitations: [...updatedInvitations]
-    };
-};
+    }
+}
 
 const addInvitation = (state: any, invitation: Invitation) => {
+    const updatedInvitations = [...state.invitations];
+    const index = updatedInvitations.findIndex(i => i.id === invitation.id);
+
+    if (index !== -1) {
+        updatedInvitations[index] = invitation;
+    } else {
+        updatedInvitations.push(invitation);
+    }
+
     return {
         ...state,
-        invitations: [
-            ...state.invitations,
-            invitation
-        ]
+        invitations: [...updatedInvitations]
     };
 };
 

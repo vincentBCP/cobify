@@ -11,12 +11,18 @@ const initialState: IState = {
 };
 
 const addNotification = (state: IState, notification: Notification) => {
+    const updatedNotifications = [...state.notifications];
+    const index = updatedNotifications.findIndex(n => n.id === notification.id);
+
+    if (index !== -1) {
+        updatedNotifications[index] = notification;
+    } else {
+        updatedNotifications.push(notification);
+    }
+
     return {
         ...state,
-        notifications: [
-            ...state.notifications,
-            notification
-        ]
+        notifications: [...updatedNotifications]
     };
 };
 

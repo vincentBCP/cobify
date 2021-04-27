@@ -7,48 +7,30 @@ interface IState {
 };
 
 const initialState: IState = {
-    columns: [
-        /*{
-            id: "1",
-            name: "Backlog",
-            boardID: "1",
-            accountID: "1",
-            taskIDs: [
-                "1",
-                "2"
-            ]
-        },
-        {
-            id: "2",
-            name: "In Progress",
-            boardID: "1",
-            accountID: "1",
-            taskIDs: [
-                "3"
-            ]
-        },
-        {
-            id: "3",
-            name: "Completed",
-            boardID: "1",
-            accountID: "1"
-        }*/
-    ]
+    columns: []
 };
 
 const addColumn = (state: IState, column: Column) => {
+    const updatedColumns = [...state.columns];
+    const index = updatedColumns.findIndex(c => c.id === column.id);
+
+    if (index !== -1) {
+        updatedColumns[index] = column;
+    } else {
+        updatedColumns.push(column);
+    }
+
     return {
         ...state,
-        columns: [
-            ...state.columns,
-            column
-        ]
+        columns: [...updatedColumns]
     };
 };
 
 const updateColumn = (state: IState, column: Column) => {
     const ind = state.columns.findIndex(c => c.id === column.id);
 
+    if (ind === -1) return state;
+    
     const updatedColumns = [...state.columns];
     updatedColumns[ind] = { ...column };
 
@@ -65,10 +47,25 @@ const setColumns = (state: IState, columns: Column[]) => {
     }
 }
 
+const deleteColumn = (state: IState, id: string) => {
+    const ind = state.columns.findIndex(c => c.id === id);
+
+    if (ind === -1) return state;
+
+    const updatedColumns = [...state.columns];
+    updatedColumns.splice(ind, 1);
+
+    return {
+        ...state,
+        columns: [...updatedColumns]
+    }
+}
+
 const actions: any = [];
 actions[actionTypes.ADD_COLUMN] = addColumn;
 actions[actionTypes.UPDATE_COLUMN] = updateColumn;
 actions[actionTypes.SET_COLUMNS] = setColumns;
+actions[actionTypes.DELETE_COLUMN] = deleteColumn;
 
 const columnReducer = (state = initialState, action: any) => {
     if (!actions[action.type]) return state;
