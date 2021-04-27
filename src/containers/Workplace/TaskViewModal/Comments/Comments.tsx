@@ -78,8 +78,6 @@ const Comments: React.FC<ICommentsProps> = props => {
             content: textEditorValue?.content,
             attachments: textEditorValue?.attachments || [],
             taskID: props.task?.id,
-            columnID: props.task?.columnID,
-            boardID: props.task?.boardID,
             accountID: props.task?.accountID,
             userID: account.id,
             date: (new Date()).toISOString()

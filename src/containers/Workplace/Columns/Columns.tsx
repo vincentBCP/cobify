@@ -17,6 +17,7 @@ import TaskAPI from '../../../api/TaskAPI';
 import ColumnComp from './Column';
 
 import ErrorContext from '../../../context/errorContext';
+import AppContext from '../../../context/appContext';
 
 export interface IFilter {
     searchString?: string,
@@ -46,6 +47,7 @@ const Columns: React.FC<IColumnsProps> = props => {
     const dispatch = useDispatch();
 
     const errorContext = React.useContext(ErrorContext);
+    const appContext = React.useContext(AppContext);
 
     const [board, setBoard] = useState<Board>();
     const [sourceTask, setSourceTask] = useState<Task | null>(null);
@@ -114,6 +116,7 @@ const Columns: React.FC<IColumnsProps> = props => {
 
     const handleDrop = (ev: React.DragEvent) => {
         ev.preventDefault();
+        ev.stopPropagation();
 
         if (!board) {
             clearDnD();
@@ -158,7 +161,7 @@ const Columns: React.FC<IColumnsProps> = props => {
             taskIDs: [...(tColumn.taskIDs || [])]
         }
 
-        if (tColumn.id === sColumn.id) {
+        if (tColumn.id === sColumn.id) { // task is dropped in its current column
             updatedTargetColumn.taskIDs?.splice(sourceIndex < targetIndex ? targetIndex + 1 : targetIndex, 0, sourceTask?.id);
             updatedTargetColumn.taskIDs?.splice(sourceIndex > targetIndex ? sourceIndex + 1 : sourceIndex, 1);
 
@@ -175,6 +178,8 @@ const Columns: React.FC<IColumnsProps> = props => {
             clearDnD();
             return;
         }
+
+        // task is dropped in different column
 
         updatedTargetColumn.taskIDs?.splice(targetIndex, 0, sourceTask?.id); // add task id to the list
 
@@ -199,7 +204,9 @@ const Columns: React.FC<IColumnsProps> = props => {
             payload: {...updatedSourceTask}
         });
         TaskAPI.updateTask(updatedSourceTask)
-        .then(response => { })
+        .then(response => {
+            appContext.sendNotification(updatedSourceTask);
+        })
         .catch(error => {
             errorContext.setError(error);
         });

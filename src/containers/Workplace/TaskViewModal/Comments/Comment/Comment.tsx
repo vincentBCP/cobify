@@ -99,8 +99,6 @@ const CommentComp: React.FC<ICommentProps> = props => {
         const dto: CommentDTO = {
             ...(textEditorValue as any),
             taskID: props.comment.taskID,
-            columnID: props.comment.columnID,
-            boardID: props.comment.boardID,
             userID: props.comment.userID,
             accountID: props.comment.accountID
         }

@@ -121,14 +121,14 @@ const Boards: React.FC<IBoardsProps> = props => {
                 props.deleteInvitation(i.id);
             });
 
-            comments.forEach(com => {
-                if (com.boardID !== id) return;
-
-                promises.push(props.deleteComment(com));
-            })
-
             tasks.forEach(t => {
                 if (t.boardID !== id) return;
+
+                comments.forEach(com => {
+                    if (com.taskID !== t.id) return;
+    
+                    promises.push(props.deleteComment(com));
+                });
 
                 promises.push(props.deleteTask(t));
             });
