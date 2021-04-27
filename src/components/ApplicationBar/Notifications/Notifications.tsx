@@ -80,6 +80,9 @@ const useStyles = makeStyles((theme: Theme) =>
                 padding: '10px 15px',
                 borderBottom: '1px solid #eee',
 
+                '&:last-of-type': {
+                    borderBottom: 'none'
+                },
                 '&.notRead': {
                     backgroundColor: '#f7f9fc'
                 },
@@ -112,6 +115,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             padding: 5,
             textAlign: 'center',
+            borderTop: '1px solid #eee',
 
             '& button': {
                 color: 'rgba(0, 0, 0, 0.87)'
