@@ -1,0 +1,203 @@
+import React from 'react';
+import _ from 'lodash';
+
+import { useSelector } from 'react-redux';
+
+import { makeStyles, createStyles, Theme, withStyles } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
+import NotificationIcon from '@material-ui/icons/NotificationsNoneOutlined';
+import Badge from '@material-ui/core/Badge';
+import Button from '@material-ui/core/Button';
+
+import Auxi from '../../../hoc/Auxi';
+import Avatar from '../../../widgets/Avatar';
+
+import User from '../../../models/types/User';
+import Notification from '../../../models/types/Notification';
+
+const StyledBadge = withStyles((theme: Theme) =>
+    createStyles({
+        badge: {
+            right: 6,
+            top: 2,
+            border: 'none',
+            padding: 0,
+            width: 22,
+            height: 22,
+            borderRadius: 11,
+            fontSize: 12,
+            backgroundColor: "#407ad6",
+            color: "white"
+        },
+    }),
+)(Badge);
+
+const useStyles = makeStyles((theme: Theme) => 
+    createStyles({
+        popover: {
+            marginTop: 10,
+            marginLeft: -10,
+
+            '& .MuiPopover-paper': {
+                width: 320,
+                maxHeight: 'calc(100vh * .70)',
+                borderRadius: 10,
+                border: '1px solid rgba(0,0,0,0.1)',
+                boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.05)'
+            }
+        },
+        root: {
+        },
+        icon: {
+            color: '#9e9e9e',
+            fontSize: 30
+        },
+        header: {
+            textAlign: 'center',
+            padding: 10,
+            color: 'rgba(0, 0, 0, 0.87)'
+        },
+        list: {
+            borderTop: '1px solid #eee',
+            maxHeight: '40vh',
+            overflowY: 'scroll',
+
+            '& > div': { // list item
+                display: 'flex',
+                alignItems: 'center',
+                transitionDuration: '0.3s',
+                cursor: 'pointer',
+                padding: '10px 15px',
+                borderBottom: '1px solid #eee',
+
+                '& > div:last-of-type': { // list item content
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginLeft: 15,
+
+                    '&.notRead': {
+                        backgroundColor: '#f7f9fc'
+                    },
+                    '& p': {
+                        lineHeight: '1.5em',
+                        fontSize: '1em'
+                    },
+                    '& p:first-of-type': {
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        footer: {
+            width: '100%',
+            padding: 5,
+            textAlign: 'center',
+
+            '& button': {
+                color: 'rgba(0, 0, 0, 0.87)'
+            }
+        },
+        empty: {
+            padding: '20px 20px',
+            color: 'rgba(0, 0, 0, 0.87)'
+        }
+    })
+);
+
+const Notifications: React.FC = props => {
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+    const account: User = useSelector((state: any) => state.app.account);
+    const users: User[] = useSelector((state: any) => state.user.users);
+    const notifications: Notification[] = useSelector((state: any) =>
+        state.notification.notifications.filter((notif: Notification) => notif.recipient === account.id));
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    }
+
+    return (
+        <Auxi>
+            <Tooltip title="Notifications">
+                <IconButton onClick={handleClick}>
+                    <StyledBadge badgeContent={4}>
+                        <NotificationIcon className={classes.icon} />
+                    </StyledBadge>
+                </IconButton>
+            </Tooltip>
+
+            <Popover
+                id="organization-selector-popup"
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                className={classes.popover}
+            >
+                <Paper className={classes.root}>
+                    {
+                        notifications.length > 0
+                        ? <Auxi>
+                            <Typography className={classes.header}>
+                                3 New Notifications
+                            </Typography>
+                            <div className={classes.list}>
+                                {
+                                    _.orderBy(notifications, ["date"], ["desc"]).map(
+                                        notif => {
+                                            const sender = users.find(u => u.id === notif.sender);
+
+                                            if (!sender) return null;
+
+                                            return (
+                                                <div className={!notif.read ? 'notRead' : ''}>
+                                                    <Avatar
+                                                        size={40}
+                                                        account={sender}
+                                                    />
+                                                    <div>
+                                                        <Typography>{notif.title}</Typography>
+                                                        <Typography>{notif.message}</Typography>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                    )
+                                }
+                            </div>
+                            <div className={classes.footer}>
+                                <Button>Mark all as read</Button>
+                            </div>
+                        </Auxi>
+                        : null
+                    }
+                    {
+                        notifications.length < 1
+                        ? <Typography className={classes.empty}>
+                            No notifications.
+                        </Typography>
+                        : null
+                    }
+                </Paper>
+            </Popover>
+        </Auxi>
+    )
+}
+
+export default Notifications;
