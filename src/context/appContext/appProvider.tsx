@@ -8,6 +8,7 @@ import Comment from '../../models/types/Comment';
 import Task from '../../models/types/Task';
 import NotificationDTO from '../../models/dto/NotificationDTO';
 import Column from '../../models/types/Column';
+import UserRole from '../../models/enums/UserRole';
 
 import NotificationAPI from '../../api/NotificationAPI';
 import Collections from '../../api/Collections';
@@ -28,6 +29,8 @@ const AppProvider: React.FC = props => {
 
     const shouldCascade = React.useCallback((record: any): boolean => {
         if (!record) return false;
+
+        if (account.role === UserRole.SYSADMIN) return true;
 
         return record.accountID === account.id || record.accountID === account.accountID
     }, [account]);
