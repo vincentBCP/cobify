@@ -25,7 +25,7 @@ const Page: React.FC<IPageProps> = props => {
 
     useEffect(() => {
         window.document.title = props.title + " - Cobify";
-    }, []);
+    }, [props.title]);
 
     return (
         <Paper className={classes.root} elevation={0}>
