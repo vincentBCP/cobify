@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './index.scss';
 
@@ -19,6 +20,8 @@ import columnReducer from './store/reducers/column';
 import taskReducer from './store/reducers/task';
 import commentReducer from './store/reducers/comment';
 import notificationReducer from './store/reducers/notification';
+
+import PageNotFound from './containers/PageNotFound';
 
 const rootRecuder = combineReducers({
     app: appReducer,
@@ -89,7 +92,27 @@ ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
             <ThemeProvider theme={theme}>
-                <App />
+                <Switch>
+                    <Route path="/accounts" component={App} exact={true} />
+                    <Route path="/contactSupport" component={App} exact={true} />
+
+                    <Route path="/workplace/:boardCode?/:taskCode?" component={App} />
+                    <Route path="/profile" component={App} exact={true} />
+                    <Route path="/boards" component={App} exact={true} />
+                    <Route path="/users" component={App} exact={true} /> 
+                    <Route path="/contactSupport" component={App} exact={true} />
+
+                    <Route path="/logout" component={App} exact={true} />
+
+                    <Route path="/login" component={App} exact={true} />
+                    <Route path="/resetPassword" component={App} exact={true} />
+                    <Route path="/signUp" component={App} exact={true} />
+
+                    <Route exact path='/' component={App} />
+
+                    <Route path="/404" component={PageNotFound} />
+                    <Redirect to="/404" />
+                </Switch>
             </ThemeProvider>
         </BrowserRouter>
     </Provider>,

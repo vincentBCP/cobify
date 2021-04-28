@@ -91,10 +91,12 @@ const App: React.FC<IAppProps> = props => {
 
     let routes = account?.role === UserRole.SYSADMIN
         ? <Switch>
-            <Route path="/accounts" component={Accounts} />
+            <Route path="/accounts" component={Accounts} exact={true} />
             <Route path="/contactSupport" component={ContactSupport} exact={true} />
             <Route path="/logout" component={Logout} exact={true} />
-            <Redirect to="/accounts" />
+            <Route path="/login" exact={true} render={() => <Redirect to="/accounts" />} />
+            <Route path="/" exact={true} render={() => <Redirect to="/accounts" />} />
+            <Redirect to="/404" />
         </Switch>
         : <Switch>
             <Route path="/workplace/:boardCode?/:taskCode?" component={Workplace} />
@@ -103,7 +105,9 @@ const App: React.FC<IAppProps> = props => {
             {account?.role === UserRole.ADMIN ? <Route path="/users" component={Users} exact={true} /> : null}
             <Route path="/contactSupport" component={ContactSupport} exact={true} />
             <Route path="/logout" component={Logout} exact={true} />
-            <Redirect to="/workplace" />
+            <Route path="/login" exact={true} render={() => <Redirect to="/workplace" />} />
+            <Route path="/" exact={true} render={() => <Redirect to="/workplace" />} />
+            <Redirect to="/404" />
         </Switch>;
 
     if(loading) return <PreLoader />;
@@ -114,7 +118,9 @@ const App: React.FC<IAppProps> = props => {
                 <Route path="/login" component={Login} exact={true} />
                 <Route path="/resetPassword" component={Login} exact={true} />
                 <Route path="/signUp" component={SignUp} exact={true} />
-                <Redirect to="/login" />
+                <Route path="/logout" exact={true} render={() => <Redirect to="/login" />} />
+                <Route path="/" exact={true} render={() => <Redirect to="/login" />} />
+                <Redirect to="/404" />
             </Switch>
         );
     }
