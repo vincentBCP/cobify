@@ -106,6 +106,18 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
 
     useEffect(() => {
+        window.document.title = "Workplace - Cobify";
+
+        if (board) {
+            window.document.title = board.name + " - Cobify";
+        }
+
+        if (viewingTask) {
+            window.document.title = viewingTask.code + " - " + board?.name + " - Cobify";
+        }
+    }, [board, viewingTask]);
+
+    useEffect(() => {
         const params: any = props.match.params || {};
         const boardCode = params.boardCode;
         const taskCode = params.taskCode;

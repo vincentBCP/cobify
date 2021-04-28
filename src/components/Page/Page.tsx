@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -22,6 +22,10 @@ interface IPageProps {
 
 const Page: React.FC<IPageProps> = props => {
     const classes = useStyles();
+
+    useEffect(() => {
+        window.document.title = props.title + " - Cobify";
+    }, []);
 
     return (
         <Paper className={classes.root} elevation={0}>

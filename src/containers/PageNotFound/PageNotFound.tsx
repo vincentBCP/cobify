@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Button from '@material-ui/core/Button';
 
 import './PageNotFound.scss';
 
 const PageNotFound: React.FC = props => {
+    useEffect(() => {
+        window.document.title = "404 - Cobify";
+    }, []);
+
     return (
         <div id="page-not-found">
             <p>404</p>

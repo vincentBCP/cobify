@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ramdomcolor from 'randomcolor';
 
 import { useForm } from 'react-hook-form';
@@ -103,6 +103,10 @@ const SignUp: React.FC<RouteComponentProps> = props => {
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>();
 
     const classes = useStyles();
+
+    useEffect(() => {
+        window.document.title = "Sign up - Cobify";
+    }, []);
 
     const signUp = (data: IFormInputs) => {
         if (loading) return;

@@ -153,6 +153,10 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
     const classes = useStyles();
 
     useEffect(() => {
+        window.document.title = "Login - Cobify";
+    }, []);
+
+    useEffect(() => {
         setErrorMessage("");
         setSuccessMessage("");
         setLoading(false);
