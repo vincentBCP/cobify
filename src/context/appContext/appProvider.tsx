@@ -202,7 +202,7 @@ const AppProvider: React.FC = props => {
         var usersRef = firebase.database().ref(Collections.USERS);
 
         usersRef.on('child_added', (data) => {
-            if (!shouldCascade(data.val())) return;
+            //if (!shouldCascade(data.val())) return;
 
             dispatch({
                 type: actionTypes.ADD_USER,
@@ -211,7 +211,7 @@ const AppProvider: React.FC = props => {
         });
 
         usersRef.on('child_changed', (data) => {
-            if (!shouldCascade(data.val())) return;
+            //if (!shouldCascade(data.val())) return;
 
             const record = data.val() as User;
             
@@ -227,7 +227,7 @@ const AppProvider: React.FC = props => {
         });
 
         usersRef.on('child_removed', (data) => {
-            if (!shouldCascade(data.val())) return;
+            //if (!shouldCascade(data.val())) return;
 
             const record = data.val() as User;
 
