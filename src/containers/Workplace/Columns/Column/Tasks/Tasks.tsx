@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'block',
             color: 'inherit',
             textDecoration: 'none',
-            marginBottom: 20,
+            marginBottom: 10,
 
             '&:last-of-type': {
                 marginBottom: 0
