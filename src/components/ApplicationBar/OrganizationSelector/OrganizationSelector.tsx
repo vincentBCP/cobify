@@ -133,17 +133,16 @@ const OrganizationSelector: React.FC<IOrganizationSelector> = props => {
         if (leavingUserAccountID) return;
         setLeavingUserAccountID(userAccount.id);
 
-        props.deleteUser(userAccount)
-        .then(() => {
-            setTimeout(() => {
-                setLeavingUserAccountID('');
-            }, 1000);
-        });
-
         if (account.id === userAccount.id) {
             localStorage.removeItem("account");
             window.location.reload();
+            return;
         }
+
+        setTimeout(() => {
+            props.deleteUser(userAccount)
+            .then(() => setLeavingUserAccountID(''));
+        }, 2000); 
     }
 
     return (
