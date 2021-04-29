@@ -44,6 +44,14 @@ class AuthAPI {
         });
     }
 
+    public deleteAccount(): Promise<any> {
+        var user = firebase.auth().currentUser;
+
+        if (!user) return Promise.resolve();
+        
+        return user.delete();
+    }
+
     public reLogin(refreshToken: string): Promise<AxiosResponse> {
         const token = this.decrypt(refreshToken);
 

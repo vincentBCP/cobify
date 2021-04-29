@@ -14,16 +14,16 @@ export const login = (email: string, password: string) => {
                 return UserAPI.getAccounts(email);
             })
             .then(accounts => {
-                const selectedAccount = localStorage.getItem("account");
+                if (accounts.length < 1) {
+                    AuthAPI.deleteAccount();
+                    reject({
+                        code: 'auth/user-not-found'
+                    });
 
-                const account = accounts.find(account => account.id === selectedAccount) || accounts[0];
+                    return;
+                }
 
-                dispatch({
-                    type: actionTypes.SET_ACCOUNT,
-                    payload: account
-                });
-
-                resolve(account);
+                resolve(true);
             })
             .catch(error => {
                 localStorage.removeItem("account");
@@ -44,6 +44,15 @@ export const checkAuth = () => {
                 return UserAPI.getAccounts(email);
             })
             .then(accounts => {
+                if (accounts.length < 1) {
+                    AuthAPI.deleteAccount();
+                    reject({
+                        code: 'auth/user-not-found'
+                    });
+                    
+                    return;
+                }
+
                 const selectedAccount = localStorage.getItem("account");
 
                 const account = accounts.find(account => account.id === selectedAccount) || accounts[0];

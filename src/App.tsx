@@ -50,12 +50,8 @@ const App: React.FC<IAppProps> = props => {
     useEffect(() => {
         checkAuth()
         .then(acct => {
-            if (Boolean(acct)) {
-                setAccount(acct);
-            }
-
-            setIsLoggedIn(Boolean(acct));
-            setLoading(Boolean(acct));
+            setAccount(acct);
+            setIsLoggedIn(true);
         })
         .catch(error => {
             setAccount(null);
@@ -120,13 +116,9 @@ const App: React.FC<IAppProps> = props => {
                 <Route path="/signUp" component={SignUp} exact={true} />
                 <Route path="/logout" exact={true} render={() => <Redirect to="/login" />} />
                 <Route path="/" exact={true} render={() => <Redirect to="/login" />} />
-                <Redirect to="/404" />
+                <Redirect to="/" />
             </Switch>
         );
-    }
-
-    if (!account) {
-        return <PreLoader />;
     }
 
     return (
