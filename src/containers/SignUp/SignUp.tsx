@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 500,
             maxWidth: '90%',
             maxHeight: '90%',
-            overflowY: 'scroll',
+            overflowY: 'auto',
             backgroundColor: '#f7f9fc',
             boxShadow: "rgba(0,0,0,0.3) 1px 2px 5px 1px, rgba(0,0,0,0.3) 0px 1px 3px -1px",
             padding: "3% 4%",
