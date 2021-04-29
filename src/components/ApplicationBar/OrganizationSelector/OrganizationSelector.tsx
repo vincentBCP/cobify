@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -9,11 +9,16 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Auxi from '../../../hoc/Auxi';
 import Avatar from '../../../widgets/Avatar';
 
 import User from '../../../models/types/User';
+import UserRole from '../../../models/enums/UserRole';
+
+import * as actions from '../../../store/actions';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -60,44 +65,52 @@ const useStyles = makeStyles((theme: Theme) =>
         accountList: {
             borderTop: '1px solid rgba(0,0,0,0.1)',
             
-            '& > div.selected': {
-                backgroundColor: '#f7f9fc'
-            },
-            '& > div:not(.selected):hover': {
-                cursor: 'pointer',
-                backgroundColor: '#f7f9fc'
-            },
             '& > div': {
                 display: 'flex',
                 alignItems: 'center',
-                padding: '12px 30px'
-            },
-            '& > div > div:last-of-type': {
-                marginLeft: 10,
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'hidden'
-            },
-            '& > div div p': {
-                fontSize: '1.2em',
-                flexGrow: 1,
-                maxWidth: '100%',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                lineHeight: '1.2em',
-                color: '#3c4043'
-            },
-            '& > div div p:nth-of-type(2)': {
-                fontSize: '0.9em',
-                color: "#5f6368"
+                padding: '12px 30px',
+
+                '&.selected': {
+                    backgroundColor: '#f7f9fc',
+                },
+                '&:not(.selected):hover': {
+                    cursor: 'pointer',
+                    backgroundColor: '#f7f9fc'
+                },
+                '& div:nth-of-type(2)': {
+                    marginLeft: 10,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                    flexGrow: 1,
+
+                    '& p': {
+                        fontSize: '1.2em',
+                        flexGrow: 1,
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        lineHeight: '1.2em',
+                        color: '#3c4043'
+                    },
+                    '& p:nth-of-type(2)': {
+                        fontSize: '0.9em',
+                        color: "#5f6368"
+                    }
+                }
             }
         }
     })
 );
 
-const OrganizationSelector: React.FC = props => {
+interface IOrganizationSelector {
+    deleteUser: (arg1: User) => Promise<string>
+}
+
+const OrganizationSelector: React.FC<IOrganizationSelector> = props => {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+    const [leavingUserAccountID, setLeavingUserAccountID] = useState("");
 
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) => state.user.users);
@@ -114,6 +127,23 @@ const OrganizationSelector: React.FC = props => {
     const handleChooseAccount = (account: User) => {
         localStorage.setItem("account", account.id);
         window.location.reload();
+    }
+
+    const leaveOrganization = (userAccount: User) => {
+        if (leavingUserAccountID) return;
+        setLeavingUserAccountID(userAccount.id);
+
+        props.deleteUser(userAccount)
+        .then(() => {
+            setTimeout(() => {
+                setLeavingUserAccountID('');
+            }, 1000);
+        });
+
+        if (account.id === userAccount.id) {
+            localStorage.removeItem("account");
+            window.location.reload();
+        }
     }
 
     return (
@@ -181,6 +211,26 @@ const OrganizationSelector: React.FC = props => {
                                             <Typography>{adminAccount.organization}</Typography>
                                             <Typography>{uAccount.role}</Typography>
                                         </div>
+                                        {
+                                            uAccount.role !== UserRole.ADMIN && 
+                                            uAccount.role !== UserRole.SYSADMIN &&
+                                            uAccount.id !== leavingUserAccountID
+                                            ? <IconButton
+                                                size="small"
+                                                onClick={(ev: any) => {
+                                                    ev.stopPropagation();
+                                                    leaveOrganization(uAccount);
+                                                }}
+                                            >
+                                                <ExitToAppIcon />
+                                            </IconButton> 
+                                            : null
+                                        }
+                                        {
+                                            uAccount.id === leavingUserAccountID
+                                            ? <CircularProgress size={22} />
+                                            : null
+                                        }
                                     </div>
                                 )
                             })
@@ -192,4 +242,10 @@ const OrganizationSelector: React.FC = props => {
     )
 }
 
-export default OrganizationSelector;
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        deleteUser: (user: User) => dispatch(actions.deleteUser(user))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(OrganizationSelector);

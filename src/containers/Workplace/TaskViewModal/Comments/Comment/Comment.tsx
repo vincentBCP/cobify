@@ -157,6 +157,8 @@ const CommentComp: React.FC<ICommentProps> = props => {
         )
     };
 
+    if (!user) return null;
+
     return (
         <div className={classes.root}>
             <Avatar
