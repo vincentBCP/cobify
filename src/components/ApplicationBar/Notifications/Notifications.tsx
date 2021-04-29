@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { isPast, format, formatDistance } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 
 import { useSelector, connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -146,7 +146,6 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                 notif.recipientID === account.id &&
                 notif.senderID !== account.id &&
                 (
-                    //!isPast(new Date(format(new Date(notif.date), "yyyy-M-d"))) ||
                     (format(new Date(notif.date), "yyyy-M-d") === format(new Date(), "yyyy-M-d")) ||
                     !Boolean(notif.read)
                 )
