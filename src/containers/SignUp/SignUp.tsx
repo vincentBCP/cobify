@@ -123,15 +123,21 @@ const SignUp: React.FC<RouteComponentProps> = props => {
                 });
         })
         .then(user => {
-            window.location.reload();
+            window.location.replace('/');
         })
         .catch(error => {
             const code = error.code;
-            const msg = code === "auth/email-already-in-use"
-                ? "You already have an account. Please login and upgrade your account instead."
-                : "Error occured.";
-                
-            setErrorMessage(msg);
+
+            switch (code) {
+                case 'auth/email-already-in-use':
+                    setErrorMessage("Email is already registered. Please login to upgrade your account instead.");
+                    break;
+                case 'auth/weak-password':
+                    setErrorMessage("Password should be at least 6 characters.");
+                    break;
+                default: setErrorMessage("Error occured.")
+            }
+            
             setLoading(false);
         });
     }

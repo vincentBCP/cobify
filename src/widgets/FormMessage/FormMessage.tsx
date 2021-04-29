@@ -5,13 +5,19 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: 20,
+        },
         message: {
+            width: '80%',
+            maxWidth: '80%',
             textAlign: 'center',
             fontSize: '0.9em',
-            
             borderRadius: 5,
             padding: 15,
-            marginBottom: 20,
 
             '&.success': {
                 backgroundColor: '#f7ffff',
@@ -34,7 +40,9 @@ const FormMessage: React.FC<IFormMessage> = props => {
     const classes = useStyles();
 
     return (
-        <Typography className={[classes.message, props.type].join(' ')}>{props.message}</Typography>
+        <div className={classes.root}>
+            <Typography className={[classes.message, props.type].join(' ')}>{props.message}</Typography>
+        </div>
     )
 }
 
