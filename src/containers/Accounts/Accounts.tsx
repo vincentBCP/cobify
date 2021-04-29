@@ -22,6 +22,7 @@ import Comment from '../../models/types/Comment';
 import Board from '../../models/types/Board';
 import Column from '../../models/types/Column';
 import Invitation from '../../models/types/Invitation';
+import Notification from '../../models/types/Notification';
 
 import AccountFormModal from './AccountFormModal';
 
@@ -30,6 +31,8 @@ import Avatar from '../../widgets/Avatar';
 import * as actions from '../../store/actions';
 
 import ErrorContext from '../../context/errorContext';
+
+import NotificationAPI from '../../api/NotificationAPI';
 
 interface IUsersProps {
     createUser: (arg1: UserDTO) => Promise<any>,
@@ -53,6 +56,7 @@ const Users: React.FC<IUsersProps> = props => {
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
+    const notifications: Notification[] = useSelector((state: any) => state.notification.notifications);
 
     const handleUserSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
         const request = props.createUser({
@@ -120,6 +124,12 @@ const Users: React.FC<IUsersProps> = props => {
                 if (u.accountID !== user.id) return;
 
                 promises.push(props.deleteUser(u));
+            });
+
+            notifications.forEach(n => {
+                if (n.accountID !== user.id) return;
+
+                promises.push(NotificationAPI.deleteNotification(n.id));
             });
 
             promises.push(props.deleteUser(user));
@@ -200,7 +210,7 @@ const mapDispatchToProps = (dispatch: any) => {
         deleteTask: (task: Task) => dispatch(actions.deleteTask(task)),
         deleteComment: (comment: Comment) => dispatch(actions.deleteComment(comment)),
         deleteColumn: (id: string) => dispatch(actions.deleteColumn(id)),
-        deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id)),
+        deleteInvitation: (id: string) => dispatch(actions.deleteInvitation(id))
     }
 };
 
