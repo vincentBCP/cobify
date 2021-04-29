@@ -146,7 +146,8 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                 notif.recipientID === account.id &&
                 notif.senderID !== account.id &&
                 (
-                    !isPast(new Date(format(new Date(notif.date), "yyyy-M-d"))) ||
+                    //!isPast(new Date(format(new Date(notif.date), "yyyy-M-d"))) ||
+                    (format(new Date(notif.date), "yyyy-M-d") === format(new Date(), "yyyy-M-d")) ||
                     !Boolean(notif.read)
                 )
             )
