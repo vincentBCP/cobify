@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
         list: {
             borderTop: '1px solid #eee',
             maxHeight: '40vh',
-            overflowY: 'scroll',
+            overflowY: 'auto',
 
             '& > div': { // list item
                 display: 'flex',
