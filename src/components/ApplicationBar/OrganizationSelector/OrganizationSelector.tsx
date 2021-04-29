@@ -214,15 +214,17 @@ const OrganizationSelector: React.FC<IOrganizationSelector> = props => {
                                             uAccount.role !== UserRole.ADMIN && 
                                             uAccount.role !== UserRole.SYSADMIN &&
                                             uAccount.id !== leavingUserAccountID
-                                            ? <IconButton
-                                                size="small"
-                                                onClick={(ev: any) => {
-                                                    ev.stopPropagation();
-                                                    leaveOrganization(uAccount);
-                                                }}
-                                            >
-                                                <ExitToAppIcon />
-                                            </IconButton> 
+                                            ? <Tooltip title="Leave">
+                                                <IconButton
+                                                    size="small"
+                                                    onClick={(ev: any) => {
+                                                        ev.stopPropagation();
+                                                        leaveOrganization(uAccount);
+                                                    }}
+                                                >
+                                                    <ExitToAppIcon />
+                                                </IconButton> 
+                                            </Tooltip>
                                             : null
                                         }
                                         {
