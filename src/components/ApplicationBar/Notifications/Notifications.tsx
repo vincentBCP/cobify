@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { format, formatDistance } from 'date-fns';
+import { formatDistance, differenceInHours } from 'date-fns';
 
 import { useSelector, connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 },
                 '& > p': { // time
                     textAlign: 'right',
-                    fontSize: '1em',
+                    fontSize: '0.9em',
                     color: '#5f6368'
                 }
             }
@@ -146,7 +146,10 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                 notif.recipientID === account.id &&
                 notif.senderID !== account.id &&
                 (
-                    (format(new Date(notif.date), "yyyy-M-d") === format(new Date(), "yyyy-M-d")) ||
+                    (differenceInHours(
+                        new Date(),
+                        new Date(notif.date)
+                    ) <= 23) ||
                     !Boolean(notif.read)
                 )
             )
