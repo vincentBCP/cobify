@@ -16,6 +16,7 @@ import BoardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/PeopleAlt';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import PowerIcon from '@material-ui/icons/PowerSettingsNew';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 
 import Logo from '../../widgets/Logo';
 
@@ -128,6 +129,27 @@ const SideNavigation: React.FC = props => {
                 }
 
                 {
+                    account.role === UserRole.SYSADMIN 
+                    ? <Tooltip
+                        title="Logout"
+                        placement="right"
+                        disableFocusListener
+                        disableTouchListener
+                        disableHoverListener={!appContext.shrinkNavigation}
+                    >
+                        <NavLink to="/logout" activeClassName="active">
+                            <ListItem key="Logout">
+                                <ListItemIcon className={classes.listItemIcon}>
+                                    <ExitToApp className={classes.drawerItemIcon} />
+                                </ListItemIcon>
+                                <ListItemText className={classes.drawerItemText} primary="Logout" />
+                            </ListItem>
+                        </NavLink>
+                    </Tooltip>
+                    : null
+                }
+
+                {
                     account.role === UserRole.ADMIN || 
                     account.role === UserRole.COADMIN || 
                     account.role === UserRole.GUEST
@@ -215,7 +237,7 @@ const SideNavigation: React.FC = props => {
                     : null
                 }
                 {
-                    appContext.shrinkNavigation
+                    appContext.shrinkNavigation && account.role !== UserRole.SYSADMIN
                     ? <div className={classes.extras}>
                         <span style={{flexGrow: 1}}></span>
                         <Tooltip
@@ -252,7 +274,7 @@ const SideNavigation: React.FC = props => {
             </div>
 
             {
-                !appContext.shrinkNavigation
+                !appContext.shrinkNavigation && account.role !== UserRole.SYSADMIN
                 ? <footer id="SideNavigation_Footer">
                     <Tooltip title="Contact support">
                         <NavLink to="/contactSupport">
