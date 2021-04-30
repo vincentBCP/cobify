@@ -4,10 +4,13 @@ import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Typography from '@material-ui/core/Typography';
 
 import Avatar from '../../../../widgets/Avatar';
 
 import User from '../../../../models/types/User';
+
+const MAX_PROFILE_PIC_SIZE_IN_MB = 2;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,6 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingLeft: 15,
             paddingRight: 15,
             marginTop: 10
+        },
+        message: {
+            marginTop: 5,
+            fontSize: '0.9em',
+            textAlign: 'center'
         }
     })
 );
@@ -50,10 +58,20 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
                 type="file"
                 onChange={(ev: React.ChangeEvent) => {
                     const fileList = (ev.target as HTMLInputElement).files || [];
-                    if (fileList[0]) {
-                        props.handleChange(fileList[0]);
-                        (ev.target as HTMLInputElement).value = "";
-                    }
+                    const pic = fileList[0];
+
+                    if (!pic) return;
+
+                    (ev.target as HTMLInputElement).value = "";
+
+                    const sizeInMB = (pic.size / (1024*1024));
+
+                    if (sizeInMB > MAX_PROFILE_PIC_SIZE_IN_MB) {
+                        alert("File is too large.");
+                        return;
+                    };
+
+                    props.handleChange(pic);
                 }}
             />
             <label htmlFor="contained-button-file">
@@ -68,6 +86,9 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
                     Upload
                 </Button>
             </label>
+            <Typography className={classes.message}>
+                For best results, use an image at least 128px by 128px in .jpg format. Maximum of {MAX_PROFILE_PIC_SIZE_IN_MB}mb.
+            </Typography>
         </Grid>
     );
 };
