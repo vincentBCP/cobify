@@ -143,6 +143,7 @@ const ColumnComp: React.FC<IColumnProps> = props => {
                         button
                         disabled={taskIDsCount > 0}
                         onClick={() => {
+                            if (taskIDsCount > 0) return;
                             props.handleColumnDelete(props.column);
                             setAnchorEl(null);
                         }}

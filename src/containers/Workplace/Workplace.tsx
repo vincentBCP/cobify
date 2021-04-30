@@ -353,7 +353,10 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                     startIcon={<AddIcon />}
                                     color="primary"
                                     disabled={!board?.columnIDs || board?.columnIDs.length < 1}
-                                    onClick={() => setAddTask(true)}
+                                    onClick={() => {
+                                        if (!board?.columnIDs || board?.columnIDs.length < 1) return;
+                                        setAddTask(true)
+                                    }}
                                 >Task</Button>
                                 : null
                             }

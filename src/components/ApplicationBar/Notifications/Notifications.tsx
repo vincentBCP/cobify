@@ -268,7 +268,10 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                             <div className={classes.footer}>
                                 <Button
                                     disabled={unreadCount < 1}
-                                    onClick={handleMarkAllAsRead}
+                                    onClick={() => {
+                                        if (unreadCount < 1) return;
+                                        handleMarkAllAsRead();
+                                    }}
                                 >
                                     Mark all as read
                                 </Button>

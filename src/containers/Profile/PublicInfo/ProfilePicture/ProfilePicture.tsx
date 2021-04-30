@@ -82,6 +82,12 @@ const ProfilePicture: React.FC<IProfilePictureProps> = props => {
                     startIcon={<CloudUploadIcon />}
                     className={classes.upload}
                     disabled={props.uploading}
+                    onClick={(ev: React.MouseEvent) => {
+                        if (props.uploading) {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                        }
+                    }}
                 >
                     Upload
                 </Button>
