@@ -14,7 +14,7 @@
     }
 
     a {
-        transition-duration: 0.5s;
+        transition-duration: 0.3s;
         padding: 0 7px;
         display: flex;
         
@@ -43,9 +43,11 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    border: none;
 
     a.active {
         background-color: $sideNavigation_secondaryColor;
+        border-right: 5px solid rgb(56, 142, 60);
     }
 }
 

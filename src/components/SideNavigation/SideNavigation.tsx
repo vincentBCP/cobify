@@ -64,7 +64,8 @@ const useStyles = makeStyles((theme: Theme) =>
             color: '#777f8a'
         },
         drawerItemText: {
-            color: '#c5c8cc'
+            color: '#c5c8cc',
+            margin: 0
         },
         extras: {
             display: 'flex',
