@@ -14,7 +14,8 @@
     }
 
     a {
-        transition-duration: 0.3s;
+        transition-property: background-color;
+        transition-duration: 0.5s;
         padding: 0 7px;
         display: flex;
         
@@ -62,7 +63,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 12px 0;
+        padding: 7px 0;
 
         &:hover {
             background-color: $sideNavigation_iconColor;
