@@ -34,6 +34,8 @@ import * as actions from '../../store/actions';
 
 import ErrorContext from '../../context/errorContext';
 
+const MAX_USERS = 7; // hard-coded for now;
+
 interface IUsersProps {
     deleteInvitation: (arg1: string) => Promise<any>,
     sendInvitation: (arg1: InvitationDTO) => Promise<any>,
@@ -77,6 +79,16 @@ const Users: React.FC<IUsersProps> = props => {
                 errorContext.setError(error);
             }
         ];
+    }
+
+    const handleCreateUser = () => {
+        if (users.length >= MAX_USERS) {
+            alert("You have reached the maximum allowed users to add.");
+            return;
+        }
+
+        setUser(null);
+        setOpen(true);
     }
 
     const handleUserCancel = () => {
@@ -220,10 +232,7 @@ const Users: React.FC<IUsersProps> = props => {
         <Tooltip title="Add User">
             <IconButton
                 aria-label="Add User"
-                onClick={() => {
-                    setUser(null);
-                    setOpen(true);
-                }}
+                onClick={handleCreateUser}
             >
                 <AddIcon />
             </IconButton>

@@ -47,6 +47,8 @@ interface IBoardsProps {
     deleteTask: (arg1: Task) => Promise<any>
 }
 
+const MAX_BOARDS = 1; // hard-coded for now
+
 const Boards: React.FC<IBoardsProps> = props => {
     const [board, setBoard] = useState<Board | null>(null);
     const [open, setOpen] = useState(false);
@@ -77,6 +79,16 @@ const Boards: React.FC<IBoardsProps> = props => {
             }
         ];
     };
+
+    const handleCreateBoard = () => {
+        if (boards.length >= MAX_BOARDS) {
+            alert("You have reached the maximum allowed boards to create.");
+            return;
+        }
+
+        setBoard(null);
+        setOpen(true);
+    }
 
     const handleBoardSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
         const request = board
@@ -241,10 +253,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         <Tooltip title="Add Board">
             <IconButton
                 aria-label="Add Board"
-                onClick={() => {
-                    setBoard(null);
-                    setOpen(true);
-                }}
+                onClick={handleCreateBoard}
             >
                 <AddIcon />
             </IconButton>
