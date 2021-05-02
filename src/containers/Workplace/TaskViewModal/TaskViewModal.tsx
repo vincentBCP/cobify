@@ -411,14 +411,14 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     <Typography>Created&nbsp;
                                         {
                                             props.task?.created
-                                            ? formatDistance(new Date(props.task.created), new Date())
+                                            ? formatDistance(new Date(props.task.created), new Date(), { addSuffix: true })
                                             : null
                                         }
                                     </Typography>
                                     <Typography>Updated&nbsp;
                                         {
                                             props.task?.updated
-                                            ? formatDistance(new Date(props.task.updated), new Date())
+                                            ? formatDistance(new Date(props.task.updated), new Date(), { addSuffix: true })
                                             : null
                                         }
                                     </Typography>
