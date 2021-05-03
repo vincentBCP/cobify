@@ -14,6 +14,8 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import Avatar from '../../../widgets/Avatar';
 
@@ -39,8 +41,8 @@ import * as actions from '../../../store/actions';
 import ErrorContext from '../../../context/errorContext';
 
 interface ITaskViewModalProps {
-    board?: Board,
-    task?: Task,
+    board: Board,
+    task: Task,
     updateTask: (arg1: Task) => Promise<Task>,
     updateTaskAndAttachments: (arg1: Task, arg2: TaskDTO) => Promise<Task>,
     updateColumn: (arg1: Column) => Promise<Column>,
@@ -51,31 +53,50 @@ interface ITaskViewModalProps {
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         dialog: {
+            '& .MuiDialogContent-root': {
+                overflow: 'hidden'
+            },
             '& .MuiDialog-paper': {
-                maxWidth: '100vw'
+                minWidth: 1000,
+                height: '90vh',
+
+                '&.MuiDialog-paperFullScreen': {
+                    height: '100vh'
+                }
             }
         },
         root: {
             display: 'flex',
             flexDirection: 'column',
-            width: 1000,
-            height: '80vh',
-            maxHeight: '80vh',
+            width: '100%',
+            height: '100%',
             marginBottom: 10,
             overflow: 'hidden'
         },
         header: {
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 20
+            marginBottom: 20,
+            
+            '& p': {
+                flexGrow: 1
+            }
         },
         code: {
             color: 'gray'
         },
         close: {
             color: 'darkgray',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            marginLeft: 10
+        },
+        windowToggle: {
+            color: 'darkgray',
+            cursor: 'pointer',
+            
+            '&.fullScreen': {
+                transform: 'rotate(180deg)'
+            }
         },
         content: {
             flexGrow: 1,
@@ -178,6 +199,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     const [task, setTask] = useState<Task>();
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
+    const [fullScreen, setFullScreen] = useState(false);
     const [_creator, setCreator] = useState<User>();
 
     const mainElemRef = React.useRef(null);
@@ -203,7 +225,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     }, [ creator ]);
 
     const handleClose = () => {
-        props.history.push("/workplace/" + props.board?.code);
+        props.history.push("/workplace/" + props.board.code);
     }
 
     const handleColumnChange = (column: Column) => {
@@ -261,9 +283,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     };
 
     const handleDelete = () => {
-        if (!props.board || !props.task) return;
-
-        const board: any = props.board || {};
+        const board: any = {...props.board};
         const column = columns.find(c => c.id === props.task?.columnID);
 
         if (!column) return;
@@ -326,11 +346,18 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                 open={Boolean(props.task)}
                 className={classes.dialog}
                 onClose={handleClose}
+                fullScreen={fullScreen}
             >
                 <DialogContent>
                     <Paper elevation={0} className={classes.root}>
                         <div className={classes.header}>
-                            <Typography className={classes.code}>{props.board?.name} / {task?.code}</Typography>
+                            <Typography className={classes.code}>{props.board.name} / {task?.code}</Typography>
+                            <Tooltip title={fullScreen ? "Exit full screen" : "Full screen"}>
+                                <OpenInNewIcon
+                                    className={[classes.windowToggle, fullScreen ? 'fullScreen' : ''].join(' ')}
+                                    onClick={() => setFullScreen(!fullScreen)}
+                                />
+                            </Tooltip>
                             <CloseIcon className={classes.close} onClick={handleClose}/>
                         </div>
                         <div className={classes.content}>
@@ -372,7 +399,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                             </div>
                             <div className={classes.side}>
                                 {
-                                    task && props.board
+                                    task 
                                     ? <ColumnSelector
                                         task={task}
                                         board={props.board}

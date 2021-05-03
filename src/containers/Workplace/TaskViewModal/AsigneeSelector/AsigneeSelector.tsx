@@ -32,19 +32,18 @@ const useStyles = makeStyles((theme: Theme) =>
             }
         },
         root: {
-            display: 'flex',
-            flexGrow: 1
+            overflow: 'hidden',
+            flexGrow: 1,
+            display: 'flex'
         },
         button: {
             flexGrow: 1,
             display: 'flex',
             justifyContent: 'flex-start',
-            padding: "5px 10px",
+            padding: "5px 0 5px 10px",
             borderRadius: 0,
-            overflow: 'hidden',
 
             '& p': {
-                flexGrow: 1,
                 fontSize: 14,
                 fontWeight: 300,
                 textAlign: 'left',
@@ -57,6 +56,16 @@ const useStyles = makeStyles((theme: Theme) =>
             '& *': {
                 fontWeight: 400
             }
+        },
+        listItem: {
+            display: 'flex',
+
+           '& p': {
+               flexGrow: 1,
+               overflow: 'hidden',
+               textOverflow: 'ellipsis',
+               whiteSpace: 'nowrap'
+           }
         }
     })
 );
@@ -149,6 +158,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                             return isSelected
                                 ? <ListItem
                                     key={"user-selector-" + user.id}
+                                    className={classes.listItem}
                                     selected
                                 >
                                     <ListItemIcon>
@@ -161,6 +171,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                                 </ListItem>
                                 : <ListItem
                                     button
+                                    className={classes.listItem}
                                     key={"user-selector-" + user.id}
                                     onClick={() => handlelistItemClick(user)}
                                 >

@@ -312,10 +312,14 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 handleCancel={handleCancelCreateTask}
             />
 
-            <TaskViewModal
-                board={board}
-                task={viewingTask}
-            />
+            {
+                board && viewingTask
+                ? <TaskViewModal
+                    board={board}
+                    task={viewingTask}
+                />
+                : null
+            }
 
             <Paper elevation={0} className={classes.root}>
                 {
