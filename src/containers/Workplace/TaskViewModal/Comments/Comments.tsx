@@ -68,6 +68,7 @@ const Comments: React.FC<ICommentsProps> = props => {
 
     const handleAddComment = () => {
         if (!textEditorValue) return;
+        if (!textEditorValue.content && (!textEditorValue.attachments || textEditorValue.attachments.length < 1)) return;
 
         if (!props.task) return;
 

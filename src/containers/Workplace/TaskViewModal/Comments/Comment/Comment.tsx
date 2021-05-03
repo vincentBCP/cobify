@@ -191,7 +191,7 @@ const CommentComp: React.FC<ICommentProps> = props => {
                 <div dangerouslySetInnerHTML={{__html: (props.comment.content)}} />
                 {
                     props.comment.attachments
-                    ? <Attachments attachments={props.comment.attachments} />
+                    ? <Attachments attachments={props.comment.attachments} noFilename/>
                     : null
                 }
             </div>
