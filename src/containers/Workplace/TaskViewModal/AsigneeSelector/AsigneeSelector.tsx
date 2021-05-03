@@ -21,7 +21,8 @@ import Invitation from '../../../../models/types/Invitation';
 
 interface IAsigneeSelectorProps {
     task: Task,
-    handleChange: (arg1: User) => void
+    handleChange: (arg1: User) => void,
+    fullScreen?: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -84,7 +85,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
         const elem: any = elemRef.current || {};
 
         setListWidth(elem.offsetWidth);
-    }, [ elemRef ]);
+    }, [ elemRef, props.fullScreen ]);
 
     const account: User = useSelector((state: any) => state.app.account);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
@@ -148,11 +149,12 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
             >
                 <List
                     style={{
-                        width: listWidth || 'auto'
+                        width: !props.fullScreen ? (listWidth || 'auto') : 'auto',
+                        maxWidth: props.fullScreen ? (listWidth || 'auto') : 'auto'
                     }}
                 >
                     {
-                        [account, ...(_.orderBy(users, ["firstName"]))].map(user => {
+                        [account, ...(_.orderBy(users, ["firstName"]))].map((user, index) => {
                             const isSelected = props.task.asigneeID === user.id;
 
                             return isSelected
@@ -167,7 +169,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                                             account={user}
                                         />
                                     </ListItemIcon>
-                                    <Typography>{user.displayName}</Typography>
+                                    <Typography>{index === 0 ? "Assign to me" : user.displayName}</Typography>
                                 </ListItem>
                                 : <ListItem
                                     button
@@ -181,7 +183,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                                             account={user}
                                         />
                                     </ListItemIcon>
-                                    <Typography>{user.displayName}</Typography>
+                                    <Typography>{index === 0 ? "Assign to me" : user.displayName}</Typography>
                                 </ListItem>;
                         })
                     }

@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IAttachmentsProps {
-    attachments: IAttachment[]
+    attachments: IAttachment[],
+    noFilename?: boolean
 }
 
 const Attachments: React.FC<IAttachmentsProps> = props => {
@@ -33,7 +34,7 @@ const Attachments: React.FC<IAttachmentsProps> = props => {
                     <div key={"attachment-" + attachment.name} className={classes.attachment}>
                         <ImagePreview
                             file={attachment}
-                            tooltip={attachment.name}
+                            showFilename={!props.noFilename || false}
                         />
                     </div>
                 )

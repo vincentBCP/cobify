@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 
 import IAttachment from '../models/interfaces/IAttachment';
 
@@ -8,9 +8,9 @@ class StorageAPI {
     // https://firebase.google.com/docs/storage/web/upload-files
 
     public upload(file: File, isProfilePic?: boolean, fname?: string): Promise<IAttachment> {
-        const tokens = file.name.split(".");
-        const extension = tokens[tokens.length - 1];
-        const filename = fname || "attachment-" + format(new Date(), "yyyy-MM-dd-HH-mm-ss-T") + "." + extension;
+        //const tokens = file.name.split(".");
+        //const extension = tokens[tokens.length - 1];
+        const filename = fname || file.name;//"attachment-" + format(new Date(), "yyyy-MM-dd-HH-mm-ss-T") + "." + extension;
 
         const path = (isProfilePic ? "profilePicture/" : "attachment/") + filename;
 
@@ -23,6 +23,7 @@ class StorageAPI {
         .then(downloadUrl => {
             return {
                 name: filename,
+                size: file.size,
                 path: path,
                 downloadURL: downloadUrl,
                 timeCreated: (new Date()).toISOString()
