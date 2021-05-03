@@ -25,6 +25,7 @@ import Task from '../../models/types/Task';
 import InvitationDTO from '../../models/dto/InvitationDTO';
 import BoardDTO from '../../models/dto/BoardDTO';
 import Comment from '../../models/types/Comment';
+import Notification from '../../models/types/Notification';
 
 import BoardInvitationFormModal from './BoardInvitationFormModal';
 import BoardFormModal from './BoardFormModal';
@@ -35,6 +36,8 @@ import Avatar from '../../widgets/Avatar';
 import * as actions from '../../store/actions';
 
 import ErrorContext from '../../context/errorContext';
+
+import NotificationAPI from '../../api/NotificationAPI';
 
 interface IBoardsProps {
     deleteInvitation: (arg1: string) => Promise<any>,
@@ -69,6 +72,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
     const users: User[] = useSelector((state: any) => state.user.users);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
+    const notifications: Notification[] = useSelector((state: any) => state.notification.notifications);
 
     const handleRemoveInvitation = (id: string): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return [
@@ -140,6 +144,12 @@ const Boards: React.FC<IBoardsProps> = props => {
                     if (com.taskID !== t.id) return;
     
                     promises.push(props.deleteComment(com));
+                });
+
+                notifications.forEach(notif => {
+                    if (notif.taskID !== t.id) return;
+
+                    promises.push(NotificationAPI.deleteNotification(notif.id));
                 });
 
                 promises.push(props.deleteTask(t));
