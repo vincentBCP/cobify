@@ -62,10 +62,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
         var xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = (event) => {
-            console.log(event);
-            console.log(xhr.response);
-
-            /*var blob = xhr.response;
+            var blob = xhr.response;
 
             // https://gist.github.com/davalapar/d0a5ba7cce4bc599f54800da22926da2
 
@@ -87,7 +84,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
             setTimeout(() => {
                 // For Firefox it is necessary to delay revoking the ObjectURL
                 window.URL.revokeObjectURL(blobURL);
-            }, 100);*/
+            }, 100);
         };
         xhr.open('GET', attachment.downloadURL);
         xhr.send();
