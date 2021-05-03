@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             '& .MuiDialog-paper': {
                 minWidth: 1000,
-                height: '90vh',
+                height: '85vh',
 
                 '&.MuiDialog-paperFullScreen': {
                     height: '100vh'
@@ -415,6 +415,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                         ? <AsigneeSelector
                                             task={task}
                                             handleChange={handleAsigneeChange}
+                                            fullScreen={fullScreen}
                                         />
                                         : null
                                     }
