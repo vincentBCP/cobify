@@ -38,10 +38,11 @@
         width: 100%;
         max-height: calc((1.2em * 2) + 10px);
         overflow: hidden;
-        padding: 5px;
-        line-height: 1.2em;
+        padding: 3px 5px;
+        line-height: 1.1em;
         font-size: 0.87em;
         color: whitesmoke;
+        word-break: break-all;
         background-color: rgba(0, 0, 0, 0.3);
     }
 
@@ -65,6 +66,11 @@
             cursor: pointer;
             color: whitesmoke;
             margin-left: 5px;
+            transition-duration: 0.3s;
+
+            &:active {
+                color: rgba(255, 255, 255, 0.5);
+            }
         }
     }
 }

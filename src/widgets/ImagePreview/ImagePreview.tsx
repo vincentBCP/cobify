@@ -14,6 +14,8 @@ import './ImagePreview.scss';
 import IAttachment from '../../models/interfaces/IAttachment';
 import { Typography } from '@material-ui/core';
 
+import Alert from '../Alert';
+
 interface IImagePreviewProps {
     file?: File | IAttachment,
     handleRemove?: () => void,
@@ -25,7 +27,9 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
     const [name, setName] = useState<string>();
     const [open, setOpen] = useState(false);
     const [noPreview, setNoPreview] = useState(false);
-
+    const [downloading, setDownloading] = useState(false);
+    const [error, setError] = useState<any | null>();
+    
     useEffect(() => {
         if (!props.file) return;
         
@@ -56,7 +60,9 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
 
     const download = () => {
         const attachment = getAttachment();
-        if (!attachment) return;
+        if (!attachment || downloading) return;
+
+        setDownloading(true);
 
         //https://firebase.google.com/docs/storage/web/download-files
         var xhr = new XMLHttpRequest();
@@ -81,10 +87,15 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
             document.body.appendChild(tempLink);
             tempLink.click();
             document.body.removeChild(tempLink);
+
             setTimeout(() => {
                 // For Firefox it is necessary to delay revoking the ObjectURL
                 window.URL.revokeObjectURL(blobURL);
-            }, 100);
+                setDownloading(false);
+            }, 500);
+        };
+        xhr.onerror = (error) => {
+            setDownloading(false);
         };
         xhr.open('GET', attachment.downloadURL);
         xhr.send();
@@ -111,6 +122,13 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
                 name={name}
                 handleClose={() => setOpen(false)}
                 handleDownload={download}
+            />
+
+            <Alert
+                open={Boolean(error)}
+                type="error"
+                message="Request failed."
+                handleClose={() => setError(null)}
             />
 
             <Tooltip title={getFileInfo()}>
