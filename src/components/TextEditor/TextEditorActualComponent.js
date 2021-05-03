@@ -31,7 +31,7 @@ const TextEditor = props => {
             ...(attachments || [])
         ];
         Array.from(files).forEach(f => {
-            if (!f.type.startsWith("image")) return;
+            // if (!f.type.startsWith("image")) return;
             updatedAttachments.push(f);
         });
         
@@ -98,7 +98,6 @@ const TextEditor = props => {
                         <div key={"image-attachment-" + index}>
                             <ImagePreview
                                 file={file}
-                                tooltip={file.name}
                                 handleRemove={() => handleRemoveAttachment(index)}
                             />
                         </div>
@@ -111,7 +110,7 @@ const TextEditor = props => {
                     id="text-editor-drop-area"
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
-                >Drop image files here</div>
+                >Drop files here</div>
                 : null
             }
         </div>
