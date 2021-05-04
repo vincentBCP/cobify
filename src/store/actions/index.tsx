@@ -54,3 +54,9 @@ export {
     getNotifications,
     updateNotification
 } from './notification';
+
+export {
+    getLabels,
+    createLabel,
+    deleteLabel
+} from './label';

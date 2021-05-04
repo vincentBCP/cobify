@@ -25,6 +25,7 @@ import InvitationDTO from '../../models/dto/InvitationDTO';
 import BoardDTO from '../../models/dto/BoardDTO';
 import Comment from '../../models/types/Comment';
 import Notification from '../../models/types/Notification';
+import Label from '../../models/types/Label';
 
 import BoardInvitationFormModal from './BoardInvitationFormModal';
 import BoardFormModal from './BoardFormModal';
@@ -46,7 +47,8 @@ interface IBoardsProps {
     deleteBoard: (arg1: string) => Promise<any>,
     deleteColumn: (arg1: string) => Promise<string>,
     deleteComment: (arg1: Comment) => Promise<any>,
-    deleteTask: (arg1: Task) => Promise<any>
+    deleteTask: (arg1: Task) => Promise<any>,
+    deleteLabel: (arg1: string) => Promise<any>
 }
 
 const MAX_BOARDS = 1; // hard-coded for now
@@ -72,6 +74,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     const users: User[] = useSelector((state: any) => state.user.users);
     const comments: Comment[] = useSelector((state: any) => state.comment.comments);
     const notifications: Notification[] = useSelector((state: any) => state.notification.notifications);
+    const labels: Label[] = useSelector((state: any) => state.label.labels);
 
     const handleRemoveInvitation = (id: string): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
         return [
@@ -149,6 +152,12 @@ const Boards: React.FC<IBoardsProps> = props => {
                     if (notif.taskID !== t.id) return;
 
                     promises.push(NotificationAPI.deleteNotification(notif.id));
+                });
+
+                labels.forEach(l => {
+                    if (l.boardID !== id) return;
+    
+                    promises.push(props.deleteLabel(l.id));
                 });
 
                 promises.push(props.deleteTask(t));
@@ -309,7 +318,8 @@ const mapDispatchToProps = (dispatch: any) => {
         deleteBoard: (id: string) => dispatch(actions.deleteBoard(id)),
         deleteTask: (task: Task) => dispatch(actions.deleteTask(task)),
         deleteComment: (comment: Comment) => dispatch(actions.deleteComment(comment)),
-        deleteColumn: (id: string) => dispatch(actions.deleteColumn(id))
+        deleteColumn: (id: string) => dispatch(actions.deleteColumn(id)),
+        deleteLabel: (id: string) => dispatch(actions.deleteLabel(id))
     }
 };
 

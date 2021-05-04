@@ -25,6 +25,7 @@ import AsigneeSelector from './AsigneeSelector';
 import ColumnSelector from './ColumnSelector';
 import Comments from './Comments';
 import Attachments from './Attachments';
+import LabelSelector from './LabelSelector';
 
 import Task from '../../../models/types/Task';
 import TaskDTO from '../../../models/dto/TaskDTO';
@@ -329,6 +330,24 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
         ];
     };
 
+    const handleLabelsUpdate = (labels: string[]) => {
+        if (!task) return;
+        
+        const updatedTask: Task = {
+            ...task,
+            labels: [...labels],
+            updated: (new Date()).toISOString()
+        }
+
+        setTask({...updatedTask});
+
+        props.updateTask(updatedTask)
+        .then(newTask => {})
+        .catch(error => {
+            errorContext.setError(error);
+        });
+    };
+
     return (
         <React.Fragment>
             <TaskFormModal
@@ -403,9 +422,22 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                         board={props.board}
                                         handleChange={handleColumnChange}
                                     />
-                                    : <span>ha?</span>
+                                    : <span></span>
                                 }
 
+                                <div className={classes.row}>
+                                    <Typography>Labels</Typography>
+                                    {
+                                        task
+                                        ? <LabelSelector
+                                            task={task}
+                                            fullScreen={fullScreen}
+                                            handleChange={handleLabelsUpdate}
+                                        />
+                                        : null
+                                    }
+                                </div>
+                                
                                 <div className={classes.row}>
                                     <Typography>Assignee</Typography>
                                     {

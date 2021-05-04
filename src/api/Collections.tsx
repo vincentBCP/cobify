@@ -5,7 +5,8 @@ enum Collections {
     INVITATIONS = "invitations",
     NOTIFICATIONS = "notifications",
     TASKS = "tasks",
-    USERS = "users"
+    USERS = "users",
+    LABELS = "labels"
 }
 
 export default Collections;

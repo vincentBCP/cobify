@@ -181,7 +181,7 @@ const Columns: React.FC<IColumnsProps> = props => {
 
         // task is dropped in different column
 
-        updatedTargetColumn.taskIDs?.splice(targetIndex, 0, sourceTask?.id); // add task id to the list
+        updatedTargetColumn.taskIDs?.splice(updatedTargetColumn.taskIDs.length, 0, sourceTask?.id); // add task id to the end of the list
 
         dispatch({
             type: actionTypes.UPDATE_COLUMN,

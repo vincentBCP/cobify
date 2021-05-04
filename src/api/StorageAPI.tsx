@@ -33,7 +33,15 @@ class StorageAPI {
 
     public delete(attachment: IAttachment): Promise<boolean> {
         return firebase.storage().ref(attachment.path).delete()
-            .then(response => true);
+            .then(response => true)
+            .catch(error => {
+                const notFoundCode = "storage/object-not-found";
+
+                if (error.code === notFoundCode)
+                    return Promise.resolve(true);
+
+                return Promise.reject(error);
+            });
     }
 };
 

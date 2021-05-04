@@ -1,71 +1,19 @@
 import React from 'react';
 
-import { useSelector } from 'react-redux';
-import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import { makeStyles, createStyles, Theme, Typography } from '@material-ui/core';
-import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
-
-import Avatar from '../../../../../widgets/Avatar';
+import { makeStyles, createStyles, Theme } from '@material-ui/core';
 
 import Task from '../../../../../models/types/Task';
 import Column from '../../../../../models/types/Column';
 import Board from '../../../../../models/types/Board';
-import User from '../../../../../models/types/User';
-import Comment from '../../../../../models/types/Comment';
+
+import TaskComponent from './Task';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
             display: "block"
-        },
-        taskLink: {
-            display: 'block',
-            color: 'inherit',
-            textDecoration: 'none',
-            marginBottom: 10,
-
-            '&:last-of-type': {
-                marginBottom: 0
-            }
-        },
-        task: {
-            display: "flex",
-            flexDirection: "column",
-            padding: "20px",
-            borderRadius: 5,
-            border: '1px solid rgba(224, 224, 224, 1)',
-            transitionDuration: "0.3s",
-
-            '&:hover': {
-                backgroundColor: '#f7f9fc'
-            }
-        },
-        taskTitle: {
-            fontSize: 15,
-            fontWeight: 'bold',
-            whiteSpace: 'normal'
-        },
-        taskCode: {
-            color: 'gray',
-            marginBottom: 0,
-            fontSize: '1em'
-        },
-        footer: {
-            marginTop: 10,
-            display: 'flex',
-            alignItems: 'center'
-        },
-        commentsCount: {
-            flexGrow: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            color: '#ccc',
-
-            '& > span': {
-                marginRight: 5
-            }
         }
     })
 );
@@ -83,52 +31,20 @@ interface ITasksProps {
 
 const Tasks: React.FC<ITasksProps & RouteComponentProps> = props => {
     const classes = useStyles();
-    
-    const users: User[] = useSelector((state: any) => state.user.users);
-    const comments: Comment[] = useSelector((state: any) => state.comment.comments);
 
     return (
         <div className={classes.root}>
             {
-                props.data.map(task => {
-                    const asignee = users.find(g => g.id === task.asigneeID);
-
-                    return <NavLink
-                            key={"tasks-" + task.id}
-                            to={"/workplace/" + props.board.code + "/" + task.code}
-                            className={classes.taskLink}
-                        >
-                        <div
-                            id={task.id}
-                            className={classes.task}
-                            draggable
-                            onDragStart={(ev: React.DragEvent) => props.handleDragStart(ev, task)}
-                            onDragOver={(ev: React.DragEvent) => props.handleDragOver(ev, task)}
-                            onDrop={props.handleDrop}
-                        >
-                            <Typography className={classes.taskCode}>{task.code}</Typography>
-                            <Typography className={classes.taskTitle}>{task.title}</Typography>
-                            <div className={classes.footer}>
-                                {
-                                    asignee
-                                    ? <Avatar
-                                        size={30}
-                                        account={asignee}
-                                    />
-                                    : null
-                                }
-                                {
-                                    comments.filter(c => c.taskID === task.id).length > 0
-                                    ? <div className={classes.commentsCount}>
-                                        <span>{comments.filter(c => c.taskID === task.id).length}</span>
-                                        <ChatBubbleOutlineOutlinedIcon />
-                                    </div>
-                                    : null
-                                }
-                            </div>
-                        </div>
-                    </NavLink>
-                })
+                props.data.map(task =>
+                    <TaskComponent
+                        key={task.id}
+                        task={task}
+                        board={props.board}
+                        handleDragStart={props.handleDragStart}
+                        handleDragOver={props.handleDragOver}
+                        handleDrop={props.handleDrop}
+                    />
+                )
             }
         </div>
     );

@@ -200,6 +200,27 @@ const AppProvider: React.FC = props => {
                 payload: data.val().id
             });
         });
+
+        // labels
+        var labelsRef = firebase.database().ref(Collections.LABELS);
+
+        labelsRef.on('child_added', (data) => {
+            if (!shouldCascade(data.val())) return;
+
+            dispatch({
+                type: actionTypes.ADD_LABEL,
+                payload: data.val()
+            });
+        });
+
+        labelsRef.on('child_removed', (data) => {
+            if (!shouldCascade(data.val())) return;
+
+            dispatch({
+                type: actionTypes.DELETE_LABEL,
+                payload: data.val().id
+            });
+        });
         
         // users
         var usersRef = firebase.database().ref(Collections.USERS);

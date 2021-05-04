@@ -9,6 +9,7 @@ type Task = {
     boardID: string,
     creatorID: string,
     accountID: string,
+    labels?: string[],
     attachments?: IAttachment[],
     asigneeID?: string,
     created: string,

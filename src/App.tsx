@@ -36,11 +36,13 @@ interface IAppProps {
     getTasks: (arg1: User) => Promise<any>,
     getInvitations: (arg1: User) => Promise<any>,
     getComments: (arg1: User) => Promise<any>,
-    getNotifications: (arg1: User) => Promise<any>
+    getNotifications: (arg1: User) => Promise<any>,
+    getLabels: (arg1: User) => Promise<any>
 }
 
 const App: React.FC<IAppProps> = props => {
-    const { checkAuth, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments, getNotifications } = props;
+    const { checkAuth, getBoards, getColumns, getUsers, getTasks, 
+        getInvitations, getComments, getNotifications, getLabels } = props;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [account, setAccount] = useState<User | null>();
@@ -72,7 +74,8 @@ const App: React.FC<IAppProps> = props => {
             getTasks(account),
             getInvitations(account),
             getComments(account),
-            getNotifications(account)
+            getNotifications(account),
+            getLabels(account)
         );
 
         setLoading(true);
@@ -83,7 +86,8 @@ const App: React.FC<IAppProps> = props => {
             errorContext.setError(error);
         })
         .finally(() => setLoading(false));
-    }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, getComments, getNotifications, errorContext ]);
+    }, [ account, getBoards, getColumns, getUsers, getTasks, getInvitations, 
+        getComments, getLabels, getNotifications, errorContext ]);
 
     let routes = account?.role === UserRole.SYSADMIN
         ? <Switch>
@@ -144,7 +148,8 @@ const mapDispatchToProps = (dispatch: any) => {
         getTasks: (account: User) => dispatch(actions.getTasks(account)),
         getInvitations: (account: User) => dispatch(actions.getInvitations(account)),
         getComments: (account: User) => dispatch(actions.getComments(account)),
-        getNotifications: (account: User) => dispatch(actions.getNotifications(account))
+        getNotifications: (account: User) => dispatch(actions.getNotifications(account)),
+        getLabels: (account: User) => dispatch(actions.getLabels(account))
     }
 };
 

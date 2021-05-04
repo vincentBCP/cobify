@@ -20,6 +20,7 @@ import columnReducer from './store/reducers/column';
 import taskReducer from './store/reducers/task';
 import commentReducer from './store/reducers/comment';
 import notificationReducer from './store/reducers/notification';
+import labelReducer from './store/reducers/label';
 
 import PageNotFound from './containers/PageNotFound';
 
@@ -31,7 +32,8 @@ const rootRecuder = combineReducers({
     column: columnReducer,
     task: taskReducer,
     comment: commentReducer,
-    notification: notificationReducer
+    notification: notificationReducer,
+    label: labelReducer
 });
 
 const store = createStore(rootRecuder, compose(applyMiddleware(thunk)))
