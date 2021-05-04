@@ -16,6 +16,9 @@ import LabelFormModal from './LabelFormModal';
 import Task from '../../../../models/types/Task';
 import Label from '../../../../models/types/Label';
 import LabelDTO from '../../../../models/dto/LabelDTO';
+import User from '../../../../models/types/User';
+
+import UserRole from '../../../../models/enums/UserRole';
 
 import ErrorContext from '../../../../context/errorContext';
 
@@ -98,6 +101,7 @@ const LabelSelector: React.FC<ILabelSeletorProps> = props => {
     const [listWidth, setListWidth] = useState<number>();
     const [addLabel, setAddLabel] = useState(false);
 
+    const account: User = useSelector((state: any) => state.app.account);
     const labels: Label[] = useSelector((state: any) =>
         state.label.labels.filter((l: Label) => l.boardID === props.task.boardID));
     const tasks: Task[] = useSelector((state: any) =>
@@ -227,25 +231,35 @@ const LabelSelector: React.FC<ILabelSeletorProps> = props => {
                                     <div className={classes.color}
                                         style={{backgroundColor: label.color}}></div>
                                     <Typography>{label.name}</Typography>
-                                    <CloseIcon
-                                        onClick={(ev: React.MouseEvent) => {
-                                            ev.stopPropagation();
+                                    {
+                                        account.role === UserRole.ADMIN ||
+                                        account.role === UserRole.COADMIN
+                                        ? <CloseIcon
+                                            onClick={(ev: React.MouseEvent) => {
+                                                ev.stopPropagation();
 
-                                            handleDeleteLabel(label);
-                                        }}
-                                    />
+                                                handleDeleteLabel(label);
+                                            }}
+                                        />
+                                        : null
+                                    }
                                 </ListItem>
                             );
                         })
                     }
                 </List>
-                <Button
-                    fullWidth
-                    style={{borderRadius: 0}}
-                    onClick={() => setAddLabel(true)}
-                >
-                    Add new label
-                </Button>
+                {
+                    account.role === UserRole.ADMIN ||
+                    account.role === UserRole.COADMIN
+                    ? <Button
+                        fullWidth
+                        style={{borderRadius: 0}}
+                        onClick={() => setAddLabel(true)}
+                    >
+                        Add new label
+                    </Button>
+                    : null
+                }
             </Popover>
         </React.Fragment>
     );
