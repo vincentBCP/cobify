@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         popover: {
             '& .MuiPopover-paper': {
-                borderRadius: 0
+                borderRadius: 0,
+                marginTop: 5
             }
         },
         root: {
@@ -41,7 +42,12 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'flex-start',
             padding: "5px 0 5px 10px",
             borderRadius: 0,
+            border: "2px solid white",
 
+            '&.open': {
+                borderRadius: 3,
+                border: "2px solid " + theme.palette.primary.main,
+            },
             '& p': {
                 fontSize: 14,
                 fontWeight: 300,
@@ -107,7 +113,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
         <React.Fragment>
             <div ref={elemRef} className={classes.root}>
                 <Button
-                    className={classes.button}
+                    className={[classes.button, Boolean(anchorEl) ? "open" : ""].join(' ')}
                     onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                         setAnchorEl(event.currentTarget);
                     }}
@@ -147,8 +153,8 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
             >
                 <List
                     style={{
-                        width: !props.fullScreen ? (listWidth || 'auto') : 'auto',
-                        maxWidth: props.fullScreen ? (listWidth || 'auto') : 'auto'
+                        width: listWidth,//!props.fullScreen ? (listWidth || 'auto') : 'auto',
+                        maxWidth: listWidth,//props.fullScreen ? (listWidth || 'auto') : 'auto'
                     }}
                 >
                     {

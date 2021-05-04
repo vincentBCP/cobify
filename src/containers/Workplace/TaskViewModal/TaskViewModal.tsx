@@ -60,7 +60,13 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: '85vh',
 
                 '&.MuiDialog-paperFullScreen': {
-                    height: '100vh'
+                    height: '100vh',
+
+                    "& [class*='makeStyles-side-']": {
+                        minWidth: '25%',
+                        maxWidth: '25%',
+                        width: '25%'
+                    }
                 }
             }
         },
