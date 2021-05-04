@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Auxi from '../../../hoc/Auxi';
 import Avatar from '../../../widgets/Avatar';
 
 import User from '../../../models/types/User';
@@ -146,7 +145,7 @@ const OrganizationSelector: React.FC<IOrganizationSelector> = props => {
     }
 
     return (
-        <Auxi>
+        <React.Fragment>
             <Tooltip title="Account">
                 <IconButton onClick={handleClick}>
                     <Avatar
@@ -239,7 +238,7 @@ const OrganizationSelector: React.FC<IOrganizationSelector> = props => {
                     </div>
                 </Paper>
             </Popover>
-        </Auxi>
+        </React.Fragment>
     )
 }
 

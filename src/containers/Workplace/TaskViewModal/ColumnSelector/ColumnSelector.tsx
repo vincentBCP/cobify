@@ -10,8 +10,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
 
-import Auxi from '../../../../hoc/Auxi';
-
 import Task from '../../../../models/types/Task';
 import Column from '../../../../models/types/Column';
 import Board from '../../../../models/types/Board';
@@ -71,7 +69,7 @@ const ColumnSelector: React.FC<IColumnSelectorProps> = props => {
     }
 
     return (
-        <Auxi>
+        <React.Fragment>
             <div ref={elemRef} className={classes.root}>
                 <Button           
                     color="primary"
@@ -133,7 +131,7 @@ const ColumnSelector: React.FC<IColumnSelectorProps> = props => {
                     }
                 </List>
             </Popover>
-        </Auxi>
+        </React.Fragment>
     );
 }
 

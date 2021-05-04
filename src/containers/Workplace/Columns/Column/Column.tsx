@@ -11,8 +11,6 @@ import ListItem from '@material-ui/core/ListItem';
 
 import Tasks from './Tasks';
 
-import Auxi from '../../../../hoc/Auxi';
-
 import Board from '../../../../models/types/Board';
 import Column from '../../../../models/types/Column';
 import Task from '../../../../models/types/Task';
@@ -112,7 +110,7 @@ const ColumnComp: React.FC<IColumnProps> = props => {
     const taskIDsCount = props.column.taskIDs?.length || 0;
 
     return (
-        <Auxi>
+        <React.Fragment>
             <Popover
                 id="column-actions-popup"
                 open={Boolean(anchorEl)}
@@ -187,7 +185,7 @@ const ColumnComp: React.FC<IColumnProps> = props => {
                     />
                 </div>
             </div>
-        </Auxi>
+        </React.Fragment>
     );
 };
 

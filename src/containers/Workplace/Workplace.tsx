@@ -12,7 +12,6 @@ import AddIcon from '@material-ui/icons/Add';
 
 import './Workplace.scss';
 
-import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
 
 import BoardSelector from './BoardSelector';
@@ -293,7 +292,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     }
 
     return (
-        <Auxi>
+        <React.Fragment>
             <ApplicationBar
                 title="Workplace"
                 component={<BoardSelector boards={boards} board={board} />}
@@ -333,7 +332,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 
                 {
                     board
-                    ? <Auxi>
+                    ? <React.Fragment>
                         <Grid container direction="row" className={classes.header}>
                             {
                                 (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
@@ -385,11 +384,11 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                 handleColumnRename={handleColumnRename}
                             />
                         </Grid>
-                    </Auxi>
+                    </React.Fragment>
                     : null
                 }
             </Paper>
-        </Auxi>
+        </React.Fragment>
     );
 };
 

@@ -15,7 +15,6 @@ import NotificationIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 
-import Auxi from '../../../hoc/Auxi';
 import Avatar from '../../../widgets/Avatar';
 
 import User from '../../../models/types/User';
@@ -200,7 +199,7 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
     const unreadCount = notifications.filter(n => !Boolean(n.read)).length
 
     return (
-        <Auxi>
+        <React.Fragment>
             <Tooltip title="Notifications">
                 <IconButton onClick={handleClick}>
                     <StyledBadge badgeContent={unreadCount}>
@@ -227,7 +226,7 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                 <Paper className={classes.root}>
                     {
                         notifications.length > 0
-                        ? <Auxi>
+                        ? <React.Fragment>
                             <Typography className={classes.header}>
                                 {notifications.length} Notifications
                             </Typography>
@@ -276,7 +275,7 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                                     Mark all as read
                                 </Button>
                             </div>
-                        </Auxi>
+                        </React.Fragment>
                         : null
                     }
                     {
@@ -288,7 +287,7 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                     }
                 </Paper>
             </Popover>
-        </Auxi>
+        </React.Fragment>
     )
 }
 

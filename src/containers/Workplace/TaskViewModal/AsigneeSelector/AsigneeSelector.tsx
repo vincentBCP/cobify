@@ -13,8 +13,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import Avatar from '../../../../widgets/Avatar';
 
-import Auxi from '../../../../hoc/Auxi';
-
 import Task from '../../../../models/types/Task';
 import User from '../../../../models/types/User';
 import Invitation from '../../../../models/types/Invitation';
@@ -106,7 +104,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
     }
 
     return (
-        <Auxi>
+        <React.Fragment>
             <div ref={elemRef} className={classes.root}>
                 <Button
                     className={classes.button}
@@ -189,7 +187,7 @@ const AsigneeSelector: React.FC<IAsigneeSelectorProps> = props => {
                     }
                 </List>
             </Popover>
-        </Auxi>
+        </React.Fragment>
     );
 }
 

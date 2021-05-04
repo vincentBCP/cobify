@@ -21,8 +21,6 @@ import Avatar from '../../../widgets/Avatar';
 
 import TaskFormModal from '../TaskFormModal';
 
-import Aux from '../../../hoc/Auxi';
-
 import AsigneeSelector from './AsigneeSelector';
 import ColumnSelector from './ColumnSelector';
 import Comments from './Comments';
@@ -332,7 +330,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     };
 
     return (
-        <Aux>
+        <React.Fragment>
             <TaskFormModal
                 open={editMode}
                 task={props.task}
@@ -469,7 +467,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                     </Paper>
                 </DialogContent>
             </Dialog>
-        </Aux>
+        </React.Fragment>
     )
 };
 

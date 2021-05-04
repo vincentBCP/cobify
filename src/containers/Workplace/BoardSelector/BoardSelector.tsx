@@ -16,8 +16,6 @@ import Avatar from '../../../widgets/Avatar';
 import Board from '../../../models/types/Board';
 import User from '../../../models/types/User';
 
-import Aux from '../../../hoc/Auxi';
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         button: {
@@ -65,7 +63,7 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
     const open = Boolean(anchorEl);
     
     return (
-        <Aux>
+        <React.Fragment>
             <Button
                 variant="outlined"
                 color="default"
@@ -154,7 +152,7 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                     }
                 </List>
             </Popover>
-        </Aux>
+        </React.Fragment>
     )
 };
 

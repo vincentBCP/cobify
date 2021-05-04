@@ -10,7 +10,6 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 
-import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
 import Page from '../../components/Page';
 
@@ -74,7 +73,7 @@ const ContactSupport: React.FC = props => {
     }
 
     return (
-        <Auxi>
+        <React.Fragment>
             {
                 success
                 ? <Alert
@@ -133,7 +132,7 @@ const ContactSupport: React.FC = props => {
                     </Paper>
                 </div>
             </Page>
-        </Auxi>
+        </React.Fragment>
     );
 };
 

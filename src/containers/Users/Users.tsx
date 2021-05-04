@@ -11,7 +11,6 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import './Users.scss';
 
-import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
 import Page from '../../components/Page';
 
@@ -240,7 +239,7 @@ const Users: React.FC<IUsersProps> = props => {
     );
 
     return (
-        <Auxi>
+        <React.Fragment>
             <ApplicationBar title="Users" />
 
             <UserInvitationFormModal
@@ -266,7 +265,7 @@ const Users: React.FC<IUsersProps> = props => {
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
                 />
             </Page>
-        </Auxi>
+        </React.Fragment>
     );
 };
 

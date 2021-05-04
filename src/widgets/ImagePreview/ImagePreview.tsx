@@ -7,8 +7,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import LargeView from './LargeView';
 
-import Auxi from '../../hoc/Auxi';
-
 import './ImagePreview.scss';
 
 import IAttachment from '../../models/interfaces/IAttachment';
@@ -115,7 +113,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
     if (!url) return null;
 
     return (
-        <Auxi>
+        <React.Fragment>
             <LargeView
                 open={open}
                 src={url}
@@ -171,7 +169,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = props => {
                     }
                 </div>
             </Tooltip>
-        </Auxi>
+        </React.Fragment>
     );
 };
 

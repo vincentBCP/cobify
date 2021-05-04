@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Aux from '../hoc/Auxi';
-
 import Alert from '../widgets/Alert';
 
 import useHttpErrorHandler from '../hooks/http-error-handler';
@@ -17,7 +15,7 @@ const withErrorHandler = (WrappedComponent: React.FC) => {
         }
 
         return (
-            <Aux>
+            <React.Fragment>
                 {
                     error
                     ? <Alert
@@ -29,7 +27,7 @@ const withErrorHandler = (WrappedComponent: React.FC) => {
                     : null
                 }
                 <WrappedComponent {...props} />
-            </Aux>
+            </React.Fragment>
         );
     }
 }

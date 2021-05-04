@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 
-import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
 import Page from '../../components/Page';
 
@@ -179,7 +178,7 @@ const Users: React.FC<IUsersProps> = props => {
     );
 
     return (
-        <Auxi>
+        <React.Fragment>
             <ApplicationBar title="Accounts" />
 
             <AccountFormModal
@@ -197,7 +196,7 @@ const Users: React.FC<IUsersProps> = props => {
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
                 />
             </Page>
-        </Auxi>
+        </React.Fragment>
     );
 };
 

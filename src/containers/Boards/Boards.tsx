@@ -11,7 +11,6 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import './Boards.scss';
 
-import Auxi from '../../hoc/Auxi';
 import ApplicationBar from '../../components/ApplicationBar';
 import Page from '../../components/Page';
 
@@ -271,7 +270,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     );
 
     return (
-        <Auxi>
+        <React.Fragment>
             <ApplicationBar title="Boards" />
 
             <BoardInvitationFormModal
@@ -297,7 +296,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
                 />
             </Page>
-        </Auxi>
+        </React.Fragment>
     );
 };
 

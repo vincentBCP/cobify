@@ -14,8 +14,6 @@ import Button from '@material-ui/core/Button';
 import User from '../../../models/types/User';
 import UserRole from '../../../models/enums/UserRole';
 
-import Aux from '../../../hoc/Auxi';
-
 import OrganizationFormModal from './OrganizationFormModal';
 
 import UserAPI from '../../../api/UserAPI';
@@ -76,7 +74,7 @@ const Account: React.FC<IAccountProps> = props => {
     }
 
     return (
-        <Aux>
+        <React.Fragment>
             <OrganizationFormModal
                 open={open}
                 handleSubmit={createAdminAccount}
@@ -88,7 +86,7 @@ const Account: React.FC<IAccountProps> = props => {
                     <Typography style={{marginBottom: 15}}>Account</Typography>
                     {
                         Boolean(adminAccount)
-                        ? <Aux>
+                        ? <React.Fragment>
                             <InputLabel style={{marginBottom: 7}}>Organization</InputLabel>
 
                             <TextField
@@ -99,7 +97,7 @@ const Account: React.FC<IAccountProps> = props => {
                                 disabled={true}
                                 value={adminAccount.organization}
                             />
-                        </Aux>
+                        </React.Fragment>
                         : null
                     }
 
@@ -129,7 +127,7 @@ const Account: React.FC<IAccountProps> = props => {
                     }
                 </CardContent>
             </Card>
-        </Aux>
+        </React.Fragment>
     );
 };
 
