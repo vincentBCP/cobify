@@ -342,6 +342,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                     handleAddUser={() => {
                         setOpenInvitation(true);
                     }}
+                    fullScreen={appContext.screenSize === SCREEN_SIZE.sm}
                     renderUsers={renderUsers}
                 />
                 : null
