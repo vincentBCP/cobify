@@ -36,6 +36,7 @@ import Avatar from '../../widgets/Avatar';
 import * as actions from '../../store/actions';
 
 import ErrorContext from '../../context/errorContext';
+import AppContext, { SCREEN_SIZE } from '../../context/appContext';
 
 import NotificationAPI from '../../api/NotificationAPI';
 
@@ -59,6 +60,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     const [openInvitation, setOpenInvitation] = useState(false);
 
     const errorContext = React.useContext(ErrorContext);
+    const appContext = React.useContext(AppContext);
 
     const account: any = useSelector((state: any) => state.app.account);
     const columns: Column[] = useSelector((state: any) => state.column.columns);
@@ -193,6 +195,11 @@ const Boards: React.FC<IBoardsProps> = props => {
         setBoard(null);
     }
 
+    const handleRowClick = (record: any) => {
+        if (appContext.screenSize === SCREEN_SIZE.lg) return;
+        console.log(record);
+    }
+
     const renderUsers = (board: Board) => {
         return (
             <div>
@@ -258,14 +265,27 @@ const Boards: React.FC<IBoardsProps> = props => {
         )
     }
 
-    const headCells: HeadCell[] = [
+    let headCells: HeadCell[] = [
         { id: "avatar", label: '', render: renderAvatar },
         { id: "name", label: "Name", property: "name" },
         { id: "columnCount", label: "Columns", property: "columnCount" },
         { id: "taskCount", label: "Tasks", property: "taskCount" },
-        { id: "userCount", label: "Users", render: renderUsers },
+        { id: "users", label: "Users", render: renderUsers },
         { id: "actions", label: "Actions", align: "center", render: renderActions }
     ];
+
+    if (appContext.screenSize === SCREEN_SIZE.md) {
+        headCells = [
+            { id: "avatar", label: '', render: renderAvatar },
+            { id: "name", label: "Name", property: "name" },
+            { id: "users", label: "Users", render: renderUsers }
+        ];
+    } else if (appContext.screenSize === SCREEN_SIZE.sm) {
+        headCells = [
+            { id: "avatar", label: '', render: renderAvatar },
+            { id: "name", label: "Name", property: "name" }
+        ];
+    }
 
     const tableActions = (
         <Tooltip title="Add Board">
@@ -303,6 +323,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                     defaultOrderBy="name"
                     actions={tableActions}
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
+                    handleRowClick={handleRowClick}
                 />
             </Page>
         </React.Fragment>

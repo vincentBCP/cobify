@@ -144,7 +144,11 @@ const SideNavigation: React.FC = props => {
                         disableTouchListener
                         disableHoverListener={!appContext.shrinkNavigation}
                     >
-                        <NavLink to="/accounts" activeClassName="active">
+                        <NavLink
+                            to="/accounts"
+                            activeClassName="active"
+                            onClick={() => appContext.toggleNavigation()}
+                        >
                             <ListItem key="Accounts">
                                 <ListItemIcon className={classes.listItemIcon}>
                                     <PeopleIcon className={classes.drawerItemIcon} />
@@ -188,7 +192,11 @@ const SideNavigation: React.FC = props => {
                         disableTouchListener
                         disableHoverListener={!appContext.shrinkNavigation}
                     >
-                        <NavLink to="/workplace" activeClassName="active">
+                        <NavLink
+                            to="/workplace"
+                            activeClassName="active"
+                            onClick={() => appContext.toggleNavigation()}
+                        >
                             <ListItem key="Workplace">
                                 <ListItemIcon className={classes.listItemIcon}>
                                     <WorkIcon className={classes.drawerItemIcon} />
@@ -211,7 +219,11 @@ const SideNavigation: React.FC = props => {
                         disableTouchListener
                         disableHoverListener={!appContext.shrinkNavigation}
                     >
-                        <NavLink to="/profile" activeClassName="active">
+                        <NavLink
+                            to="/profile"
+                            activeClassName="active"
+                            onClick={() => appContext.toggleNavigation()}
+                        >
                             <ListItem key="profile">
                                 <ListItemIcon className={classes.listItemIcon}>
                                     <AccountIcon className={classes.drawerItemIcon} />
@@ -232,7 +244,11 @@ const SideNavigation: React.FC = props => {
                         disableTouchListener
                         disableHoverListener={!appContext.shrinkNavigation}
                     >
-                        <NavLink to="/boards" activeClassName="active">
+                        <NavLink
+                            to="/boards"
+                            activeClassName="active"
+                            onClick={() => appContext.toggleNavigation()}
+                        >
                             <ListItem key="Boards">
                             <ListItemIcon className={classes.listItemIcon}>
                                 <BoardIcon className={classes.drawerItemIcon} />
@@ -253,7 +269,11 @@ const SideNavigation: React.FC = props => {
                         disableTouchListener
                         disableHoverListener={!appContext.shrinkNavigation}
                     >
-                        <NavLink to="/users" activeClassName="active">
+                        <NavLink
+                            to="/users"
+                            activeClassName="active"
+                            onClick={() => appContext.toggleNavigation()}
+                        >
                             <ListItem key="users">
                                 <ListItemIcon className={classes.listItemIcon}>
                                     <PeopleIcon className={classes.drawerItemIcon} />
@@ -276,7 +296,10 @@ const SideNavigation: React.FC = props => {
                             disableFocusListener
                             disableTouchListener
                         >
-                            <NavLink to="/contactSupport">
+                            <NavLink
+                                to="/contactSupport"
+                                onClick={() => appContext.toggleNavigation()}
+                            >
                                 <ListItem key="support">
                                     <ListItemIcon className={classes.listItemIcon}>
                                         <ContactSupportIcon className={classes.drawerItemText} />
@@ -307,7 +330,10 @@ const SideNavigation: React.FC = props => {
                 !appContext.shrinkNavigation && account.role !== UserRole.SYSADMIN
                 ? <footer id="SideNavigation_Footer">
                     <Tooltip title="Contact support">
-                        <NavLink to="/contactSupport">
+                        <NavLink
+                            to="/contactSupport"
+                            onClick={() => appContext.toggleNavigation()}
+                        >
                             <ContactSupportIcon className={classes.drawerItemText} />
                         </NavLink>
                     </Tooltip>

@@ -13,8 +13,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TableToolbar from './TableToolbar';
 import TableHead from './TableHead';
 
-import AppContext, { SCREEN_SIZE } from '../../context/appContext';
-
 export enum Order {
     ASC = "asc",
     DESC = "desc"
@@ -86,7 +84,8 @@ interface ITableProps {
     defaultOrderBy: string,
     title?: string,
     actions?: JSX.Element,
-    handleDeleteSelectedRows: (arg1: string[]) => [Promise<any>, (arg: any) => void, (arg: any) => void]
+    handleDeleteSelectedRows: (arg1: string[]) => [Promise<any>, (arg: any) => void, (arg: any) => void],
+    handleRowClick?: (arg1: any) => void
 }
 
 const CustomTable: React.FC<ITableProps> = props => {
@@ -97,8 +96,6 @@ const CustomTable: React.FC<ITableProps> = props => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [loading, setLoading] = useState(false);
-
-    const appContext = React.useContext(AppContext);
 
     const filterDataList = () => {
         return stableSort(props.dataList, getComparator(order, orderBy))
@@ -120,7 +117,7 @@ const CustomTable: React.FC<ITableProps> = props => {
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    const handleCheckboxClick = (event: React.MouseEvent<unknown>, id: string) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected: string[] = [];
 
@@ -180,10 +177,7 @@ const CustomTable: React.FC<ITableProps> = props => {
                     loading={loading}
                 />
                 <TableContainer>
-                    <Table
-                        className={classes.table}
-                        size={appContext.screenSize !== SCREEN_SIZE.lg ? 'small' : 'medium'}
-                    >
+                    <Table className={classes.table}>
                         <TableHead
                             headCells={props.headCells}
                             numSelected={selected.length}
@@ -200,7 +194,10 @@ const CustomTable: React.FC<ITableProps> = props => {
                                 return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.id)}
+                                        onClick={(event) => {
+                                            if (!props.handleRowClick) return;
+                                            props.handleRowClick(row);
+                                        }}
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
@@ -212,6 +209,10 @@ const CustomTable: React.FC<ITableProps> = props => {
                                             <Checkbox
                                                 color="primary"
                                                 checked={isItemSelected}
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    handleCheckboxClick(event, row.id)
+                                                }}
                                             />
                                         </TableCell>
                                         {props.headCells.map((headCell, ind) => 

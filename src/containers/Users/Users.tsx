@@ -32,6 +32,7 @@ import UserFormModal from './UserFormModal';
 import * as actions from '../../store/actions';
 
 import ErrorContext from '../../context/errorContext';
+import AppContext, { SCREEN_SIZE } from '../../context/appContext';
 
 const MAX_USERS = 7; // hard-coded for now;
 
@@ -49,6 +50,7 @@ const Users: React.FC<IUsersProps> = props => {
     const [open, setOpen] = useState(false);
 
     const errorContext = React.useContext(ErrorContext);
+    const appContext = React.useContext(AppContext);
 
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) =>
@@ -218,7 +220,7 @@ const Users: React.FC<IUsersProps> = props => {
         );
     }
 
-    const headCells: HeadCell[] = [
+    let headCells: HeadCell[] = [
         { id: 'avatar', label: '', render: renderAvatar },
         { id: 'email', property: "email", label: 'Email' },
         { id: 'displayName', property: "displayName", label: 'Name' },
@@ -226,6 +228,22 @@ const Users: React.FC<IUsersProps> = props => {
         { id: 'boards', label: 'Boards', render: renderInvitations },
         { id: 'actions', label: 'Actions', align: 'center', render: renderActions }
     ];
+
+    if (appContext.screenSize === SCREEN_SIZE.md) {
+        headCells = [
+            { id: 'avatar', label: '', render: renderAvatar },
+            { id: 'email', property: "email", label: 'Email' },
+            { id: 'displayName', property: "displayName", label: 'Name' },
+            { id: 'role', property: 'role', label: 'Role', render: renderRole},
+            { id: 'boards', label: 'Boards', render: renderInvitations }
+        ];
+    } else if (appContext.screenSize === SCREEN_SIZE.sm) {
+        headCells = [
+            { id: 'avatar', label: '', render: renderAvatar },
+            { id: 'email', property: "email", label: 'Email' },
+            { id: 'displayName', property: "displayName", label: 'Name' }
+        ];
+    }
 
     const tableActions = (
         <Tooltip title="Add User">
