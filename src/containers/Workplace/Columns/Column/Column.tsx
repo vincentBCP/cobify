@@ -96,6 +96,17 @@ const ColumnComp: React.FC<IColumnProps> = props => {
                 !props.filter?.userIDs.includes(task?.asigneeID || ""))
                 return;
 
+            if (props.filter?.labels && props.filter?.labels.length > 0) {
+                let hasLabel = false;
+
+                props.filter.labels.forEach(label => {
+                    if (!(task.labels || []).includes(label)) return;
+                    hasLabel = true;
+                });
+                
+                if (!hasLabel) return;
+            }
+
             data.push(task);
         });
 

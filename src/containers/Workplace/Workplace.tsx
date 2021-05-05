@@ -20,6 +20,7 @@ import Columns from './Columns';
 import ColumnFormModal from './ColumnFormModal';
 import TaskFormModal from './TaskFormModal';
 import TaskViewModal from './TaskViewModal';
+import LabelFilter from './LabelFilter';
 
 import Board from '../../models/types/Board';
 import ColumnDTO from '../../models/dto/ColumnDTO';
@@ -87,6 +88,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const [loading, setLoading] = useState(false);
     const [searchString, setSearchString] = useState<string>();
     const [selectedUserIDs, setSelectedUserIDs] = useState<string[]>();
+    const [selectedLabels, setSelectedLabels] = useState<string[]>();
 
     const account: User = useSelector((state: any) => state.app.account);
     const invitations: Invitation[] = useSelector((state: any) => state.invitation.invitations);
@@ -291,6 +293,10 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
         });
     }
 
+    const handleLabelsFilterChange = (labels: string[]) => {
+        setSelectedLabels([...labels]);
+    }
+
     return (
         <React.Fragment>
             <ApplicationBar
@@ -371,13 +377,19 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                                 boardID={board?.id}
                                 handleSelectionChange={ids => setSelectedUserIDs(ids)}
                             />
+                            <LabelFilter
+                                boardID={board.id}
+                                labels={selectedLabels}
+                                handleChange={handleLabelsFilterChange}
+                            />
                         </Grid>
                         <Grid container direction="row" className={classes.content}>
                             <Columns
                                 board={board}
                                 filter={{
                                     searchString: searchString,
-                                    userIDs: selectedUserIDs
+                                    userIDs: selectedUserIDs,
+                                    labels: selectedLabels
                                 }}
                                 handleBoardUpdate={handleBoardUpdate}
                                 handleColumnDelete={handleColumnDelete}

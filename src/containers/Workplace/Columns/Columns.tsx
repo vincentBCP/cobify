@@ -21,7 +21,8 @@ import AppContext from '../../../context/appContext';
 
 export interface IFilter {
     searchString?: string,
-    userIDs?: string[]
+    userIDs?: string[],
+    labels?: string[]
 }
 
 interface IColumnsProps {
