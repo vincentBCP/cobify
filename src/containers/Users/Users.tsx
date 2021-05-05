@@ -176,7 +176,7 @@ const Users: React.FC<IUsersProps> = props => {
 
     const renderActions = (user: User) => {
         return (
-            <div>
+            <div style={{whiteSpace: 'nowrap'}}>
                 <IconButton
                     size="medium"
                     onClick={(ev: React.MouseEvent) => {

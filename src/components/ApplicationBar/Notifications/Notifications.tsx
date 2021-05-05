@@ -22,6 +22,8 @@ import Notification from '../../../models/types/Notification';
 import Task from '../../../models/types/Task';
 import Board from '../../../models/types/Board';
 
+import AppContext from '../../../context/appContext';
+
 import * as actions from '../../../store/actions';
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -53,6 +55,14 @@ const useStyles = makeStyles((theme: Theme) =>
                 borderRadius: 10,
                 border: '1px solid rgba(0,0,0,0.1)',
                 boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.05)'
+            },
+
+            '&.sm': {
+                marginLeft: 0,
+                
+                '& .MuiPopover-paper': {
+                    width: '100vw'
+                }
             }
         },
         root: {
@@ -134,6 +144,8 @@ interface INotificationsProps {
 const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+    const appContext = React.useContext(AppContext);
 
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) => state.user.users);
@@ -221,7 +233,7 @@ const Notifications: React.FC<INotificationsProps & RouteComponentProps> = props
                     vertical: 'top',
                     horizontal: 'right',
                 }}
-                className={classes.popover}
+                className={[classes.popover, appContext.screenSize].join(' ')}
             >
                 <Paper className={classes.root}>
                     {

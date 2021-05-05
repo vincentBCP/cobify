@@ -26,11 +26,11 @@ export enum SCREEN_SIZE {
 }
 
 const AppProvider: React.FC = props => {
-    const [shrinkNavigation, setShrinkNavigation] = React.useState(false);
+    const [shrinkNavigation, setShrinkNavigation] = React.useState(true);
 
-    const small = useMediaQuery('(max-width:550px)') ? SCREEN_SIZE.sm : null;
-    const medium = useMediaQuery('(min-width:600px)') ? SCREEN_SIZE.md : null;
-    const large = useMediaQuery('(min-width:1000px)') ? SCREEN_SIZE.lg : null;
+    const small = useMediaQuery('(max-width:425px)') ? SCREEN_SIZE.sm : null;
+    const medium = useMediaQuery('(min-width:768px)') ? SCREEN_SIZE.md : null;
+    const large = useMediaQuery('(min-width:1024px)') ? SCREEN_SIZE.lg : null;
 
     const screenSize = large || medium || small || "";
 

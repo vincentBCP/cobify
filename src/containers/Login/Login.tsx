@@ -23,6 +23,8 @@ import demo1Png from '../../assets/demo/demo1.png';
 import demo2Png from '../../assets/demo/demo2.png';
 import demo3Png from '../../assets/demo/demo3.png';
 
+import AppContext from '../../context/appContext';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -43,12 +45,34 @@ const useStyles = makeStyles((theme: Theme) =>
             borderRadius: 20,
             height: '80%',
             width: '70%',
+            minWidth: 900,
             overflow: 'hidden',
             backgroundColor: '#f7f9fc',
-            boxShadow: "rgba(0,0,0,0.3) 1px 2px 5px 1px, rgba(0,0,0,0.3) 0px 1px 3px -1px"
+            boxShadow: "rgba(0,0,0,0.3) 1px 2px 5px 1px, rgba(0,0,0,0.3) 0px 1px 3px -1px",
+
+            '&.sm': {
+                width: '100%',
+                borderRadius: 0
+            },
+            '&.md': {
+                width: '60%'
+            },
+            '&.sm, &.md': {
+                height: 'auto',
+                minWidth: 0,
+                paddingTop: 30,
+                paddingBottom: 30,
+                backgroundColor: 'white',
+
+                "& [class*='makeStyles-demo-']": {
+                    border: '1px solid red',
+                    display: 'none'
+                }
+            }
         },
         demo: {
-            flexGrow: 1,
+            width: "55%",
+            flexShrink: 0,
             display: 'flex',
             flexDirection: 'column',
             padding: "50px 0",
@@ -77,12 +101,11 @@ const useStyles = makeStyles((theme: Theme) =>
             }
         },
         form: {
-            width: "45%",
-            flexShrink: 0,
+            flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            padding: "0 7%",
+            padding: "0 5%",
             backgroundColor: 'white'
         },
         login: {
@@ -151,6 +174,8 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
     const [active, setActive] = useState(0);
 
     const classes = useStyles();
+
+    const appContext = React.useContext(AppContext);
 
     useEffect(() => {
         window.document.title = "Login - Cobify";
@@ -231,7 +256,7 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
 
     return (
         <div className={classes.root}>
-            <div className={classes.content}>                
+            <div className={[classes.content, appContext.screenSize].join(' ')}>                
                 <div className={classes.form}>
                     <Route
                         path="/login"

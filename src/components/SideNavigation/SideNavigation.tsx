@@ -105,7 +105,6 @@ const SideNavigation: React.FC = props => {
 
     const account = useSelector((state: any) => state.app.account);
 
-    console.log(appContext.screenSize);
     return (
         <Drawer
             id="SideNavigation"

@@ -114,14 +114,16 @@ const App: React.FC<IAppProps> = props => {
 
     if (!isLoggedIn) {
         return (
-            <Switch>
-                <Route path="/login" component={Login} exact={true} />
-                <Route path="/resetPassword" component={Login} exact={true} />
-                <Route path="/signUp" component={SignUp} exact={true} />
-                <Route path="/logout" exact={true} render={() => <Redirect to="/login" />} />
-                <Route path="/" exact={true} render={() => <Redirect to="/login" />} />
-                <Redirect to="/" />
-            </Switch>
+            <AppProvider>
+                <Switch>
+                    <Route path="/login" component={Login} exact={true} />
+                    <Route path="/resetPassword" component={Login} exact={true} />
+                    <Route path="/signUp" component={SignUp} exact={true} />
+                    <Route path="/logout" exact={true} render={() => <Redirect to="/login" />} />
+                    <Route path="/" exact={true} render={() => <Redirect to="/login" />} />
+                    <Redirect to="/" />
+                </Switch>
+            </AppProvider>
         );
     }
 

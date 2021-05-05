@@ -19,6 +19,8 @@ import UserAPI from '../../api/UserAPI';
 
 import UserRole from '../../models/enums/UserRole';
 
+import AppContext from '../../context/appContext';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -42,6 +44,13 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundColor: '#f7f9fc',
             boxShadow: "rgba(0,0,0,0.3) 1px 2px 5px 1px, rgba(0,0,0,0.3) 0px 1px 3px -1px",
             padding: "2%",
+
+            '&.sm': {
+                width: '100%',
+                maxWidth: '100%',
+                padding: '5%',
+                borderRadius: 0
+            }
         },
         form: {
             width: '100%',
@@ -101,6 +110,8 @@ const SignUp: React.FC<RouteComponentProps> = props => {
 
     const classes = useStyles();
 
+    const appContext = React.useContext(AppContext);
+
     useEffect(() => {
         window.document.title = "Sign up - Cobify";
     }, []);
@@ -144,7 +155,7 @@ const SignUp: React.FC<RouteComponentProps> = props => {
 
     return (
         <div className={classes.root}>
-            <div className={classes.content}>
+            <div className={[classes.content, appContext.screenSize].join(' ')}>
                 <div className={classes.header}>
                     <Typography>Create your account</Typography>
                 </div>

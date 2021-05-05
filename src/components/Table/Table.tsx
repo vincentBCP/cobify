@@ -13,6 +13,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TableToolbar from './TableToolbar';
 import TableHead from './TableHead';
 
+import AppContext, { SCREEN_SIZE } from '../../context/appContext';
+
 export enum Order {
     ASC = "asc",
     DESC = "desc"
@@ -96,6 +98,8 @@ const CustomTable: React.FC<ITableProps> = props => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [loading, setLoading] = useState(false);
 
+    const appContext = React.useContext(AppContext);
+
     const filterDataList = () => {
         return stableSort(props.dataList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -176,7 +180,10 @@ const CustomTable: React.FC<ITableProps> = props => {
                     loading={loading}
                 />
                 <TableContainer>
-                    <Table className={classes.table}>
+                    <Table
+                        className={classes.table}
+                        size={appContext.screenSize !== SCREEN_SIZE.lg ? 'small' : 'medium'}
+                    >
                         <TableHead
                             headCells={props.headCells}
                             numSelected={selected.length}

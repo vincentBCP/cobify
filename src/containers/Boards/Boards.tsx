@@ -221,7 +221,7 @@ const Boards: React.FC<IBoardsProps> = props => {
 
     const renderActions = (board: Board) => {
         return (
-            <div>
+            <div style={{whiteSpace: 'nowrap'}}>
                 <IconButton
                     size="medium"
                     onClick={(ev: React.MouseEvent) => {

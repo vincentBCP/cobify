@@ -17,6 +17,8 @@ import Avatar from '../../../widgets/Avatar';
 import User from '../../../models/types/User';
 import UserRole from '../../../models/enums/UserRole';
 
+import AppContext from '../../../context/appContext';
+
 import * as actions from '../../../store/actions';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -31,6 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
                 borderRadius: 10,
                 border: '1px solid rgba(0,0,0,0.1)',
                 boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.05)'
+            },
+
+            '&.sm': {
+                marginLeft: 0,
+                
+                '& .MuiPopover-paper': {
+                    width: '100vw'
+                }
             }
         },
         root: {
@@ -111,6 +121,8 @@ const OrganizationSelector: React.FC<IOrganizationSelector> = props => {
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
     const [leavingUserAccountID, setLeavingUserAccountID] = useState("");
 
+    const appContext = React.useContext(AppContext);
+
     const account: User = useSelector((state: any) => state.app.account);
     const users: User[] = useSelector((state: any) => state.user.users);
     const userAccounts: User[] = users.filter(u => u.email === account.email);
@@ -168,7 +180,7 @@ const OrganizationSelector: React.FC<IOrganizationSelector> = props => {
                     vertical: 'top',
                     horizontal: 'right',
                 }}
-                className={classes.popover}
+                className={[classes.popover, appContext.screenSize].join(' ')}
             >
                 <Paper className={classes.root}>
                     <div className={classes.account}>

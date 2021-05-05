@@ -6,6 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import OrganizationSelector from './OrganizationSelector';
 import Notifications from './Notifications';
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: '0 10px 0 25px',
 
             '&.sm, &.md': {
-                padding: '0 0 0 10px'
+                padding: 0
             }
         },
         appBarOpen: {
@@ -60,12 +61,18 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
 
             '&.sm, &.md': {
-                padding: '0 0px 0 10px'
+                padding: '0 0 0 10px'
             }
         },
         component: {
             flexGrow: 1,
             overflow: 'hidden'
+        },
+        menu: {
+            color: '#233044',
+            width: 30,
+            height: 30,
+            marginRight: 10
         },
         arrow: {
             width: 25,
@@ -76,9 +83,6 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             left: -40,
 
-            '&.sm, &.md': {
-                left: -25
-            },
             '& svg': {
                 width: 25,
                 height: 25,
@@ -111,8 +115,13 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
         >
             <Toolbar className={[classes.toolbar, appContext.screenSize].join(' ')}>
                 {
-                    <div
-                        className={[classes.arrow, appContext.screenSize].join(' ')}
+                    appContext.screenSize !== SCREEN_SIZE.lg
+                    ? <MenuIcon
+                        className={classes.menu}
+                        onClick={() => appContext.toggleNavigation()}
+                    />
+                    : <div
+                        className={classes.arrow}
                         onClick={() => appContext.toggleNavigation()}
                     >
                         { appContext.shrinkNavigation ? <ChevronRightIcon /> : <ChevronLeftIcon /> }

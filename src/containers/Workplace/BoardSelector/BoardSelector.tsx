@@ -16,8 +16,26 @@ import Avatar from '../../../widgets/Avatar';
 import Board from '../../../models/types/Board';
 import User from '../../../models/types/User';
 
+import AppContext from '../../../context/appContext';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        popover: {
+            '& .MuiPopover-paper': {
+                minWidth: 300
+            },
+
+            '&.sm': {
+                marginTop: 15,
+                
+                '& .MuiPopover-paper': {
+                    width: '100vw',
+                    borderRadius: 10,
+                    border: '1px solid rgba(0,0,0,0.1)',
+                    boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.05)'
+                }
+            }
+        },
         button: {
             height: 42,
             minWidth: 150,
@@ -32,9 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis'
             }
-        },
-        list: {
-            minWidth: 250
         },
         link: {
             display: "inline-block",
@@ -53,6 +68,8 @@ interface IBoardSelectorProps {
 const BoardSelector: React.FC<IBoardSelectorProps> = props => {
     const theme = useTheme();
     const classes = useStyles();
+
+    const appContext = React.useContext(AppContext);
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -113,8 +130,9 @@ const BoardSelector: React.FC<IBoardSelectorProps> = props => {
                     vertical: 'top',
                     horizontal: 'left',
                 }}
+                className={[classes.popover, appContext.screenSize].join(' ')}
             >
-                <List className={classes.list}>
+                <List>
                     {
                         _.orderBy(props.boards, ["name"]).map(board =>
                             (props.board || {}).id === board.id
