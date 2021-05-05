@@ -29,6 +29,7 @@ import Label from '../../models/types/Label';
 
 import BoardInvitationFormModal from './BoardInvitationFormModal';
 import BoardFormModal from './BoardFormModal';
+import BoardModal from './BoardModal';
 
 import Chip from '../../widgets/Chip';
 import Avatar from '../../widgets/Avatar';
@@ -56,7 +57,8 @@ const MAX_BOARDS = 1; // hard-coded for now
 
 const Boards: React.FC<IBoardsProps> = props => {
     const [board, setBoard] = useState<Board | null>(null);
-    const [open, setOpen] = useState(false);
+    const [openBoard, setOpenBoard] = useState(false);
+    const [openForm, setOpenForm] = useState(false);
     const [openInvitation, setOpenInvitation] = useState(false);
 
     const errorContext = React.useContext(ErrorContext);
@@ -95,7 +97,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         }
 
         setBoard(null);
-        setOpen(true);
+        setOpenForm(true);
     }
 
     const handleBoardSubmit = (data: any): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
@@ -112,8 +114,12 @@ const Boards: React.FC<IBoardsProps> = props => {
 
         return [
             request,
-            response => {
-                setOpen(false);
+            board => {
+                setOpenForm(false);
+
+                if (board) {
+                    setBoard({...board} as Board);
+                }
             },
             error => {
                 errorContext.setError(error);
@@ -122,7 +128,7 @@ const Boards: React.FC<IBoardsProps> = props => {
     }
 
     const handleBoardCancel = () => {
-        setOpen(false);
+        setOpenForm(false);
     }
 
     const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
@@ -180,8 +186,11 @@ const Boards: React.FC<IBoardsProps> = props => {
     const handleBoardInvitationSubmit = (dto: InvitationDTO): [Promise<any>, (arg: any) => void, (arg: any) => void] =>  {
         return [
             props.sendInvitation(dto),
-            response => {
+            board => {
                 setOpenInvitation(false);
+
+                if (openBoard) return;
+
                 setBoard(null);
             },
             error => {
@@ -192,12 +201,17 @@ const Boards: React.FC<IBoardsProps> = props => {
 
     const handleBoardInvitationCancel = () => {
         setOpenInvitation(false);
+
+        if (openBoard) return;
+
         setBoard(null);
     }
 
     const handleRowClick = (record: any) => {
         if (appContext.screenSize === SCREEN_SIZE.lg) return;
-        console.log(record);
+
+        setBoard(record as Board);
+        setOpenBoard(true);
     }
 
     const renderUsers = (board: Board) => {
@@ -233,7 +247,7 @@ const Boards: React.FC<IBoardsProps> = props => {
                     size="medium"
                     onClick={(ev: React.MouseEvent) => {
                         ev.stopPropagation();
-                        setOpen(true);
+                        setOpenForm(true);
                         setBoard(board);
                     }}
                 >
@@ -310,11 +324,28 @@ const Boards: React.FC<IBoardsProps> = props => {
             />
 
             <BoardFormModal
-                open={open}
+                open={openForm}
                 board={board}
                 handleSubmit={handleBoardSubmit}
                 handleCancel={handleBoardCancel}
             />
+
+            {
+                board && openBoard
+                ? <BoardModal
+                    board={board}
+                    handleClose={() => {
+                        setOpenBoard(false);
+                        setBoard(null);
+                    }}
+                    handleBoardUpdate={handleBoardSubmit}
+                    handleAddUser={() => {
+                        setOpenInvitation(true);
+                    }}
+                    renderUsers={renderUsers}
+                />
+                : null
+            }
 
             <Page key="lorem" title="Boards">
                 <Table

@@ -20,10 +20,11 @@ const useStyles = makeStyles((theme: Theme) =>
         appBar: {
             backgroundColor: 'white',
             boxShadow: 'none',
-            zIndex: 998,
+            zIndex: 1000,
             padding: '0 10px 0 25px',
 
             '&.sm, &.md': {
+                zIndex: 998,
                 padding: 0
             }
         },

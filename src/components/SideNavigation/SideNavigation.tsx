@@ -105,6 +105,11 @@ const SideNavigation: React.FC = props => {
 
     const account = useSelector((state: any) => state.app.account);
 
+    const handleLinkClick = () => {
+        if (appContext.screenSize === SCREEN_SIZE.lg) return;
+        appContext.toggleNavigation()
+    }
+
     return (
         <Drawer
             id="SideNavigation"
@@ -147,7 +152,7 @@ const SideNavigation: React.FC = props => {
                         <NavLink
                             to="/accounts"
                             activeClassName="active"
-                            onClick={() => appContext.toggleNavigation()}
+                            onClick={handleLinkClick}
                         >
                             <ListItem key="Accounts">
                                 <ListItemIcon className={classes.listItemIcon}>
@@ -195,7 +200,7 @@ const SideNavigation: React.FC = props => {
                         <NavLink
                             to="/workplace"
                             activeClassName="active"
-                            onClick={() => appContext.toggleNavigation()}
+                            onClick={handleLinkClick}
                         >
                             <ListItem key="Workplace">
                                 <ListItemIcon className={classes.listItemIcon}>
@@ -222,7 +227,7 @@ const SideNavigation: React.FC = props => {
                         <NavLink
                             to="/profile"
                             activeClassName="active"
-                            onClick={() => appContext.toggleNavigation()}
+                            onClick={handleLinkClick}
                         >
                             <ListItem key="profile">
                                 <ListItemIcon className={classes.listItemIcon}>
@@ -247,7 +252,7 @@ const SideNavigation: React.FC = props => {
                         <NavLink
                             to="/boards"
                             activeClassName="active"
-                            onClick={() => appContext.toggleNavigation()}
+                            onClick={handleLinkClick}
                         >
                             <ListItem key="Boards">
                             <ListItemIcon className={classes.listItemIcon}>
@@ -272,7 +277,7 @@ const SideNavigation: React.FC = props => {
                         <NavLink
                             to="/users"
                             activeClassName="active"
-                            onClick={() => appContext.toggleNavigation()}
+                            onClick={handleLinkClick}
                         >
                             <ListItem key="users">
                                 <ListItemIcon className={classes.listItemIcon}>
@@ -298,7 +303,7 @@ const SideNavigation: React.FC = props => {
                         >
                             <NavLink
                                 to="/contactSupport"
-                                onClick={() => appContext.toggleNavigation()}
+                                onClick={handleLinkClick}
                             >
                                 <ListItem key="support">
                                     <ListItemIcon className={classes.listItemIcon}>
@@ -332,7 +337,7 @@ const SideNavigation: React.FC = props => {
                     <Tooltip title="Contact support">
                         <NavLink
                             to="/contactSupport"
-                            onClick={() => appContext.toggleNavigation()}
+                            onClick={handleLinkClick}
                         >
                             <ContactSupportIcon className={classes.drawerItemText} />
                         </NavLink>
