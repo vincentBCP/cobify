@@ -21,9 +21,17 @@ const useStyles = makeStyles((theme: Theme) =>
         button: {
             height: 42,
             minWidth: 150,
+            maxWidth: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'left'
+            justifyContent: 'left',
+
+            '& p': {
+                flexGrow: 1,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis'
+            }
         },
         list: {
             minWidth: 250

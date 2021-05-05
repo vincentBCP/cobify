@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 import AppContext from './appContext';
 
 import User from '../../models/types/User';
@@ -17,8 +19,20 @@ import firebase from '../../firebase';
 
 import * as actionTypes from '../../store/actions/actionTypes';
 
+export enum SCREEN_SIZE {
+    sm = "sm",
+    md = "md",
+    lg = "lg"
+}
+
 const AppProvider: React.FC = props => {
     const [shrinkNavigation, setShrinkNavigation] = React.useState(false);
+
+    const small = useMediaQuery('(max-width:550px)') ? SCREEN_SIZE.sm : null;
+    const medium = useMediaQuery('(min-width:600px)') ? SCREEN_SIZE.md : null;
+    const large = useMediaQuery('(min-width:1000px)') ? SCREEN_SIZE.lg : null;
+
+    const screenSize = large || medium || small || "";
 
     const dispatch = useDispatch();
 
@@ -366,6 +380,7 @@ const AppProvider: React.FC = props => {
         <AppContext.Provider
             value={{
                 shrinkNavigation: shrinkNavigation,
+                screenSize: screenSize,
                 toggleNavigation: () => {
                     setShrinkNavigation(!shrinkNavigation)
                 },

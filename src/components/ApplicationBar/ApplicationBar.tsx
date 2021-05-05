@@ -12,7 +12,7 @@ import Notifications from './Notifications';
 
 import { SIDE_NAVIGATION_WIDTH, SHRINK_SIDE_NAVIGATION_WIDTH } from '../SideNavigation/SideNavigation';
 
-import AppContext from '../../context/appContext';
+import AppContext, { SCREEN_SIZE } from '../../context/appContext';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -20,9 +20,11 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundColor: 'white',
             boxShadow: 'none',
             zIndex: 1000,
-            paddingTop: 2,
-            paddingLeft: 25,
-            paddingRight: 10
+            padding: '0 10px 0 25px',
+
+            '&.sm, &.md': {
+                padding: '0 0 0 10px'
+            }
         },
         appBarOpen: {
             width: 'calc(100vw - ' + SIDE_NAVIGATION_WIDTH + 'px)',
@@ -38,6 +40,33 @@ const useStyles = makeStyles((theme: Theme) =>
                 duration: theme.transitions.duration.leavingScreen,
             })
         },
+        appBarShow: {
+            width: 'calc(100vw - ' + SIDE_NAVIGATION_WIDTH + 'px)',
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+        appBarHide: {
+            width: 'calc(100vw)',
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            })
+        },
+        toolbar: {
+            margin: 0,
+            padding: '0 25px 0 25px',
+            display: 'flex',
+
+            '&.sm, &.md': {
+                padding: '0 0px 0 10px'
+            }
+        },
+        component: {
+            flexGrow: 1,
+            overflow: 'hidden'
+        },
         arrow: {
             width: 25,
             height: 25,
@@ -47,7 +76,12 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             left: -40,
 
+            '&.sm, &.md': {
+                left: -25
+            },
             '& svg': {
+                width: 25,
+                height: 25,
                 color: '#ccc', 
             }
         }
@@ -68,22 +102,24 @@ const ApplicationBar: React.FC<IHeaderProps> = props => {
         <AppBar
             id="Header"
             position="fixed"
-            className={clsx(classes.appBar, {
-                [classes.appBarOpen]: !appContext.shrinkNavigation,
-                [classes.appBarClose]: appContext.shrinkNavigation,
+            className={clsx(classes.appBar, appContext.screenSize, {
+                [classes.appBarOpen]: !appContext.shrinkNavigation && appContext.screenSize === SCREEN_SIZE.lg,
+                [classes.appBarClose]: appContext.shrinkNavigation && appContext.screenSize === SCREEN_SIZE.lg,
+                [classes.appBarShow]: !appContext.shrinkNavigation && appContext.screenSize !== SCREEN_SIZE.lg,
+                [classes.appBarHide]: appContext.shrinkNavigation && appContext.screenSize !== SCREEN_SIZE.lg,
             })}
         >
-            <Toolbar>
+            <Toolbar className={[classes.toolbar, appContext.screenSize].join(' ')}>
                 {
                     <div
-                        className={classes.arrow}
+                        className={[classes.arrow, appContext.screenSize].join(' ')}
                         onClick={() => appContext.toggleNavigation()}
                     >
                         { appContext.shrinkNavigation ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
                     </div>
                 }
 
-                <div style={{flexGrow: 1}}>
+                <div className={classes.component}>
                     {props.component}
                 </div>
                 <Notifications />

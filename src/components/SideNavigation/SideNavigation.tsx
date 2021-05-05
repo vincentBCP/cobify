@@ -26,7 +26,7 @@ import './SideNavigation.scss';
 
 import UserRole from '../../models/enums/UserRole';
 
-import AppContext from '../../context/appContext';
+import AppContext, { SCREEN_SIZE } from '../../context/appContext';
 
 export const SIDE_NAVIGATION_WIDTH = 240;
 export const SHRINK_SIDE_NAVIGATION_WIDTH = 70;
@@ -36,7 +36,16 @@ const useStyles = makeStyles((theme: Theme) =>
         drawer: {
             width: SIDE_NAVIGATION_WIDTH,
             flexShrink: 0,
-            zIndex: 999
+            zIndex: 999,
+
+            '&.sm, &.md': {
+                width: 0
+            },
+            '&.sm .MuiDrawer-paper, &.md .MuiDrawer-paper': {
+                position: 'absolute',
+                top: 0,
+                width: SIDE_NAVIGATION_WIDTH
+            }
         },
         drawerPaper: {
             backgroundColor: '#233044',
@@ -47,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
             transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen,
-            }),
+            })
         },
         drawerClose: {
             transition: theme.transitions.create('width', {
@@ -56,6 +65,20 @@ const useStyles = makeStyles((theme: Theme) =>
             }),
             overflowX: 'hidden',
             width: SHRINK_SIDE_NAVIGATION_WIDTH
+        },
+        drawerShow: {
+            transition: theme.transitions.create('left', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            left: 0
+        },
+        drawerHide: {
+            transition: theme.transitions.create('left', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            left: '-100%'
         },
         listItemIcon: {
             marginRight: 2
@@ -82,28 +105,33 @@ const SideNavigation: React.FC = props => {
 
     const account = useSelector((state: any) => state.app.account);
 
+    console.log(appContext.screenSize);
     return (
         <Drawer
             id="SideNavigation"
             variant="persistent"
             anchor="left"
             open={true}
-            className={clsx(classes.drawer, {
-                [classes.drawerOpen]: !appContext.shrinkNavigation,
-                [classes.drawerClose]: appContext.shrinkNavigation,
+            className={clsx(classes.drawer, appContext.screenSize, {
+                [classes.drawerOpen]: (!appContext.shrinkNavigation && appContext.screenSize === SCREEN_SIZE.lg),
+                [classes.drawerClose]: (appContext.shrinkNavigation && appContext.screenSize === SCREEN_SIZE.lg),
+                [classes.drawerShow]: (!appContext.shrinkNavigation && appContext.screenSize !== SCREEN_SIZE.lg),
+                [classes.drawerHide]: (appContext.shrinkNavigation && appContext.screenSize !== SCREEN_SIZE.lg),
             })}
             classes={{
-                paper: clsx(classes.drawerPaper, {
-                    [classes.drawerOpen]: !appContext.shrinkNavigation,
-                    [classes.drawerClose]: appContext.shrinkNavigation,
+                paper: clsx(classes.drawerPaper, appContext.screenSize, {
+                    [classes.drawerOpen]: (!appContext.shrinkNavigation && appContext.screenSize === SCREEN_SIZE.lg),
+                    [classes.drawerClose]: (appContext.shrinkNavigation && appContext.screenSize === SCREEN_SIZE.lg),
+                    [classes.drawerShow]: (!appContext.shrinkNavigation && appContext.screenSize !== SCREEN_SIZE.lg),
+                    [classes.drawerHide]: (appContext.shrinkNavigation && appContext.screenSize !== SCREEN_SIZE.lg),
                 }),
             }}
         >
             <div id="SideNavigation_Header">
                 {
-                    !appContext.shrinkNavigation
-                    ? <Logo />
-                    : <img src={logoPng} alt="logo" />
+                    appContext.shrinkNavigation && appContext.screenSize === SCREEN_SIZE.lg
+                    ? <img src={logoPng} alt="logo" />
+                    : <Logo />
                 }
             </div>
 
@@ -238,7 +266,9 @@ const SideNavigation: React.FC = props => {
                     : null
                 }
                 {
-                    appContext.shrinkNavigation && account.role !== UserRole.SYSADMIN
+                    appContext.shrinkNavigation && 
+                    appContext.screenSize === SCREEN_SIZE.lg && 
+                    account.role !== UserRole.SYSADMIN
                     ? <div className={classes.extras}>
                         <span style={{flexGrow: 1}}></span>
                         <Tooltip

@@ -4,7 +4,6 @@
     background-color: $sideNavigation_primaryColor;
     height: 100%;
     display: flex;
-    overflow: hidden;
 
     a,
     a:visited,
@@ -31,6 +30,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 
     img {
         width: 40px;
