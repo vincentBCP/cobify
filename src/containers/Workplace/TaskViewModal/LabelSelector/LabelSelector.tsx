@@ -127,7 +127,7 @@ const LabelSelector: React.FC<ILabelSeletorProps> = props => {
 
         if (index === -1 && !remove) {
             labels.push(label.name);
-        } else {
+        } else if (index !== -1){
             labels.splice(index, 1);
         }
 
@@ -198,7 +198,7 @@ const LabelSelector: React.FC<ILabelSeletorProps> = props => {
                     <Typography>
                         {
                             props.task.labels && props.task.labels.length > 0
-                            ? _.orderBy(props.task.labels).join(",")
+                            ? _.orderBy(props.task.labels).join(", ")
                             : "None"
                         }
                     </Typography>

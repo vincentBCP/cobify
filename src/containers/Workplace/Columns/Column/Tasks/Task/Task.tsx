@@ -68,11 +68,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         labels: {
             display: 'flex',
-            justifyContent: 'space-between',
             flexWrap: 'wrap'
         },
         label: {
             width: "calc(20% - 5px)",
+            marginRight: 5,
             padding: 4,
             borderRadius: 4,
             marginBottom: 5
