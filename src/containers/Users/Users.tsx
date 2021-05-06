@@ -75,8 +75,12 @@ const Users: React.FC<IUsersProps> = props => {
 
         return [
             request,
-            response => { // succes callback
+            user => { // succes callback
                 setOpenForm(false);
+
+                if (user) {
+                    setUser({...user} as User);
+                }
             },
             error => { // fail callback
                 errorContext.setError(error);

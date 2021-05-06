@@ -25,6 +25,7 @@ import Notification from '../../models/types/Notification';
 import Label from '../../models/types/Label';
 
 import AccountFormModal from './AccountFormModal';
+import AccountModal from './AccountModal';
 
 import Avatar from '../../widgets/Avatar';
 
@@ -47,7 +48,9 @@ interface IUsersProps {
 }
 
 const Users: React.FC<IUsersProps> = props => {
-    const [open, setOpen] = useState(false);
+    const [openForm, setOpenForm] = useState(false);
+    const [openAccount, setOpenAccount] = useState(false);
+    const [viewingAccount, setViewingAccount] = useState<User | null>();
 
     const errorContext = React.useContext(ErrorContext);
     const appContext = React.useContext(AppContext);
@@ -74,7 +77,7 @@ const Users: React.FC<IUsersProps> = props => {
         return [
             request,
             (response: any) => {
-                setOpen(false);
+                setOpenForm(false);
             },
             (error: any) => {
                 errorContext.setError(error);
@@ -83,7 +86,7 @@ const Users: React.FC<IUsersProps> = props => {
     }
 
     const handleUserCancel = () => {
-        setOpen(false);
+        setOpenForm(false);
     }
 
     const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
@@ -154,6 +157,13 @@ const Users: React.FC<IUsersProps> = props => {
         ];
     }
 
+    const handleRowClick = (record: any) => {
+        if (appContext.screenSize === SCREEN_SIZE.lg) return;
+
+        setViewingAccount(record as User);
+        setOpenAccount(true);
+    }
+
     const renderCreated = (user: User) => {
         return <span>{format(new Date(user.created), "MMM d, yyyy")}</span>
     }
@@ -195,7 +205,7 @@ const Users: React.FC<IUsersProps> = props => {
             <IconButton
                 aria-label="Add Account"
                 onClick={() => {
-                    setOpen(true);
+                    setOpenForm(true);
                 }}
             >
                 <AddIcon />
@@ -207,8 +217,21 @@ const Users: React.FC<IUsersProps> = props => {
         <React.Fragment>
             <ApplicationBar title="Accounts" />
 
+            {
+                viewingAccount && openAccount
+                ? <AccountModal
+                    account={viewingAccount}
+                    handleClose={() => {
+                        setOpenAccount(false);
+                        setViewingAccount(null);
+                    }}
+                    fullScreen={appContext.screenSize === SCREEN_SIZE.sm}
+                />
+                : null
+            }
+
             <AccountFormModal
-                open={open}
+                open={openForm}
                 handleSubmit={handleUserSubmit}
                 handleCancel={handleUserCancel}
             />
@@ -220,6 +243,7 @@ const Users: React.FC<IUsersProps> = props => {
                     headCells={headCells}
                     defaultOrderBy="displayName"
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
+                    handleRowClick={handleRowClick}
                 />
             </Page>
         </React.Fragment>

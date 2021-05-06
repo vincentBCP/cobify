@@ -66,7 +66,9 @@ const useStyles = makeStyles((theme: Theme) =>
                 marginBottom: 10
             },
             '& input': {
-                padding: 10
+                '&:disabled': {
+                    color: 'black'
+                }
             }
         }
     })
@@ -127,7 +129,6 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
                         <div className={classes.row}>
                             <TextField
                                 label="Name"
-                                variant="outlined"
                                 value={name}
                                 onChange={(ev: React.ChangeEvent) => setName((ev.target as HTMLInputElement).value)}
                                 fullWidth
@@ -136,7 +137,6 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
                         <div className={classes.row}>
                             <TextField
                                 label="Code"
-                                variant="outlined"
                                 defaultValue={props.board.code || ""}
                                 disabled
                                 fullWidth
@@ -145,14 +145,12 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
                         <div className={classes.row}>
                             <TextField
                                 label="Columns"
-                                variant="outlined"
                                 defaultValue={props.board.columnCount || "0"}
                                 disabled
                                 style={{width: "calc(50% - 5px", marginRight: 10}}
                             />
                             <TextField
                                 label="Tasks"
-                                variant="outlined"
                                 defaultValue={props.board.taskCount || "0"}
                                 disabled
                                 style={{width: "calc(50% - 5px"}}

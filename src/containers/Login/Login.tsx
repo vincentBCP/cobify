@@ -62,12 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 minWidth: 0,
                 paddingTop: 30,
                 paddingBottom: 30,
-                backgroundColor: 'white',
-
-                "& [class*='makeStyles-demo-']": {
-                    border: '1px solid red',
-                    display: 'none'
-                }
+                backgroundColor: 'white'
             }
         },
         demo: {
@@ -78,6 +73,10 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: "50px 0",
             justifyContent: 'center',
             alignItems: 'center',
+
+            '&.sm, &.md': {
+                display: 'none'
+            },
 
             '& p': {
                 width: '60%',
@@ -352,7 +351,7 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                         )}
                     />
                 </div>
-                <div className={classes.demo}>
+                <div className={[classes.demo, appContext.screenSize].join(' ')}>
                     <Typography>How it works?</Typography>
                     <div className={classes.carousel}>
                         <Carousel

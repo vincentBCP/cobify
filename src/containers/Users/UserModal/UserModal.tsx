@@ -70,8 +70,10 @@ const useStyles = makeStyles((theme: Theme) =>
                 letterSpacing: '0.00938em',
                 marginBottom: 10
             },
-            '& input, & .MuiSelect-root': {
-                padding: 10
+            '& input': {
+                '&:disabled': {
+                    color: 'black'
+                }
             }
         }
     })
@@ -132,7 +134,6 @@ const UserModal: React.FC<IUserModalProps> = props => {
                         <div className={classes.row}>
                             <TextField
                                 label="Name"
-                                variant="outlined"
                                 defaultValue={props.user.displayName}
                                 disabled
                                 fullWidth
@@ -141,14 +142,13 @@ const UserModal: React.FC<IUserModalProps> = props => {
                         <div className={classes.row}>
                             <TextField
                                 label="Email"
-                                variant="outlined"
                                 defaultValue={props.user.email}
                                 disabled
                                 fullWidth
                             />
                         </div>
                         <div className={classes.row}>
-                            <FormControl variant="outlined" fullWidth>
+                            <FormControl fullWidth>
                                 <InputLabel>Role</InputLabel>
                                 <Select
                                     label="Role"
