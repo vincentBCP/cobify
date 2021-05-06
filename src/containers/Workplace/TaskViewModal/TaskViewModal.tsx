@@ -38,6 +38,7 @@ import UserRole from '../../../models/enums/UserRole';
 import * as actions from '../../../store/actions';
 
 import ErrorContext from '../../../context/errorContext';
+import AppContext, { SCREEN_SIZE } from '../../../context/appContext';
 
 interface ITaskViewModalProps {
     board: Board,
@@ -60,13 +61,18 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: '85vh',
 
                 '&.MuiDialog-paperFullScreen': {
-                    height: '100vh',
+                    height: '100vh'
+                }
+            },
 
-                    "& [class*='makeStyles-side-']": {
-                        minWidth: '25%',
-                        maxWidth: '25%',
-                        width: '25%'
-                    }
+            '&.sm, &.md': {
+                '& .MuiDialogContent-root': {
+                    padding: 0
+                },
+                '& .MuiDialog-paper': {
+                    minWidth: 0,
+                    width: '100%',
+                    maxWidth: '100%'
                 }
             }
         },
@@ -85,6 +91,10 @@ const useStyles = makeStyles((theme: Theme) =>
             
             '& p': {
                 flexGrow: 1
+            },
+
+            '&.sm, &.md': {
+                padding: '20px 20px 0 20px'
             }
         },
         code: {
@@ -106,18 +116,31 @@ const useStyles = makeStyles((theme: Theme) =>
         content: {
             flexGrow: 1,
             overflow: 'hidden',
-            display: 'flex'
+            display: 'flex',
+
+            '&.sm, &.md': {
+                flexWrap: 'wrap',
+                paddingBottom: 20,
+                overflowX: 'hidden',
+                overflowY: 'auto',
+            }
         },
         main: {
             flexGrow: 1,
             borderRight: '1px solid #ccc',
             padding: "5px 20px 5px 0",
             overflowX: 'hidden',
-            overflowY: 'auto'
+            overflowY: 'auto',
+
+            '&.sm, &.md': {
+                width: '100%',
+                flexGrow: 0,
+                border: 'none',
+                padding: '5px 20px'
+            }
         },
         title: {
             display: 'flex',
-            alignItems: 'center',
             marginBottom: 20,
 
             '& p': {
@@ -126,9 +149,16 @@ const useStyles = makeStyles((theme: Theme) =>
                 fontWeight: 500,
                 color: 'rgb(23, 43, 77)'
             },
+            '& button': {
+                flexShrink: 0,
+                width: 27,
+                height: 27
+            },
             '& svg': {
                 cursor: 'pointer',
-                color: '#ccc'
+                color: '#ccc',
+                width: 20,
+                height: 20
             }
         },
         description: {
@@ -141,7 +171,20 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '30%',
             padding: '5px 0 5px 20px',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+
+            '&.fullScreen': {
+                minWidth: '25%',
+                maxWidth: '25%',
+                width: '25%'
+            },
+
+            '&.sm, &.md': {
+                minWidth: '100%',
+                maxWidth: '100%',
+                width: '100%',
+                padding: '0 20px'
+            }
         },
         row: {
             display: 'flex',
@@ -201,14 +244,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props => {
     const classes = useStyles();
-    const [task, setTask] = useState<Task>();
-    const [loading, setLoading] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [fullScreen, setFullScreen] = useState(false);
-    const [_creator, setCreator] = useState<User>();
 
     const mainElemRef = React.useRef(null);
     const errorContext = React.useContext(ErrorContext);
+    const appContext = React.useContext(AppContext);
+
+    const [task, setTask] = useState<Task>();
+    const [loading, setLoading] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [fullScreen, setFullScreen] = useState(appContext.screenSize === SCREEN_SIZE.sm);
+    const [_creator, setCreator] = useState<User>();
 
     useEffect(() => {
         if (!props.task) return;
@@ -288,6 +333,10 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
     };
 
     const handleDelete = () => {
+        const c = window.confirm("Delete task?");
+
+        if (!c) return;
+
         const board: any = {...props.board};
         const column = columns.find(c => c.id === props.task?.columnID);
 
@@ -367,24 +416,38 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
 
             <Dialog
                 open={Boolean(props.task)}
-                className={classes.dialog}
+                className={[classes.dialog, appContext.screenSize].join(' ')}
                 onClose={handleClose}
                 fullScreen={fullScreen}
             >
                 <DialogContent>
                     <Paper elevation={0} className={classes.root}>
-                        <div className={classes.header}>
+                        <div className={[classes.header, appContext.screenSize].join(' ')}>
                             <Typography className={classes.code}>{props.board.name} / {task?.code}</Typography>
-                            <Tooltip title={fullScreen ? "Exit full screen" : "Full screen"}>
-                                <OpenInNewIcon
-                                    className={[classes.windowToggle, fullScreen ? 'fullScreen' : ''].join(' ')}
-                                    onClick={() => setFullScreen(!fullScreen)}
-                                />
-                            </Tooltip>
+                            {
+                                appContext.screenSize === SCREEN_SIZE.lg
+                                ? <Tooltip title={fullScreen ? "Exit full screen" : "Full screen"}>
+                                    <OpenInNewIcon
+                                        className={[classes.windowToggle, fullScreen ? 'fullScreen' : ''].join(' ')}
+                                        onClick={() => setFullScreen(!fullScreen)}
+                                    />
+                                </Tooltip>
+                                : null
+                            }
                             <CloseIcon className={classes.close} onClick={handleClose}/>
                         </div>
-                        <div className={classes.content}>
-                            <div className={classes.main} ref={mainElemRef}>
+                        <div className={[classes.content, appContext.screenSize].join(' ')}>
+                            <div className={[classes.main, appContext.screenSize].join(' ')} ref={mainElemRef}>
+                                {
+                                    appContext.screenSize !== SCREEN_SIZE.lg && task 
+                                    ? <ColumnSelector
+                                        task={task}
+                                        board={props.board}
+                                        handleChange={handleColumnChange}
+                                        screenSize={appContext.screenSize}
+                                    />
+                                    : null
+                                }
                                 <div className={classes.title}>
                                     <Typography>{task?.title}</Typography>
                                     {
@@ -410,6 +473,52 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     ? <Attachments attachments={task.attachments} />
                                     : null
                                 }
+                                {
+                                    appContext.screenSize !== SCREEN_SIZE.lg
+                                    ? <React.Fragment>
+                                        <div className={classes.row}>
+                                            <Typography>Labels</Typography>
+                                            {
+                                                task
+                                                ? <LabelSelector
+                                                    task={task}
+                                                    fullScreen={fullScreen}
+                                                    handleChange={handleLabelsUpdate}
+                                                />
+                                                : null
+                                            }
+                                        </div>
+                                        
+                                        <div className={classes.row}>
+                                            <Typography>Assignee</Typography>
+                                            {
+                                                task
+                                                ? <AsigneeSelector
+                                                    task={task}
+                                                    handleChange={handleAsigneeChange}
+                                                    fullScreen={fullScreen}
+                                                />
+                                                : null
+                                            }
+                                        </div>
+                                            
+                                        <div className={classes.row}>
+                                            <Typography>Reporter</Typography>
+                                            {
+                                                _creator
+                                                ? <div className={classes.reporter}>
+                                                    <Avatar
+                                                        size={30}
+                                                        account={_creator}
+                                                    />
+                                                    <Typography>{_creator.displayName}</Typography>
+                                                </div>
+                                                : null
+                                            }
+                                        </div>
+                                    </React.Fragment>
+                                    : null
+                                }
                                 <Comments
                                     task={props.task}
                                     addCommentCallback={() => {
@@ -420,57 +529,64 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                     }}
                                 />
                             </div>
-                            <div className={classes.side}>
+                            <div className={[classes.side, fullScreen ? "fullScreen" : "", appContext.screenSize].join(' ')}>
                                 {
-                                    task 
-                                    ? <ColumnSelector
-                                        task={task}
-                                        board={props.board}
-                                        handleChange={handleColumnChange}
-                                    />
-                                    : <span></span>
+                                    appContext.screenSize === SCREEN_SIZE.lg
+                                    ? <React.Fragment>
+                                        {
+                                            task 
+                                            ? <ColumnSelector
+                                                task={task}
+                                                board={props.board}
+                                                handleChange={handleColumnChange}
+                                            />
+                                            : null
+                                        }
+
+                                        <div className={classes.row}>
+                                            <Typography>Labels</Typography>
+                                            {
+                                                task
+                                                ? <LabelSelector
+                                                    task={task}
+                                                    fullScreen={fullScreen}
+                                                    handleChange={handleLabelsUpdate}
+                                                />
+                                                : null
+                                            }
+                                        </div>
+                                        
+                                        <div className={classes.row}>
+                                            <Typography>Assignee</Typography>
+                                            {
+                                                task
+                                                ? <AsigneeSelector
+                                                    task={task}
+                                                    handleChange={handleAsigneeChange}
+                                                    fullScreen={fullScreen}
+                                                />
+                                                : null
+                                            }
+                                        </div>
+                                            
+                                        <div className={classes.row}>
+                                            <Typography>Reporter</Typography>
+                                            {
+                                                _creator
+                                                ? <div className={classes.reporter}>
+                                                    <Avatar
+                                                        size={30}
+                                                        account={_creator}
+                                                    />
+                                                    <Typography>{_creator.displayName}</Typography>
+                                                </div>
+                                                : null
+                                            }
+                                        </div>
+                                    </React.Fragment>
+                                    : null
                                 }
 
-                                <div className={classes.row}>
-                                    <Typography>Labels</Typography>
-                                    {
-                                        task
-                                        ? <LabelSelector
-                                            task={task}
-                                            fullScreen={fullScreen}
-                                            handleChange={handleLabelsUpdate}
-                                        />
-                                        : null
-                                    }
-                                </div>
-                                
-                                <div className={classes.row}>
-                                    <Typography>Assignee</Typography>
-                                    {
-                                        task
-                                        ? <AsigneeSelector
-                                            task={task}
-                                            handleChange={handleAsigneeChange}
-                                            fullScreen={fullScreen}
-                                        />
-                                        : null
-                                    }
-                                </div>
-                                    
-                                <div className={classes.row}>
-                                    <Typography>Reporter</Typography>
-                                    {
-                                        _creator
-                                        ? <div className={classes.reporter}>
-                                            <Avatar
-                                                size={30}
-                                                account={_creator}
-                                            />
-                                            <Typography>{_creator.displayName}</Typography>
-                                        </div>
-                                        : null
-                                    }
-                                </div>
                                 <div className={classes.date}>
                                     <Typography>Created&nbsp;
                                         {

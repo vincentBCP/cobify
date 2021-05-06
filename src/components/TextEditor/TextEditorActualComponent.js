@@ -27,11 +27,14 @@ const TextEditor = props => {
         ev.stopPropagation();
         const files = ev.dataTransfer.files;
 
+        addFiles(files);
+    }
+
+    const addFiles = (files) => {
         const updatedAttachments = [
             ...(attachments || [])
         ];
         Array.from(files).forEach(f => {
-            // if (!f.type.startsWith("image")) return;
             updatedAttachments.push(f);
         });
         
@@ -105,14 +108,36 @@ const TextEditor = props => {
                 }
             </div>
             {
-                (attachments || []).length < 1
+                /*(attachments || []).length < 1
                 ? <div
                     id="text-editor-drop-area"
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
                 >Drop files here</div>
-                : null
+                : null*/
             }
+            <input
+                style={{display: 'none'}}
+                id="text-editor-input-file"
+                type="file"
+                multiple
+                onChange={ev => {
+                    const fileList = ev.target.files || [];
+
+                    if (fileList.length < 1) return;
+                    
+                    addFiles(fileList);
+                }}
+            />
+            <label htmlFor="text-editor-input-file">
+                <span
+                    id="text-editor-file-area"
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                >
+                    Click or drop files here
+                </span>
+            </label>
         </div>
     );
 };

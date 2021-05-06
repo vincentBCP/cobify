@@ -38,7 +38,12 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             flexGrow: 1,
             whiteSpace: 'nowrap',
-            padding: "30px 50px 30px 50px"
+            padding: "30px 50px 30px 50px",
+
+            '&.sm, &.md': {
+                whiteSpace: 'normal',
+                padding: 10
+            }
         }
     })
 );
@@ -235,7 +240,7 @@ const Columns: React.FC<IColumnsProps> = props => {
     if (!board) return null;
 
     return (
-        <div className={classes.root}>
+        <div className={[classes.root, appContext.screenSize].join(' ')}>
             {
                 (board?.columnIDs || []).map(colID => {
                     const column = columns.find(c => c.id === colID);

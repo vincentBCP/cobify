@@ -17,6 +17,8 @@ import Task from '../../../../models/types/Task';
 import User from '../../../../models/types/User';
 import UserRole from '../../../../models/enums/UserRole';
 
+import AppContext from '../../../../context/appContext';
+
 import { SIDE_NAVIGATION_WIDTH } from '../../../../components/SideNavigation/SideNavigation';
 
 import { IFilter } from '../Columns';
@@ -48,8 +50,17 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 'calc((100vw - ' + SIDE_NAVIGATION_WIDTH + 'px - 140px) / 3)',
             maxWidth: 'calc((100vw - ' + SIDE_NAVIGATION_WIDTH + 'px - 140px) / 3)',
             marginRight: 20,
+
             '&:last-of-type': {
                 marginRight: 0
+            },
+
+            '&.sm, &.md': {
+                width: '100%',
+                minWidth: '100%',
+                maxWidth: '100%',
+                height: 'auto',
+                marginBottom: 30
             }
         },
         content: {
@@ -77,6 +88,8 @@ const ColumnComp: React.FC<IColumnProps> = props => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
     const tasks: Task[] = useSelector((state: any) => state.task.tasks);
+
+    const appContext = React.useContext(AppContext);
 
     const getTasks = (): Task[] => {
         const data: Task[] = [];
@@ -163,7 +176,7 @@ const ColumnComp: React.FC<IColumnProps> = props => {
             </Popover>
 
             <div
-                className={classes.root}
+                className={[classes.root, appContext.screenSize].join(' ')}
                 draggable
                 onDragStart={(ev: React.DragEvent) => props.handleColumnDragStart(ev, props.column)}
                 onDragOver={(ev: React.DragEvent) => props.handleColumnDragOver(ev, props.column)}

@@ -41,6 +41,15 @@ const useStyles = makeStyles((theme: Theme) =>
                 flexGrow: 1,
                 fontWeight: 'bold',
                 color: "rgb(23, 43, 77)"
+            }
+        },
+        actions: {
+            display: 'flex',
+            alignItems: 'center',
+
+            '& button': {
+                width: 27,
+                height: 27
             },
             '& svg': {
                 color: '#ccc',
@@ -48,10 +57,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: 20,
                 cursor: 'pointer'
             }
-        },
-        actions: {
-            display: 'flex',
-            alignItems: 'center'
         },
         date: {
             color: "#ccc",
@@ -171,12 +176,12 @@ const CommentComp: React.FC<ICommentProps> = props => {
                     {
                         account.id === user.id
                         ? <div className={classes.actions}>
-                            <IconButton style={{width: 27, height: 27}} onClick={handleEdit}>
+                            <IconButton onClick={handleEdit}>
                                 <EditIcon />
                             </IconButton>
                             {
                                 !loading
-                                ? <IconButton style={{width: 27, height: 27}} onClick={handleDelete}>
+                                ? <IconButton onClick={handleDelete}>
                                     <DeleteIcon />
                                 </IconButton>
                                 : <div style={{display: 'flex', alignItems: 'center', marginLeft: 7}}>

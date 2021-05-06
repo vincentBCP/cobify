@@ -17,7 +17,8 @@ import Board from '../../../../models/types/Board';
 interface IColumnSelectorProps {
     task: Task,
     board: Board,
-    handleChange: (arg1: Column) => void
+    handleChange: (arg1: Column) => void,
+    screenSize?: string
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: 'flex',
             marginBottom: 30,
+
+            '&.sm, &.md': {
+                marginBottom: 5
+            }
         },
         button: {
             display: 'flex',
@@ -70,7 +75,7 @@ const ColumnSelector: React.FC<IColumnSelectorProps> = props => {
 
     return (
         <React.Fragment>
-            <div ref={elemRef} className={classes.root}>
+            <div ref={elemRef} className={[classes.root, props.screenSize].join(' ')}>
                 <Button           
                     color="primary"
                     variant="contained"

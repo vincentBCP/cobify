@@ -31,8 +31,10 @@
         }
     }
 
-    #text-editor-drop-area {
+    #text-editor-file-area {
+        display: block;
         border: 1px solid #e4ebf5;
+        width: 100%;
         border-top: none;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;

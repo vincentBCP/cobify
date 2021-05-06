@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
+import {makeStyles, createStyles, Theme} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
 import TextEditor, { ITextEditorValue } from '../../../components/TextEditor/TextEditor';
 import FormModal from '../../../widgets/FormModal';
 
 import Task from '../../../models/types/Task';
+
+import AppContext, { SCREEN_SIZE } from '../../../context/appContext';
 
 interface IFormInputs {
     title: string
@@ -20,9 +23,24 @@ interface ITaskFormModalProps {
     handleCancel: () => void
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            width: 650,
+
+            '&.sm': {
+                width: '100%'
+            }
+        }
+    })
+);
+
 const TaskFormModal: React.FC<ITaskFormModalProps> = props => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>();
     const [textEditorValue, setTextEditorValue] = useState<ITextEditorValue | null>();
+
+    const classes = useStyles();
+    const appContext = React.useContext(AppContext);
 
     useEffect(() => {
         if (!props.open) return;
@@ -53,11 +71,12 @@ const TaskFormModal: React.FC<ITaskFormModalProps> = props => {
             title={props.task ? "Update task" : "Add task"}
             open={props.open}
             reset={reset}
+            fullScreen={appContext.screenSize === SCREEN_SIZE.sm}
             useFormHandleSubmit={handleSubmit}
             handleSubmit={handleFormSubmit}
             handleCancel={props.handleCancel}
         >
-            <div style={{width: 650}}>
+            <div className={[classes.root, appContext.screenSize].join(' ')}>
                 <TextField
                     label="Title"
                     defaultValue={props.task?.title || ""}

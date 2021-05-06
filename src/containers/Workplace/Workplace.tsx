@@ -40,6 +40,7 @@ import BoardAPI from '../../api/BoardAPI';
 import ColumnAPI from '../../api/ColumnAPI';
 
 import ErrorContext from '../../context/errorContext';
+import AppContext from '../../context/appContext';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,6 +56,11 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: "30px 50px 0px 50px",
             display: 'flex',
             alignItems: 'center',
+
+            '&.sm, &.md': {
+                border: '1px solid red',
+                padding: 10
+            }
         },
         content: {
             overflow: 'auto',
@@ -79,6 +85,7 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
     const dispatch = useDispatch();
 
     const errorContext = React.useContext(ErrorContext);
+    const appContext = React.useContext(AppContext);
 
     const [showColumnForm, setShowColumnForm] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState<Column | null>();
@@ -339,7 +346,11 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                 {
                     board
                     ? <React.Fragment>
-                        <Grid container direction="row" className={classes.header}>
+                        <Grid
+                            container
+                            direction="row"
+                            className={[classes.header, appContext.screenSize].join(' ')}
+                        >
                             {
                                 (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
                                 ? <Button

@@ -23,7 +23,7 @@ import ErrorContext from '../../../../context/errorContext';
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
-            marginTop: 40
+            marginTop: 20
         },
         comments: {
             fontWeight: 500,

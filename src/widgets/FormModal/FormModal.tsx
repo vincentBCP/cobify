@@ -16,6 +16,7 @@ interface IFormModalProps {
     open?: boolean,
     title: string,
     reset: UseFormReset<any>,
+    fullScreen?: boolean,
     useFormHandleSubmit: UseFormHandleSubmit<any>,
     handleSubmit: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void]
     handleCancel: () => void,
@@ -28,6 +29,10 @@ const useStyles = makeStyles((theme: Theme) =>
             '& .MuiDialog-paper': {
                 maxWidth: 1000,
                 maxHeight: '85vh',
+
+                '&.MuiDialog-paperFullScreen': {
+                    maxHeight: '100vh'
+                }
             }
         },
         root: {
@@ -82,7 +87,11 @@ const FormModal: React.FC<IFormModalProps> = props => {
     };
 
     return (
-        <Dialog open={props.open || false} className={classes.dialog}>
+        <Dialog
+            open={props.open || false}
+            className={classes.dialog}
+            fullScreen={Boolean(props.fullScreen)}
+        >
             <DialogContent>
                 <Paper elevation={0} className={classes.root}>
                     <Typography className={classes.title}>{props.title || "Form"}</Typography>
