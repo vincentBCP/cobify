@@ -209,6 +209,9 @@ const CustomTable: React.FC<ITableProps> = props => {
                                             <Checkbox
                                                 color="primary"
                                                 checked={isItemSelected}
+                                                inputProps={{
+                                                    'aria-label': props.headCells[0].label + "-" + row.id
+                                                }}
                                                 onClick={(event) => {
                                                     event.stopPropagation();
                                                     handleCheckboxClick(event, row.id)
