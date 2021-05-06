@@ -28,6 +28,7 @@ import Avatar from '../../widgets/Avatar';
 
 import UserInvitationFormModal from './UserInvitationFormModal';
 import UserFormModal from './UserFormModal';
+import UserModal from './UserModal';
 
 import * as actions from '../../store/actions';
 
@@ -47,7 +48,8 @@ interface IUsersProps {
 const Users: React.FC<IUsersProps> = props => {
     const [openInvitation, setOpenInvitation] = useState(false);
     const [user, setUser] = useState<User | null>(null);
-    const [open, setOpen] = useState(false);
+    const [openForm, setOpenForm] = useState(false);
+    const [openUser, setOpenUser] = useState(false);
 
     const errorContext = React.useContext(ErrorContext);
     const appContext = React.useContext(AppContext);
@@ -74,7 +76,7 @@ const Users: React.FC<IUsersProps> = props => {
         return [
             request,
             response => { // succes callback
-                setOpen(false);
+                setOpenForm(false);
             },
             error => { // fail callback
                 errorContext.setError(error);
@@ -89,11 +91,11 @@ const Users: React.FC<IUsersProps> = props => {
         }
 
         setUser(null);
-        setOpen(true);
+        setOpenForm(true);
     }
 
     const handleUserCancel = () => {
-        setOpen(false);
+        setOpenForm(false);
     }
 
     const handleDeleteSelectedRows = (ids: string[]): [Promise<any>, (arg: any) => void, (arg: any) => void] => {
@@ -127,6 +129,9 @@ const Users: React.FC<IUsersProps> = props => {
             props.sendInvitation(dto),
             response => { // succes callback
                 setOpenInvitation(false);
+
+                if (openUser) return;
+
                 setUser(null);
             },
             error => { // fail callback
@@ -137,6 +142,9 @@ const Users: React.FC<IUsersProps> = props => {
 
     const handleUserInvitationCancel = () => {
         setOpenInvitation(false);
+
+        if (openUser) return;
+
         setUser(null);
     }
 
@@ -149,6 +157,13 @@ const Users: React.FC<IUsersProps> = props => {
             }
         ];
     };
+
+    const handleRowClick = (record: any) => {
+        if (appContext.screenSize === SCREEN_SIZE.lg) return;
+
+        setUser(record as User);
+        setOpenUser(true);
+    }
 
     const renderInvitations = (user: User): JSX.Element => {
         return (
@@ -184,7 +199,7 @@ const Users: React.FC<IUsersProps> = props => {
                     onClick={(ev: React.MouseEvent) => {
                         ev.stopPropagation();
                         setUser(user);
-                        setOpen(true);
+                        setOpenForm(true);
                     }}
                 >
                     <EditIcon />
@@ -268,11 +283,29 @@ const Users: React.FC<IUsersProps> = props => {
             />
 
             <UserFormModal
-                open={open}
+                open={openForm}
                 user={user}
                 handleSubmit={handleUserSubmit}
                 handleCancel={handleUserCancel}
             />
+
+            {
+                user && openUser
+                ? <UserModal
+                    user={user}
+                    handleClose={() => {
+                        setOpenUser(false);
+                        setUser(null);
+                    }}
+                    handleUserUpdate={handleUserSubmit}
+                    handleAddBoard={() => {
+                        setOpenInvitation(true);
+                    }}
+                    fullScreen={appContext.screenSize === SCREEN_SIZE.sm}
+                    renderBoards={renderInvitations}
+                />
+                : null
+            }
 
             <Page title="Users">
                 <Table
@@ -281,6 +314,7 @@ const Users: React.FC<IUsersProps> = props => {
                     headCells={headCells}
                     defaultOrderBy="displayName"
                     handleDeleteSelectedRows={handleDeleteSelectedRows}
+                    handleRowClick={handleRowClick}
                 />
             </Page>
         </React.Fragment>

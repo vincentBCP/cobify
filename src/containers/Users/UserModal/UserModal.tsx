@@ -5,18 +5,23 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Paper from '@material-ui/core/Paper';
 import CloseIcon from '@material-ui/icons/Close';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
-import Board from '../../../models/types/Board';
+import User from '../../../models/types/User';
+import UserRole from '../../../models/enums/UserRole';
 
 import SendButton from '../../../widgets/FormModal/FormActions/SendButton';
 
-interface IBoardModalProps {
-    board: Board,
+interface IUserModalProps {
+    user: User,
     handleClose: () => void,
-    handleBoardUpdate: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void],
-    handleAddUser: () => void,
+    handleUserUpdate: (arg1: any) => [Promise<any>, (arg: any) => void, (arg: any) => void],
+    handleAddBoard: () => void,
     fullScreen?: boolean,
-    renderUsers: (arg1: Board) => any
+    renderBoards: (arg1: User) => any
 }
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -65,15 +70,15 @@ const useStyles = makeStyles((theme: Theme) =>
                 letterSpacing: '0.00938em',
                 marginBottom: 10
             },
-            '& input': {
+            '& input, & .MuiSelect-root': {
                 padding: 10
             }
         }
     })
 );
 
-const BoardModal: React.FC<IBoardModalProps> = props => {
-    const [name, setName] = useState(props.board.name);
+const UserModal: React.FC<IUserModalProps> = props => {
+    const [role, setRole] = useState(props.user.role);
     const [loading, setLoading] = useState(false);
 
     const classes = useStyles();
@@ -81,17 +86,17 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
     const theme = useTheme();
 
     const handleSave = () => {
-        if (!Boolean(name.trim())) return;
-        if (name === props.board.name) return;
+        if (!Boolean(role)) return;
+        if (role === props.user.role) return;
 
         if (loading) return;
         setLoading(true);
 
         const data: any = {
-            name: name
+            role: role
         }
 
-        const [request, successCallback, failCallback] = props.handleBoardUpdate(data);
+        const [request, successCallback, failCallback] = props.handleUserUpdate(data);
 
         request
         .then((response: any) => {
@@ -108,19 +113,19 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
         });
     }
 
-    const contrastColor = theme.palette.getContrastText(props.board.color);
+    const contrastColor = theme.palette.getContrastText(props.user.color);
 
     return (
         <Dialog
-            open={Boolean(props.board)}
+            open={Boolean(props.user)}
             className={[classes.dialog, Boolean(props.fullScreen) ? "" : "md"].join(' ')}
             onClose={props.handleClose}
             fullScreen={Boolean(props.fullScreen)}
         >
             <DialogContent>
                 <Paper className={classes.root}>
-                    <div className={classes.header} style={{backgroundColor: props.board.color}}>
-                        <Typography style={{color: contrastColor}}>{props.board.name}</Typography>
+                    <div className={classes.header} style={{backgroundColor: props.user.color}}>
+                        <Typography style={{color: contrastColor}}>{props.user.displayName}</Typography>
                         <CloseIcon style={{color: contrastColor}} onClick={props.handleClose} />
                     </div>
                     <div className={classes.content}>
@@ -128,36 +133,36 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
                             <TextField
                                 label="Name"
                                 variant="outlined"
-                                value={name}
-                                onChange={(ev: React.ChangeEvent) => setName((ev.target as HTMLInputElement).value)}
-                                fullWidth
-                            />
-                        </div>
-                        <div className={classes.row}>
-                            <TextField
-                                label="Code"
-                                variant="outlined"
-                                defaultValue={props.board.code || ""}
+                                defaultValue={props.user.displayName}
                                 disabled
                                 fullWidth
                             />
                         </div>
                         <div className={classes.row}>
                             <TextField
-                                label="Columns"
+                                label="Email"
                                 variant="outlined"
-                                defaultValue={props.board.columnCount || "0"}
+                                defaultValue={props.user.email}
                                 disabled
-                                style={{width: "calc(50% - 5px", marginRight: 10}}
-                            />
-                            <TextField
-                                label="Tasks"
-                                variant="outlined"
-                                defaultValue={props.board.taskCount || "0"}
-                                disabled
-                                style={{width: "calc(50% - 5px"}}
+                                fullWidth
                             />
                         </div>
+                        <div className={classes.row}>
+                            <FormControl variant="outlined" fullWidth>
+                                <InputLabel>Role</InputLabel>
+                                <Select
+                                    label="Role"
+                                    value={role}
+                                    onChange={(ev: React.ChangeEvent<{ value: unknown }>) =>
+                                        setRole(ev.target.value as string)
+                                    }
+                                >
+                                    <MenuItem value={UserRole.COADMIN}>Co-admin</MenuItem>
+                                    <MenuItem value={UserRole.GUEST}>Guest</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        
                         <div className={classes.row}>
                             <SendButton
                                 label="Save"
@@ -168,14 +173,14 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
                             />
                         </div>
                         <div className={classes.row}>
-                            <label>Users</label>
-                            {props.renderUsers(props.board)}
+                            <label>Boards</label>
+                            {props.renderBoards(props.user)}
                         </div>
                         <div className={classes.row}>
                             <Button
                                 variant="outlined"
-                                onClick={props.handleAddUser}
-                            >Add user</Button>
+                                onClick={props.handleAddBoard}
+                            >Add board</Button>
                         </div>
                     </div>
                 </Paper>
@@ -184,4 +189,4 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
     )
 };
 
-export default BoardModal
+export default UserModal;
