@@ -49,7 +49,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
             '& button': {
                 width: 27,
-                height: 27
+                height: 27,
+
+                '&:first-of-type': {
+                    marginRight: 10
+                }
             },
             '& svg': {
                 color: '#ccc',

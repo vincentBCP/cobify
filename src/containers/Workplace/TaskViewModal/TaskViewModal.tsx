@@ -7,7 +7,6 @@ import { connect, useSelector } from 'react-redux';
 import { makeStyles, createStyles,Theme } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
@@ -67,8 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
             '&.sm, &.md': {
                 '& .MuiDialogContent-root': {
-                    padding: 0,
-                    overflow: 'hidden auto'
+                    //padding: 0
                 },
                 '& .MuiDialog-paper': {
                     minWidth: 0
@@ -80,12 +78,11 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             width: '100%',
             height: '100%',
-            marginBottom: 10,
             overflow: 'hidden',
-            
+            paddingBottom: 20,
+
             '&.sm, &.md': {
-                height: 'auto',
-                minHeight: '100%'
+                padding: '20px 0'
             }
         },
         header: {
@@ -98,7 +95,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
 
             '&.sm, &.md': {
-                padding: '20px 20px 0 20px'
+                padding: '0 20px'
             }
         },
         code: {
@@ -124,7 +121,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
             '&.sm, &.md': {
                 flexWrap: 'wrap',
-                paddingBottom: 20
+                overflow: 'hidden auto',
+                padding: '0 20px'
             }
         },
         main: {
@@ -135,8 +133,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
             '&.sm, &.md': {
                 width: '100%',
-                padding: '5px 20px',
                 overflow: 'visible',
+                padding: 0,
                 border: 'none'
             }
         },
@@ -184,7 +182,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 minWidth: '100%',
                 maxWidth: '100%',
                 width: '100%',
-                padding: '0 20px'
+                padding: 0
             }
         },
         row: {
@@ -421,12 +419,12 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                 onClose={handleClose}
                 fullScreen={fullScreen}
             >
-                <DialogContent>
-                    <Paper elevation={0} className={[classes.root, appContext.screenSize].join(' ')}>
+                <DialogContent className={[classes.root, appContext.screenSize].join(' ')}>
+
                         <div className={[classes.header, appContext.screenSize].join(' ')}>
                             <Typography className={classes.code}>{props.board.name} / {task?.code}</Typography>
                             {
-                                appContext.screenSize === SCREEN_SIZE.lg
+                                appContext.screenSize !== SCREEN_SIZE.sm
                                 ? <Tooltip title={fullScreen ? "Exit full screen" : "Full screen"}>
                                     <OpenInNewIcon
                                         className={[classes.windowToggle, fullScreen ? 'fullScreen' : ''].join(' ')}
@@ -619,7 +617,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                                 }
                             </div>
                         </div>
-                    </Paper>
+
                 </DialogContent>
             </Dialog>
         </React.Fragment>
