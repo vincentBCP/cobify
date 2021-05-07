@@ -58,7 +58,7 @@ const BoardFormModal: React.FC<IBoardFormModalModalProps> = props => {
                         }
                     })
                 }}
-                style={{marginBottom: 20}}
+                style={{marginBottom: props.board ? 0 : 20}}
             />
 
             {

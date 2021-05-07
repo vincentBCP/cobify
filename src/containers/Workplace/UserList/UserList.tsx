@@ -22,8 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: 20
+            alignItems: 'center'
         },
         buttonContainer: {
             border: '2px solid #f7f9fc',

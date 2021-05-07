@@ -14,7 +14,7 @@ interface ISearchBarProps {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            padding: '5px 4px',
+            padding: '3px 4px',
             display: 'flex',
             alignItems: 'center',
             width: 230,

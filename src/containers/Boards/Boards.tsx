@@ -284,7 +284,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         { id: "name", label: "Name", property: "name" },
         { id: "columnCount", label: "Columns", property: "columnCount" },
         { id: "taskCount", label: "Tasks", property: "taskCount" },
-        { id: "users", label: "Users", render: renderUsers },
+        { id: "team", label: "Team", render: renderUsers },
         { id: "actions", label: "Actions", align: "center", render: renderActions }
     ];
 
@@ -292,7 +292,7 @@ const Boards: React.FC<IBoardsProps> = props => {
         headCells = [
             { id: "avatar", label: '', render: renderAvatar },
             { id: "name", label: "Name", property: "name" },
-            { id: "users", label: "Users", render: renderUsers }
+            { id: "team", label: "Team", render: renderUsers }
         ];
     } else if (appContext.screenSize === SCREEN_SIZE.sm) {
         headCells = [

@@ -40,7 +40,7 @@ import BoardAPI from '../../api/BoardAPI';
 import ColumnAPI from '../../api/ColumnAPI';
 
 import ErrorContext from '../../context/errorContext';
-import AppContext from '../../context/appContext';
+import AppContext, { SCREEN_SIZE } from '../../context/appContext';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,8 +58,42 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
 
             '&.sm, &.md': {
-                border: '1px solid red',
                 padding: 10
+            }
+        },
+        headerGroup: {
+            display: 'flex',
+            alignItems: 'center',
+
+            '&:nth-of-type(3) > div': {
+                marginLeft: 20
+            },
+
+            '&.sm, &.md': {
+                width: '100%',
+                margin: 0,
+                marginBottom: 10,
+
+                '& > button': {
+                    width: 'calc(50% - 5px)',
+
+                    '&:last-of-type': {
+                        marginRight: 0
+                    }
+                },
+
+                '&:nth-of-type(2)': {
+                    marginBottom: 20,
+
+                    '& > form': {
+                        flexGrow: 1,
+                        marginRight: 10
+                    }
+                },
+
+                '&:nth-of-type(3) > div': {
+                    marginLeft: 0
+                }
             }
         },
         content: {
@@ -68,8 +102,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         button: {
             marginRight: 10,
-            paddingTop: 8,
-            paddingBottom: 8
+            padding: '8px 12px',
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            color: '#777f8a'
         }
     })
 );
@@ -351,48 +386,67 @@ const Workplace: React.FC<IWorkplaceProps & RouteComponentProps> = props => {
                             direction="row"
                             className={[classes.header, appContext.screenSize].join(' ')}
                         >
-                            {
-                                (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
-                                ? <Button
-                                    variant="contained"
-                                    className={classes.button}
-                                    startIcon={<AddIcon />}
-                                    color="primary"
-                                    onClick={() => {
-                                        setSelectedColumn(null);
-                                        setShowColumnForm(true);
-                                    }}
-                                >Column</Button>
-                                : null
-                            }
-                            {
-                                (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
-                                ? <Button
-                                    variant="contained" 
-                                    className={classes.button}
-                                    startIcon={<AddIcon />}
-                                    color="primary"
-                                    disabled={!board?.columnIDs || board?.columnIDs.length < 1}
-                                    onClick={() => {
-                                        if (!board?.columnIDs || board?.columnIDs.length < 1) return;
-                                        setAddTask(true)
-                                    }}
-                                >Task</Button>
-                                : null
-                            }
-                            <SearchBar
-                                placeholder="Search task"
-                                handleChange={(searchString: string) => setSearchString(searchString)}
-                            />
-                            <UserList
-                                boardID={board?.id}
-                                handleSelectionChange={ids => setSelectedUserIDs(ids)}
-                            />
-                            <LabelFilter
-                                boardID={board.id}
-                                labels={selectedLabels}
-                                handleChange={handleLabelsFilterChange}
-                            />
+                            <div className={[classes.headerGroup, appContext.screenSize].join(' ')}>
+                                {
+                                    (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
+                                    ? <Button
+                                        variant="text"
+                                        className={classes.button}
+                                        startIcon={<AddIcon />}
+                                        color="default"
+                                        onClick={() => {
+                                            setSelectedColumn(null);
+                                            setShowColumnForm(true);
+                                        }}
+                                    >Column</Button>
+                                    : null
+                                }
+                                {
+                                    (account?.role === UserRole.ADMIN || account?.role === UserRole.COADMIN)
+                                    ? <Button
+                                        variant="text" 
+                                        className={classes.button}
+                                        startIcon={<AddIcon />}
+                                        color="default"
+                                        disabled={!board?.columnIDs || board?.columnIDs.length < 1}
+                                        onClick={() => {
+                                            if (!board?.columnIDs || board?.columnIDs.length < 1) return;
+                                            setAddTask(true)
+                                        }}
+                                    >Task</Button>
+                                    : null
+                                }
+                            </div>
+                            <div className={[classes.headerGroup, appContext.screenSize].join(' ')}>
+                                <SearchBar
+                                    placeholder="Search task"
+                                    handleChange={(searchString: string) => setSearchString(searchString)}
+                                />
+                                {
+                                    appContext.screenSize !== SCREEN_SIZE.lg
+                                    ? <LabelFilter
+                                        boardID={board.id}
+                                        labels={selectedLabels}
+                                        handleChange={handleLabelsFilterChange}
+                                    />
+                                    : null
+                                }
+                            </div>
+                            <div className={[classes.headerGroup, appContext.screenSize].join(' ')}>
+                                <UserList
+                                    boardID={board?.id}
+                                    handleSelectionChange={ids => setSelectedUserIDs(ids)}
+                                />
+                                {
+                                    appContext.screenSize === SCREEN_SIZE.lg
+                                    ? <LabelFilter
+                                        boardID={board.id}
+                                        labels={selectedLabels}
+                                        handleChange={handleLabelsFilterChange}
+                                    />
+                                    : null
+                                }
+                            </div>
                         </Grid>
                         <Grid container direction="row" className={classes.content}>
                             <Columns

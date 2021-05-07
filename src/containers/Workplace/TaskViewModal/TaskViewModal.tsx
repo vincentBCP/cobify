@@ -58,21 +58,20 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             '& .MuiDialog-paper': {
                 minWidth: 1000,
-                height: '85vh',
+                height: '85%',
 
                 '&.MuiDialog-paperFullScreen': {
-                    height: '100vh'
+                    height: '100%'
                 }
             },
 
             '&.sm, &.md': {
                 '& .MuiDialogContent-root': {
-                    padding: 0
+                    padding: 0,
+                    overflow: 'hidden auto'
                 },
                 '& .MuiDialog-paper': {
-                    minWidth: 0,
-                    width: '100%',
-                    maxWidth: '100%'
+                    minWidth: 0
                 }
             }
         },
@@ -82,7 +81,12 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             height: '100%',
             marginBottom: 10,
-            overflow: 'hidden'
+            overflow: 'hidden',
+            
+            '&.sm, &.md': {
+                height: 'auto',
+                minHeight: '100%'
+            }
         },
         header: {
             display: 'flex',
@@ -120,23 +124,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
             '&.sm, &.md': {
                 flexWrap: 'wrap',
-                paddingBottom: 20,
-                overflowX: 'hidden',
-                overflowY: 'auto',
+                paddingBottom: 20
             }
         },
         main: {
             flexGrow: 1,
             borderRight: '1px solid #ccc',
             padding: "5px 20px 5px 0",
-            overflowX: 'hidden',
-            overflowY: 'auto',
+            overflow: 'hidden auto',
 
             '&.sm, &.md': {
                 width: '100%',
-                flexGrow: 0,
-                border: 'none',
-                padding: '5px 20px'
+                padding: '5px 20px',
+                overflow: 'visible',
+                border: 'none'
             }
         },
         title: {
@@ -421,7 +422,7 @@ const TaskViewModal: React.FC<ITaskViewModalProps & RouteComponentProps> = props
                 fullScreen={fullScreen}
             >
                 <DialogContent>
-                    <Paper elevation={0} className={classes.root}>
+                    <Paper elevation={0} className={[classes.root, appContext.screenSize].join(' ')}>
                         <div className={[classes.header, appContext.screenSize].join(' ')}>
                             <Typography className={classes.code}>{props.board.name} / {task?.code}</Typography>
                             {

@@ -8,11 +8,11 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+//import Grid from '@material-ui/core/Grid';
+//import Typography from '@material-ui/core/Typography';
 
 import FormModal from '../../../widgets/FormModal';
-import Avatar from '../../../widgets/Avatar';
+//import Avatar from '../../../widgets/Avatar';
 
 import Board from '../../../models/types/Board';
 import User from '../../../models/types/User';
@@ -65,14 +65,14 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
 
     return (
         <FormModal
-            title="Invitation"
+            title="Add team member"
             open={props.open}
             reset={reset}
             useFormHandleSubmit={handleSubmit}
             handleSubmit={handleFormSubmit}
             handleCancel={props.handleCancel}
         >
-            <Grid
+            {/*<Grid
                 container direction="row"
                 alignItems="center" spacing={2}
                 style={{marginBottom: 30}}
@@ -90,7 +90,7 @@ const BoardInvitationFormModal: React.FC<IBoardInvitationFormModalProps> = props
                         {board.name}
                     </Typography>
                 </Grid> : null}
-            </Grid>
+                </Grid>*/}
 
             <FormControl fullWidth>
                 <InputLabel

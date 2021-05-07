@@ -30,14 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         root: {
             overflow: 'hidden',
-            display: 'flex',
-            marginLeft: 20
+            display: 'flex'
         },
         button: {
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            padding: "8px 10px 8px 15px",
+            padding: '8px 12px',
             borderRadius: 3,
             backgroundColor: 'rgba(0, 0, 0, 0.04)',
             
@@ -49,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 }
             },
             '& p': {
-                fontSize: 15,
+                fontSize: 14,
                 textAlign: 'left',
                 color: '#777f8a',
                 marginRight: 10

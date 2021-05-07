@@ -166,14 +166,14 @@ const BoardModal: React.FC<IBoardModalProps> = props => {
                             />
                         </div>
                         <div className={classes.row}>
-                            <label>Users</label>
+                            <label>Team</label>
                             {props.renderUsers(props.board)}
                         </div>
                         <div className={classes.row}>
                             <Button
                                 variant="outlined"
                                 onClick={props.handleAddUser}
-                            >Add user</Button>
+                            >Add team member</Button>
                         </div>
                     </div>
                 </Paper>

@@ -180,7 +180,7 @@ const UserModal: React.FC<IUserModalProps> = props => {
                             <Button
                                 variant="outlined"
                                 onClick={props.handleAddBoard}
-                            >Add board</Button>
+                            >Add to board</Button>
                         </div>
                     </div>
                 </Paper>

@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
             '&.sm, &.md': {
                 whiteSpace: 'normal',
+                overflow: 'hidden auto',
                 padding: 10
             }
         }
