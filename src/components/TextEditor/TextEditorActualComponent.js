@@ -11,6 +11,7 @@ import ImagePreview from '../../widgets/ImagePreview';
 const TextEditor = props => {
     const [attachments, setAttachments] = useState(props.value?.attachments || []); // array of File or array of IAttachment or arry of File and IAttachment
     const [editor, setEditor] = useState();
+    const [id] = useState(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5));
 
     useEffect(() => {
         setAttachments(props.value ? props.value.attachments || [] : []);
@@ -118,7 +119,7 @@ const TextEditor = props => {
             }
             <input
                 style={{display: 'none'}}
-                id="text-editor-input-file"
+                id={"input-file-" + id}
                 type="file"
                 multiple
                 onChange={ev => {
@@ -129,7 +130,7 @@ const TextEditor = props => {
                     addFiles(fileList);
                 }}
             />
-            <label htmlFor="text-editor-input-file">
+            <label htmlFor={"input-file-" + id}>
                 <span
                     id="text-editor-file-area"
                     onDragOver={handleDragOver}
