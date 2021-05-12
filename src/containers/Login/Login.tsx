@@ -309,6 +309,23 @@ const Login: React.FC<ILoginProps & RouteComponentProps> = props => {
                     }
                     <Route
                         path="/login"
+                        render={() =>
+                            Boolean(!successMessage && !errorMessage)
+                            ? <FormMessage
+                                type="success"
+                                message={
+                                    <React.Fragment>
+                                        <p style={{margin: 0, lineHeight: '1.3em'}}>Demo Account</p>
+                                        <p style={{margin: 0, lineHeight: '1.3em'}}>Email: cobify.demo@email.com</p>
+                                        <p style={{margin: 0, lineHeight: '1.3em'}}>Password: 123456</p>
+                                    </React.Fragment>
+                                }
+                            />
+                            : null
+                        }
+                    />
+                    <Route
+                        path="/login"
                         render={() => (
                             <SigninForm
                                 handleSubmit={login}

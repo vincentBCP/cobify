@@ -14,10 +14,13 @@ const useStyles = makeStyles((theme: Theme) =>
         message: {
             width: '80%',
             maxWidth: '80%',
-            textAlign: 'center',
-            fontSize: '0.9em',
             borderRadius: 5,
             padding: 15,
+
+            '& > p': {
+                textAlign: 'center',
+                fontSize: '0.9em'
+            },
 
             '&.success': {
                 backgroundColor: '#f7ffff',
@@ -33,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IFormMessage {
     type: 'success' | 'error'
-    message?: string
+    message: string | JSX.Element
 }
 
 const FormMessage: React.FC<IFormMessage> = props => {
@@ -41,7 +44,13 @@ const FormMessage: React.FC<IFormMessage> = props => {
 
     return (
         <div className={classes.root}>
-            <Typography className={[classes.message, props.type].join(' ')}>{props.message}</Typography>
+            <div className={[classes.message, props.type].join(' ')}>
+                {
+                    (typeof props.message === 'string')
+                    ? <Typography>{props.message}</Typography>
+                    : props.message
+                }
+            </div>
         </div>
     )
 }
